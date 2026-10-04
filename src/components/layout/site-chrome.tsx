@@ -39,6 +39,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { RoleBadge } from "@/components/common/status-badge";
+import { LogoMark } from "@/components/brand/logo";
+import { LanguageToggle } from "@/components/brand/language-toggle";
 import { APP_NAME, ROLE_HOME } from "@/lib/constants";
 import { cn, initialsOf } from "@/lib/utils";
 
@@ -52,11 +54,23 @@ export const PUBLIC_NAV = [
 
 export function BrandMark({ className }: { className?: string }) {
   return (
-    <Link href="/" className={cn("flex items-center gap-2 font-semibold tracking-tight", className)}>
-      <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-        <Home className="size-4" aria-hidden="true" />
+    <Link
+      href="/"
+      aria-label={`${APP_NAME} home`}
+      className={cn(
+        "flex items-center gap-2.5 transition-opacity duration-200 hover:opacity-90",
+        className,
+      )}
+    >
+      <LogoMark className="size-9 shrink-0 text-primary" />
+      <span className="flex flex-col leading-none">
+        <span className="font-display text-[1.0625rem] font-semibold tracking-tight text-foreground">
+          Nest<span className="text-primary">Space</span>
+        </span>
+        <span className="mt-1 text-[0.5625rem] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+          Homes&nbsp;&amp;&nbsp;rooms
+        </span>
       </span>
-      <span className="text-lg">{APP_NAME}</span>
     </Link>
   );
 }
@@ -155,6 +169,7 @@ export function SiteHeader() {
             </>
           )}
           {user ? <UserMenu /> : null}
+          <LanguageToggle />
         </div>
 
         <Button
@@ -231,7 +246,6 @@ export const SITE_FOOTER_SECTIONS = [
     links: [
       { label: "Sign in", href: "/login" },
       { label: "Create account", href: "/register" },
-      { label: "Demo login", href: "/login#demo" },
     ],
   },
 ] as const;

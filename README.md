@@ -32,7 +32,7 @@ npm run dev                    # http://localhost:4000
 |---|---|
 | Type safety | `npm run typecheck` |
 | Lint | `npm run lint` |
-| Production build | `npm build` |
+| Production build | `npm run build` |
 
 ---
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, LogOut, type LucideIcon } from "lucide-react";
+import { ChevronDown, ClipboardList, LogOut, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -52,7 +52,7 @@ export function DashboardShell({ sections, areaLabel, children }: DashboardShell
             </p>
             {section.items.map((item) => {
               const active = item.exact ? pathname === item.href : pathname.startsWith(item.href);
-              const Icon = item.icon;
+              const Icon = item.icon ?? ClipboardList;
               return (
                 <Link
                   key={item.href}
@@ -60,10 +60,10 @@ export function DashboardShell({ sections, areaLabel, children }: DashboardShell
                   onClick={() => setMobileOpen(false)}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                    "group flex items-center gap-3 rounded-lg border border-transparent px-3 py-2 text-sm font-medium transition-all",
                     active
-                      ? "bg-primary/10 text-primary"
-                      : "text-muted-foreground hover:bg-secondary hover:text-foreground",
+                      ? "border-primary/15 bg-primary/10 text-primary shadow-sm"
+                      : "text-muted-foreground hover:border-border hover:bg-secondary/70 hover:text-foreground",
                   )}
                 >
                   <Icon className="size-4 shrink-0" aria-hidden="true" />
@@ -127,7 +127,7 @@ export function DashboardShell({ sections, areaLabel, children }: DashboardShell
         <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 border-r border-border bg-card lg:block">
           {sidebar}
         </aside>
-        <main id="main-content" className="min-w-0 flex-1">
+        <main id="main-content" className="dashboard-main min-w-0 flex-1">
           <div className="container-page space-y-8 py-8">{children}</div>
         </main>
       </div>

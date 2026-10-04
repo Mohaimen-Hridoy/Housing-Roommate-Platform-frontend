@@ -34,7 +34,7 @@ export function PropertyCard({ property, image }: PropertyCardProps) {
     <Link
       href={`/properties/${property.id}`}
       aria-label={`View ${property.title} details`}
-      className="group block overflow-hidden rounded-xl border border-border bg-card text-card-foreground shadow-sm transition-colors hover:bg-muted/30 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      className="interactive-surface group block overflow-hidden rounded-2xl border border-border bg-card text-card-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
     >
       <div className="relative aspect-[16/10] w-full bg-muted">
         <SmartImage

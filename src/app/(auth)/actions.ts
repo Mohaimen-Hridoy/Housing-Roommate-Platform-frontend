@@ -8,6 +8,7 @@ import { ApiRequestError } from "@/lib/api/server";
 import { authApi } from "@/lib/api/endpoints";
 import { clearSession, getSessionUser, writeSession } from "@/lib/auth/session";
 import { DEMO_ACCOUNTS, ROLE_HOME } from "@/lib/constants";
+import { decodeJwtPayload } from "@/lib/auth/tokens";
 import type { SessionUser } from "@/lib/types/api";
 
 export interface ActionState {
@@ -53,6 +54,14 @@ export async function loginAction(_prev: ActionState, formData: FormData): Promi
   let role: SessionUser["role"] = "TENANT";
   try {
     const tokens = await authApi.login(parsed.data);
+    const claims = decodeJwtPayload(tokens.accessToken);
+    if (!claims?.sub || !claims.role) throw new Error("Login succeeded but the access token was invalid.");
+    await writeSession(tokens, {
+      id: claims.sub,
+      email: parsed.data.email,
+      name: null,
+      role: claims.role,
+    });
     const user = await authApi.me();
     role = user.role;
     await writeSession(tokens, user);
@@ -62,27 +71,6 @@ export async function loginAction(_prev: ActionState, formData: FormData): Promi
 
   revalidatePath("/", "layout");
   redirect(ROLE_HOME[role]);
-}
-
-/**
- * One-click demo login. Signs in with a seeded account and always lands on the
- * dashboard that matches the role.
- */
-export async function demoLoginAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
-  const role = String(formData.get("role") ?? "") as SessionUser["role"];
-  const account = DEMO_ACCOUNTS.find((entry) => entry.role === role);
-  if (!account) return { status: "error", message: "Unknown demo role." };
-
-  try {
-    const tokens = await authApi.login({ email: account.email, password: account.password });
-    const user = await authApi.me();
-    await writeSession(tokens, user);
-  } catch (error) {
-    return toFieldErrors(error);
-  }
-
-  revalidatePath("/", "layout");
-  redirect(ROLE_HOME[account.role]);
 }
 
 const registerSchema = z
@@ -131,6 +119,14 @@ export async function registerAction(_prev: ActionState, formData: FormData): Pr
   try {
     const tokens =
       role === "OWNER" ? await authApi.registerOwner(payload) : await authApi.registerTenant(payload);
+    const claims = decodeJwtPayload(tokens.accessToken);
+    if (!claims?.sub || !claims.role) throw new Error("Registration succeeded but the access token was invalid.");
+    await writeSession(tokens, {
+      id: claims.sub,
+      email,
+      name,
+      role: claims.role,
+    });
     const user = await authApi.me();
     await writeSession(tokens, user);
   } catch (error) {
@@ -139,6 +135,33 @@ export async function registerAction(_prev: ActionState, formData: FormData): Pr
 
   revalidatePath("/", "layout");
   redirect(ROLE_HOME[role]);
+}
+
+/**
+ * One-click demo login. Signs in with a seeded account and always lands on the
+ * dashboard that matches the role. Required by the assignment so a reviewer
+ * can inspect all three roles without credentials.
+ */
+export async function demoLoginAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
+  const role = String(formData.get("role") ?? "") as SessionUser["role"];
+  const account = DEMO_ACCOUNTS.find((entry) => entry.role === role);
+  if (!account) return { status: "error", message: "Unknown demo role." };
+
+  try {
+    const tokens = await authApi.login({ email: account.email, password: account.password });
+    const claims = decodeJwtPayload(tokens.accessToken);
+    await writeSession(tokens, {
+      id: claims?.sub ?? account.email,
+      email: account.email,
+      name: account.label,
+      role,
+    });
+  } catch (error) {
+    return toFieldErrors(error);
+  }
+
+  revalidatePath("/", "layout");
+  redirect(account.home);
 }
 
 export async function logoutAction(): Promise<void> {

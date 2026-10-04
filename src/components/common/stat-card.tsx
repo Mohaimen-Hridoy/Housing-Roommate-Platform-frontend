@@ -32,7 +32,14 @@ export function StatCard({ label, value, icon: Icon, tone = "default", hint, hre
   const styles = TONE_STYLES[tone];
 
   const body = (
-    <Card className={cn("flex h-full items-start gap-4 p-5 transition-shadow", href && "hover:shadow-md", className)}>
+    <Card
+      className={cn(
+        "interactive-surface relative flex h-full items-start gap-4 overflow-hidden p-5",
+        href && "cursor-pointer",
+        className,
+      )}
+    >
+      <span className="pointer-events-none absolute -right-8 -top-8 size-24 rounded-full bg-primary/[0.035]" />
       {Icon ? (
         <span className={cn("flex size-10 shrink-0 items-center justify-center rounded-lg", styles.icon)}>
           <Icon className="size-5" aria-hidden="true" />

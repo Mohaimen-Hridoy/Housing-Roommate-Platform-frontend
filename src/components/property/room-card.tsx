@@ -33,7 +33,7 @@ export function RoomCard({ room, image }: RoomCardProps) {
     <Link
       href={`/properties/${room.propertyId}`}
       aria-label={`View ${property?.title ?? "property"} details for room ${room.title}`}
-      className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card text-card-foreground shadow-sm transition-colors hover:bg-muted/30 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      className="interactive-surface group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card text-card-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
     >
       <div className="relative aspect-[16/10] w-full bg-muted">
         <SmartImage

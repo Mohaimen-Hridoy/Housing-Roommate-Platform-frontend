@@ -10,14 +10,22 @@ import {
 } from "recharts";
 
 import {
-  AXIS_COLOR,
+  AXIS_TICK,
+  AXIS_TICK_MARGIN,
+  BAR_RADIUS_ROW,
+  CATEGORY_AXIS_WIDTH,
   GRID_COLOR,
+  GRID_DASHARRAY,
+  GRID_WIDTH,
   LABEL_COLOR,
+  LABEL_FONT_SIZE,
+  MAX_BAR_SIZE_ROW,
+  ROW_CHART_MARGIN,
+  gradientFill,
   isEmptySeries,
-  seriesColor,
   type ChartDatum,
 } from "./chart-theme";
-import { ChartFrame, ChartTooltip } from "./chart-frame";
+import { ChartFrame, ChartTooltip, chartGradient, useChartGradientIds } from "./chart-frame";
 
 interface TopCitiesChartProps {
   data: ChartDatum[];
@@ -25,6 +33,9 @@ interface TopCitiesChartProps {
 
 /** Busiest cities by listing count — horizontal bar chart. */
 export function TopCitiesChart({ data }: TopCitiesChartProps) {
+  const [fill] = useChartGradientIds("top-cities");
+  const colorIndex = 1;
+
   return (
     <ChartFrame
       title="Top cities by properties"
@@ -33,13 +44,35 @@ export function TopCitiesChart({ data }: TopCitiesChartProps) {
       emptyMessage="No city has listings yet."
       height={300}
     >
-      <BarChart data={data} layout="vertical" margin={{ top: 4, right: 24, bottom: 0, left: 8 }}>
-        <CartesianGrid horizontal={false} stroke={GRID_COLOR} />
-        <XAxis type="number" allowDecimals={false} tick={{ fill: AXIS_COLOR, fontSize: 11 }} tickLine={false} axisLine={{ stroke: GRID_COLOR }} />
-        <YAxis type="category" dataKey="label" width={96} tick={{ fill: AXIS_COLOR, fontSize: 11 }} tickLine={false} axisLine={false} />
+      <BarChart data={data} layout="vertical" margin={ROW_CHART_MARGIN}>
+        <defs>{chartGradient([fill], { from: colorIndex, direction: "horizontal", fadeTo: 0.35 })}</defs>
+        <CartesianGrid horizontal={false} stroke={GRID_COLOR} strokeDasharray={GRID_DASHARRAY} strokeWidth={GRID_WIDTH} />
+        <XAxis
+          type="number"
+          allowDecimals={false}
+          tick={AXIS_TICK}
+          tickLine={false}
+          axisLine={false}
+          tickMargin={AXIS_TICK_MARGIN}
+        />
+        <YAxis
+          type="category"
+          dataKey="label"
+          width={CATEGORY_AXIS_WIDTH}
+          tick={AXIS_TICK}
+          tickLine={false}
+          axisLine={false}
+          tickMargin={AXIS_TICK_MARGIN}
+        />
         <ChartTooltip />
-        <Bar dataKey="value" name="Properties" radius={[0, 6, 6, 0]} maxBarSize={22} fill={seriesColor(1)}>
-          <LabelList dataKey="value" position="right" fill={LABEL_COLOR} fontSize={11} />
+        <Bar
+          dataKey="value"
+          name="Properties"
+          fill={gradientFill(fill[0])}
+          radius={BAR_RADIUS_ROW}
+          maxBarSize={MAX_BAR_SIZE_ROW}
+        >
+          <LabelList dataKey="value" position="right" fill={LABEL_COLOR} fontSize={LABEL_FONT_SIZE} offset={6} />
         </Bar>
       </BarChart>
     </ChartFrame>

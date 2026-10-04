@@ -97,9 +97,13 @@ export function CheckoutButton({ booking, payments = [], size = "default", class
         return;
       }
 
+      if (data.clientSecret) {
+        setClientSecret(data.clientSecret);
+      }
+
       // Stripe is enabled but no hosted URL was issued — fall back to the
       // in-app Payment Element when a client secret is available.
-      if (clientSecret) {
+      if (data.clientSecret || clientSecret) {
         setOpen(true);
         return;
       }

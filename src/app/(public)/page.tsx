@@ -19,6 +19,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SmartImage } from "@/components/common/smart-image";
 import { RoomStatusBadge } from "@/components/common/status-badge";
+import { HeroArt } from "@/components/brand/hero-art";
+import { Reveal } from "@/components/brand/reveal";
 import { formatCurrency } from "@/lib/format";
 import { APP_NAME } from "@/lib/constants";
 import type { ImageAsset, PropertyListItem, RoomListItem } from "@/lib/types/api";
@@ -126,16 +128,17 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="border-b border-border bg-gradient-to-b from-primary/5 via-background to-background">
-        <div className="container-page grid gap-10 py-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:items-center lg:py-24">
-          <div className="space-y-6">
+      <section className="surface-mint border-b border-border">
+        <div className="container-page py-16 lg:py-24">
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,1fr)] lg:items-center">
+          <div className="space-y-7">
             <Badge variant="accent" className="gap-1.5">
               <Sparkles className="size-3" aria-hidden="true" />
               Housing &amp; roommate platform
             </Badge>
 
-            <h1 className="text-4xl font-semibold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
-              Find a room you will actually want to live in
+            <h1 className="text-4xl font-semibold leading-[1.05] tracking-[-0.02em] sm:text-5xl lg:text-[3.4rem]">
+              <span className="text-gradient-brand">Find a room</span> you will actually want to live in
             </h1>
 
             <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
@@ -156,7 +159,7 @@ export default async function HomePage() {
               </Button>
             </div>
 
-            <dl className="grid max-w-lg grid-cols-3 gap-4 pt-4">
+            <dl className="grid max-w-lg grid-cols-3 gap-4 border-t border-border/70 pt-6">
               {[
                 { label: "Roles", value: "3" },
                 { label: "API endpoints", value: "79" },
@@ -164,13 +167,19 @@ export default async function HomePage() {
               ].map((item) => (
                 <div key={item.label}>
                   <dt className="text-xs uppercase tracking-wide text-muted-foreground">{item.label}</dt>
-                  <dd className="mt-0.5 text-xl font-semibold tabular-nums">{item.value}</dd>
+                  <dd className="tabular mt-1 text-2xl font-semibold">{item.value}</dd>
                 </div>
               ))}
             </dl>
           </div>
 
-          <Card className="overflow-hidden">
+          <Reveal distance={28} className="order-first lg:order-none">
+            <HeroArt className="mx-auto w-full max-w-lg drop-shadow-[0_24px_48px_hsl(var(--shadow-color)/0.16)]" />
+          </Reveal>
+        </div>
+
+        <div className="mt-14">
+          <Card className="surface-raised edge-light overflow-hidden">
             <CardContent className="p-0">
               <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-4">
                 <div>
@@ -220,6 +229,7 @@ export default async function HomePage() {
               )}
             </CardContent>
           </Card>
+        </div>
         </div>
       </section>
 

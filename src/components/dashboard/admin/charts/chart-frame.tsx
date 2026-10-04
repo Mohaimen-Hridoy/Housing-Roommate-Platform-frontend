@@ -1,7 +1,8 @@
 "use client";
 
-import { BarChart3 } from "lucide-react";
+import { useId, useMemo } from "react";
 import type { ReactElement } from "react";
+import { BarChart3 } from "lucide-react";
 import { Legend, ResponsiveContainer, Tooltip } from "recharts";
 
 import { EmptyState } from "@/components/common/empty-state";
@@ -10,8 +11,16 @@ import { formatNumber } from "@/lib/format";
 
 import {
   CHART_HEIGHT,
+  LEGEND_HEIGHT,
+  TOOLTIP_CURSOR,
   TOOLTIP_LABEL_STYLE,
+  TOOLTIP_LIST_STYLE,
+  TOOLTIP_ROW_LABEL_STYLE,
+  TOOLTIP_ROW_STYLE,
+  TOOLTIP_ROW_VALUE_STYLE,
   TOOLTIP_STYLE,
+  TOOLTIP_SWATCH_STYLE,
+  seriesColor,
   toLabel,
   toNumber,
 } from "./chart-theme";
@@ -29,6 +38,10 @@ interface ChartFrameProps {
 /**
  * Shared chart shell: title, description, responsive plot and a graceful empty
  * state, so a chart never renders as a blank box.
+ *
+ * The header rhythm and the plot box are fixed here, and every chart uses the
+ * same plot height and legend strip from `chart-theme`, so the six admin cards
+ * align row by row.
  */
 export function ChartFrame({
   title,
@@ -40,11 +53,11 @@ export function ChartFrame({
 }: ChartFrameProps) {
   return (
     <Card className="flex h-full flex-col">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-base">{title}</CardTitle>
-        {description ? <CardDescription>{description}</CardDescription> : null}
+      <CardHeader className="space-y-1 pb-3">
+        <CardTitle className="text-base leading-tight">{title}</CardTitle>
+        {description ? <CardDescription className="text-xs leading-relaxed">{description}</CardDescription> : null}
       </CardHeader>
-      <CardContent className="flex-1">
+      <CardContent className="flex-1 pt-0">
         {isEmpty ? (
           <EmptyState
             compact
@@ -65,18 +78,129 @@ export function ChartFrame({
   );
 }
 
-/** Themed tooltip shared by every chart. */
-export function ChartTooltip() {
-  return (
-    <Tooltip
-      cursor={{ fill: "hsl(var(--muted) / 0.6)" }}
-      contentStyle={TOOLTIP_STYLE}
-      labelStyle={TOOLTIP_LABEL_STYLE}
-      itemStyle={{ color: "hsl(var(--popover-foreground))", fontSize: "0.75rem" }}
-      formatter={(value) => formatNumber(toNumber(value))}
-      labelFormatter={(label) => toLabel(label)}
-    />
+/**
+ * Resolves `<linearGradient>` ids that are safe to share a document with other
+ * charts.
+ *
+ * `url(#id)` paint servers are looked up against the whole document, so two
+ * charts using the same id both resolve to whichever gradient mounted first —
+ * exactly what happens on `/admin`, where six charts render at once. The chart's
+ * own slug keeps the id readable and different charts can never collide; React's
+ * per-instance id makes it safe even if the same chart is mounted twice.
+ */
+export function useChartGradientIds(slug: string, count = 1): readonly string[] {
+  const instanceId = useId();
+  const scope = `${slug}-${instanceId}`.replace(/[^a-zA-Z0-9]/g, "");
+
+  return useMemo(
+    () => Array.from({ length: Math.max(count, 1) }, (_, index) => `chart-${scope}-fill-${index}`),
+    [scope, count],
   );
+}
+
+interface ChartGradientOptions {
+  /** Series index the first id belongs to — pass the same index the bar uses. */
+  from?: number;
+  /** Opacity the fill fades to at the far end of the bar. */
+  fadeTo?: number;
+  direction?: "vertical" | "horizontal";
+}
+
+/**
+ * `<linearGradient>` elements to spread inside a chart's own `<defs>`.
+ *
+ * This returns elements rather than a component on purpose: Recharts only
+ * forwards raw SVG tags (`defs`, `clipPath`, …) out of a chart's children, so a
+ * wrapper component would be silently dropped.
+ *
+ * Stops are coloured through `style` rather than the `stop-color` presentation
+ * attribute, which keeps `var()` resolution guaranteed in every engine.
+ */
+export function chartGradient(
+  ids: readonly string[],
+  { from = 0, fadeTo = 0.28, direction = "vertical" }: ChartGradientOptions = {},
+): ReactElement[] {
+  // Default `objectBoundingBox` units, so bare fractions read as 0%..100%.
+  const [x1, y1, x2, y2] = direction === "vertical" ? [0, 0, 0, 1] : [0, 0, 1, 0];
+
+  return ids.map((id, index) => {
+    const color = seriesColor(from + index);
+    return (
+      <linearGradient key={id} id={id} x1={x1} y1={y1} x2={x2} y2={y2}>
+        <stop offset="0%" style={{ stopColor: color, stopOpacity: 1 }} />
+        <stop offset="100%" style={{ stopColor: color, stopOpacity: fadeTo }} />
+      </linearGradient>
+    );
+  });
+}
+
+interface ChartTooltipEntry {
+  color?: string;
+  name?: string | number;
+  value?: unknown;
+}
+
+interface ChartTooltipContentProps {
+  active?: boolean;
+  label?: unknown;
+  payload?: readonly ChartTooltipEntry[];
+  /** Formats the value column; defaults to a grouped plain number. */
+  valueFormatter?: (value: unknown, name: string) => string;
+  /** Set to false when a label row would only repeat the series name. */
+  showLabel?: boolean;
+}
+
+/**
+ * A bar painted with a gradient reports its fill as `url(#id)`, which cannot be
+ * used as a `background-color`, so fall back to the flat series colour. The
+ * swatch then always matches the mark it labels.
+ */
+function swatchColor(entry: ChartTooltipEntry, index: number): string {
+  const color = typeof entry.color === "string" ? entry.color : "";
+  return color && !color.startsWith("url(") ? color : seriesColor(index);
+}
+
+/** Themed tooltip body: swatch, quiet label, then the value on a tabular grid. */
+export function ChartTooltipContent({
+  active,
+  label,
+  payload,
+  valueFormatter,
+  showLabel = true,
+}: ChartTooltipContentProps) {
+  if (!active || !payload || payload.length === 0) return null;
+
+  const heading = toLabel(label);
+
+  return (
+    <div style={TOOLTIP_STYLE}>
+      {showLabel && heading ? <p style={TOOLTIP_LABEL_STYLE}>{heading}</p> : null}
+      <div style={TOOLTIP_LIST_STYLE}>
+        {payload.map((entry, index) => {
+          const name = toLabel(entry.name);
+          const formatted = valueFormatter
+            ? valueFormatter(entry.value, name)
+            : formatNumber(toNumber(entry.value));
+
+          return (
+            <div key={`${name}-${index}`} style={TOOLTIP_ROW_STYLE}>
+              <span
+                aria-hidden="true"
+                style={{ ...TOOLTIP_SWATCH_STYLE, backgroundColor: swatchColor(entry, index) }}
+              />
+              <span style={TOOLTIP_ROW_LABEL_STYLE}>{name}</span>
+              <span style={TOOLTIP_ROW_VALUE_STYLE}>{formatted}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/** Themed tooltip shared by every admin chart. */
+export function ChartTooltip() {
+  return <Tooltip cursor={TOOLTIP_CURSOR} content={<ChartTooltipContent />} />;
 }
 
 /** Themed legend shared by every chart. */
@@ -84,10 +208,11 @@ export function ChartLegend() {
   return (
     <Legend
       verticalAlign="bottom"
-      height={30}
+      align="center"
+      height={LEGEND_HEIGHT}
       iconType="circle"
-      iconSize={8}
-      wrapperStyle={{ fontSize: "0.72rem", paddingTop: "0.5rem" }}
+      iconSize={9}
+      wrapperStyle={{ fontSize: "0.72rem", paddingTop: "0.625rem" }}
       formatter={(value) => <span className="text-muted-foreground">{toLabel(value)}</span>}
     />
   );

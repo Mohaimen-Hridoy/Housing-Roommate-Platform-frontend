@@ -1,0 +1,815 @@
+/**
+ * Translation dictionaries.
+ *
+ * Coverage is deliberately shared-vocabulary first: navigation, actions,
+ * statuses, auth and property terms. Any key missing from `bn` falls back to
+ * the English string, so a partially translated page still renders instead of
+ * showing a raw key. Extend `bn` as more pages are localised.
+ */
+
+export const LOCALES = ["en", "bn"] as const;
+export type Locale = (typeof LOCALES)[number];
+
+export const LOCALE_LABEL: Record<Locale, string> = {
+  en: "EN",
+  bn: "বাংলা",
+};
+
+export const LOCALE_HTML_LANG: Record<Locale, string> = {
+  en: "en",
+  bn: "bn",
+};
+
+/** Narrows an untrusted value (cookie, query) to a supported locale. */
+export function isLocale(value: unknown): value is Locale {
+  return value === "en" || value === "bn";
+}
+
+const en = {
+  /* chrome */
+  "brand.name": "NestSpace",
+  "brand.tagline": "Homes & rooms",
+  "nav.browse": "Browse rooms",
+  "nav.howItWorks": "How it works",
+  "nav.about": "About",
+  "nav.faq": "FAQ",
+  "nav.contact": "Contact",
+  "nav.login": "Log in",
+  "nav.register": "Get started",
+  "nav.dashboard": "Dashboard",
+  "nav.signOut": "Sign out",
+  "nav.skipToContent": "Skip to content",
+  "nav.language": "Language",
+  "nav.menu": "Menu",
+
+  /* generic actions */
+  "action.save": "Save changes",
+  "action.saveChanges": "Save changes",
+  "action.cancel": "Cancel",
+  "action.delete": "Delete",
+  "action.remove": "Remove",
+  "action.edit": "Edit",
+  "action.view": "View",
+  "action.viewDetails": "View details",
+  "action.back": "Back",
+  "action.next": "Next",
+  "action.previous": "Previous",
+  "action.continue": "Continue",
+  "action.submit": "Submit",
+  "action.retry": "Try again",
+  "action.clearAll": "Clear all",
+  "action.close": "Close",
+  "action.confirm": "Confirm",
+  "action.search": "Search",
+  "action.filter": "Filter",
+  "action.sort": "Sort",
+  "action.apply": "Apply",
+  "action.loading": "Loading",
+  "action.signIn": "Sign in",
+  "action.signUp": "Create account",
+  "action.send": "Send",
+  "action.copy": "Copy",
+  "action.copied": "Copied",
+
+  /* states */
+  "state.empty": "Nothing here yet",
+  "state.error": "Something went wrong",
+  "state.retry": "Try again",
+  "state.noResults": "No matches",
+  "state.offline": "Cannot reach the server",
+
+  /* auth */
+  "auth.email": "Email",
+  "auth.password": "Password",
+  "auth.name": "Full name",
+  "auth.phone": "Phone number",
+  "auth.newPassword": "New password",
+  "auth.confirmPassword": "Confirm new password",
+  "auth.currentPassword": "Current password",
+  "auth.signInTitle": "Welcome back",
+  "auth.signInSubtitle": "Sign in to manage your bookings, messages and payments.",
+  "auth.registerTitle": "Create your account",
+  "auth.demoTitle": "Demo accounts",
+  "auth.demoSubtitle": "Explore the platform instantly — no password needed.",
+  "auth.role.tenant": "Tenant",
+  "auth.role.owner": "Owner",
+  "auth.role.admin": "Admin",
+  "auth.forgotPassword": "Forgot your password?",
+  "auth.noAccount": "New here?",
+  "auth.haveAccount": "Already have an account?",
+  "auth.oneClick": "One click",
+
+  /* property & browse */
+  "property.bedrooms": "Bedrooms",
+  "property.bathrooms": "Bathrooms",
+  "property.area": "Area",
+  "property.perMonth": "/mo",
+  "property.availableFrom": "Available from",
+  "property.deposit": "Deposit",
+  "property.amenities": "Amenities",
+  "property.reviews": "Reviews",
+  "property.noReviews": "No reviews yet",
+  "property.gallery": "Gallery",
+  "property.about": "About this property",
+  "property.rooms": "Rooms",
+  "property.from": "From",
+  "property.city": "City",
+  "property.allCities": "All cities",
+  "property.sortNewest": "Newest first",
+  "property.sortTitle": "Title A–Z",
+  "property.sortCity": "City A–Z",
+  "property.sortRentLow": "Rent: low to high",
+  "property.sortRentHigh": "Rent: high to low",
+  "property.sortLargest": "Largest first",
+  "property.anyRent": "Any rent",
+  "property.anySize": "Any size",
+  "property.searchPlaceholder": "Search by title, city or address…",
+  "property.resultCount": "{count} properties found",
+  "property.resultCountRoom": "{count} rooms found",
+  "property.matchCount": "{count} matches",
+
+  /* booking */
+  "booking.title": "My bookings",
+  "booking.request": "Request booking",
+  "booking.requestSent": "Request sent",
+  "booking.payNow": "Pay now",
+  "booking.cancel": "Cancel booking",
+  "booking.nights": "nights",
+  "booking.night": "night",
+  "booking.total": "Total",
+  "booking.timeline": "Booking timeline",
+  "booking.priceBreakdown": "Price breakdown",
+
+  /* money */
+  "money.paymentDue": "Payment due",
+  "money.paymentComplete": "Payment complete",
+  "money.paid": "Paid",
+  "money.refunded": "Refunded",
+  "money.pending": "Pending",
+  "money.processing": "Processing",
+
+  /* statuses */
+  "status.PENDING": "Pending",
+  "status.APPROVED": "Approved",
+  "status.REJECTED": "Rejected",
+  "status.CANCELLED": "Cancelled",
+  "status.EXPIRED": "Expired",
+  "status.AVAILABLE": "Available",
+  "status.OCCUPIED": "Occupied",
+  "status.MAINTENANCE": "Maintenance",
+  "status.PUBLISHED": "Published",
+  "status.DRAFT": "Draft",
+  "status.ARCHIVED": "Archived",
+  "status.SUCCEEDED": "Paid",
+  "status.FAILED": "Failed",
+  "status.REFUNDED": "Refunded",
+  "status.PARTIALLY_REFUNDED": "Partly refunded",
+  "status.PROCESSING": "Processing",
+
+  /* dashboard nav */
+  "dash.overview": "Overview",
+  "dash.bookings": "Bookings",
+  "dash.favorites": "Favourites",
+  "dash.messages": "Messages",
+  "dash.payments": "Payments",
+  "dash.reviews": "Reviews",
+  "dash.settings": "Settings",
+  "dash.listings": "Listings",
+  "dash.newListing": "New listing",
+  "dash.earnings": "Earnings",
+  "dash.users": "Users",
+  "dash.amenities": "Amenities",
+  "dash.auditLogs": "Audit logs",
+  "dash.properties": "Properties",
+
+  /* footer */
+  "footer.rights": "Academic project — B7A7 assignment.",
+  "footer.product": "Product",
+  "footer.company": "Company",
+  "footer.support": "Support",
+  "footer.legal": "Legal",
+
+  /* misc */
+  "misc.perMonth": "per month",
+  "misc.required": "Required",
+  "misc.optional": "Optional",
+  "misc.showMore": "Show more",
+  "misc.showLess": "Show less",
+  "misc.resultsFor": "Results for",
+
+  /* shared marketing copy */
+  "common.home": "Home",
+  "common.viewAll": "View all",
+  "action.createAccount": "Create an account",
+  "action.browseAllProperties": "Browse all properties",
+  "action.browseAllRooms": "Browse all rooms",
+  "action.contactUs": "Contact us",
+  "action.stillNeedHelp": "Still need help?",
+
+  /* counts and units */
+  "unit.beds": "{{count}} bedroom",
+  "unit.baths": "{{count}} bath",
+  "unit.rooms": "{{count}} rooms",
+  "unit.more": "+{{count}} more",
+  "unit.questions": "{{count}} questions",
+  "card.viewDetailsAria": "View {{title}} details",
+  "card.roomDetailsAria": "View {{property}} details for room {{room}}",
+
+  /* landing page */
+  "home.eyebrow": "Housing & roommate platform",
+  "home.title": "Find a room you will actually want to live in",
+  "home.subtitle":
+    "{{app}} connects tenants with property owners. Browse verified rooms, request a booking, pay through Stripe and manage everything from a single dashboard — with occupancy, revenue and approval analytics for the people who own the buildings.",
+  "home.ctaBrowse": "Browse available rooms",
+  "home.ctaList": "List your property",
+  "home.statRoles": "Roles",
+  "home.statEndpoints": "API endpoints",
+  "home.statPayments": "Payments",
+  "home.listingsTitle": "Newest published listings",
+  "home.listingsLive": "Live from the API",
+  "home.listingsEmpty": "No published listings yet. Seed the backend or sign in as an owner to publish one.",
+  "home.amenityCount": "{{count}} amenities",
+  "home.featuresTitle": "Everything the workflow needs",
+  "home.featuresSubtitle": "Not a static mockup — every feature below is wired to the live backend API.",
+  "home.stepsTitle": "How it works",
+  "home.stepsSubtitle": "Four steps from signing up to moving in, for both tenants and owners.",
+  "home.valueTitle": "Best value right now",
+  "home.valueSubtitle": "The lowest-rent rooms currently marked available on the platform.",
+  "home.valueCta": "See all available rooms",
+  "home.ctaBadge": "Evaluator friendly",
+  "home.ctaTitle": "Ready to find your next room?",
+  "home.ctaBody": "Create an account to browse rooms, manage listings and keep your housing journey organised.",
+  "home.ctaAction": "Sign in",
+  "home.feature.search.title": "Search that actually filters",
+  "home.feature.search.body":
+    "Filter by city, rent range, bedrooms, facing and availability. Every filter lives in the URL, so you can bookmark or share exactly what you are looking at.",
+  "home.feature.booking.title": "Bookings with real state",
+  "home.feature.booking.body":
+    "Requests move through pending, approved, rejected and cancelled — and the room availability updates with them, so you never request a room that is already taken.",
+  "home.feature.payments.title": "Stripe test-mode payments",
+  "home.feature.payments.body":
+    "Approved bookings open a Stripe Checkout Session. Payments settle through a verified webhook, and cancellations issue refunds automatically.",
+  "home.feature.roles.title": "Role-based access",
+  "home.feature.roles.body":
+    "Tenants, owners and admins each get their own dashboard and their own permissions, enforced in the middleware and again in the API.",
+  "home.feature.analytics.title": "Owner analytics",
+  "home.feature.analytics.body":
+    "Occupancy rate, approval rate, revenue and platform fees — computed from real booking and payment data, not estimates.",
+  "home.feature.verified.title": "Verified accounts",
+  "home.feature.verified.body":
+    "Email verification, password reset and a full audit trail of every mutating action, with actor, entity and IP recorded.",
+  "home.step.account.title": "Create your account",
+  "home.step.account.body":
+    "Register as a tenant to book, or as an owner to publish listings and approve requests.",
+  "home.step.search.title": "Search or publish",
+  "home.step.search.body":
+    "Tenants filter live listings; owners create a property and add rooms with photos and amenities.",
+  "home.step.request.title": "Request and approve",
+  "home.step.request.body":
+    "A booking request reserves the room while the owner reviews it, then approves or rejects.",
+  "home.step.pay.title": "Pay and review",
+  "home.step.pay.body": "Pay through Stripe Checkout, then leave a review once the stay is complete.",
+
+  /* browse / marketplace */
+  "browse.eyebrow": "Marketplace",
+  "browse.title": "Find your next place",
+  "browse.subtitle":
+    "Every listing below is live from the platform API — filter by city, rent or size and bookmark the exact view you want.",
+  "browse.tablist": "Browse by",
+  "browse.tabProperties": "Properties",
+  "browse.tabRooms": "Rooms",
+  "browse.searchProperties": "Search properties",
+  "browse.searchRooms": "Search rooms",
+  "browse.rentLabel": "Monthly rent",
+  "browse.bedroomsPlus": "{{count}}+ bedrooms",
+  "browse.price.upTo400": "Up to 400",
+  "browse.price.400to800": "400 – 800",
+  "browse.price.800to1200": "800 – 1,200",
+  "browse.price.1200plus": "1,200 and above",
+  "browse.toolbarNote": "Filters are stored in the URL — bookmark or share this exact view.",
+  "browse.clearSearch": "Clear search",
+  "browse.removeFilter": "Remove filter",
+  "browse.pageOf": "Page {{page}} of {{total}}",
+  "browse.error.properties": "Could not load properties",
+  "browse.error.rooms": "Could not load rooms",
+  "browse.error.partialProperties": "Some listings could not be loaded",
+  "browse.error.partialRooms": "Some rooms could not be loaded",
+  "browse.empty.properties.title": "No properties match these filters",
+  "browse.empty.properties.body":
+    "Try removing a filter, widening the price band, or searching a different city.",
+  "browse.empty.rooms.title": "No available rooms match these filters",
+  "browse.empty.rooms.body":
+    "Owners mark rooms available once they are ready. Widen the rent band or clear the date filter to see more.",
+
+  /* about */
+  "about.eyebrow": "Our mission",
+  "about.title": "About NestSpace",
+  "about.subtitle": "An open housing and roommate platform built for transparency, speed, and role-based clarity.",
+  "about.missionTitle": "Why NestSpace exists",
+  "about.mission1":
+    "Finding a room or managing a rental portfolio is fragmented. Listings live on marketplaces, payments go through ad-hoc channels, and communication disappears the moment a tenancy ends. {{app}} brings all of that into one platform.",
+  "about.mission2":
+    "For tenants, that means verified listings, real-time availability, a structured booking flow, and secure Stripe Checkout payments — no phone calls to confirm a room is still free. For owners, it means a self-service dashboard to publish properties, approve requests, and track occupancy and earnings with computed analytics.",
+  "about.mission3":
+    "The platform is designed around three distinct roles — Tenant, Owner and Admin — so every user sees only what is relevant to them and every action is auditable.",
+  "about.buildTitle": "How it is built",
+  "about.buildBody":
+    "NestSpace is a full-stack monorepo frontend that mirrors a real production backend. The backend exposes 79 API endpoints following a uniform envelope, every mutation is logged, and roles are enforced in the middleware and again in every resolver.",
+  "about.feature.rbac.title": "Role-based access control",
+  "about.feature.rbac.body":
+    "Tenants, owners and admins each get their own dashboard and permission set, enforced in the API and middleware so data stays compartmentalised.",
+  "about.feature.stripe.title": "Stripe test-mode payments",
+  "about.feature.stripe.body":
+    "Approved bookings open a Stripe Checkout Session. Payments settle through a verified webhook, and cancellations automatically issue refunds for SUCCEEDED payments.",
+  "about.feature.jwt.title": "JWT with rotating refresh tokens",
+  "about.feature.jwt.body":
+    "Access tokens carry the user's role and ID; refresh tokens rotate on every use. Tokens are stored as httpOnly cookies so JavaScript never reads them.",
+  "about.feature.audit.title": "Audit logging",
+  "about.feature.audit.body":
+    "Every mutating action records the actor, entity, action, before and after values, IP and user agent — making compliance and debugging straightforward.",
+  "about.feature.images.title": "Image uploads with Cloudinary",
+  "about.feature.images.body":
+    "Property and room images go through Cloudinary in production, with a local filesystem fallback for development. Uploads are capped at 6 files of 5 MB in jpeg, png, webp or avif.",
+  "about.stackTitle": "Tech stack",
+  "about.stack.frontend": "Frontend framework",
+  "about.stack.language": "Language",
+  "about.stack.styling": "Styling",
+  "about.stack.data": "Data fetching",
+  "about.stack.forms": "Forms",
+  "about.stack.icons": "Icons",
+  "about.stack.notifications": "Notifications",
+  "about.stack.charts": "Charts",
+  "about.stack.backend": "Backend framework",
+  "about.stack.orm": "ORM",
+  "about.stack.database": "Database",
+  "about.stack.auth": "Authentication",
+  "about.stack.payments": "Payments",
+  "about.stack.images": "Image storage",
+  "about.stack.envelope": "API envelope",
+  "about.rolesTitle": "Built for three roles",
+  "about.rolesSubtitle": "Every role gets its own dashboard, permission set, and home route.",
+  "about.overviewTitle": "Platform overview",
+  "about.stat.roles": "Roles",
+  "about.stat.endpoints": "API endpoints",
+  "about.stat.auth": "Auth",
+  "about.stat.payments": "Payments",
+  "about.stat.database": "Database",
+  "about.stat.frontend": "Frontend",
+  "about.role.tenant.body":
+    "Tenants are people looking for a room or whole property. They search and filter listings, request bookings with custom messages, pay through Stripe, and leave reviews after a stay.",
+  "about.role.tenant.cap1": "Search and filter listings by city, rent range, amenities, room features",
+  "about.role.tenant.cap2": "Request a booking with start and end dates plus a message to the owner",
+  "about.role.tenant.cap3": "Pay through Stripe Checkout once the booking is approved",
+  "about.role.tenant.cap4": "Leave a review after a completed stay (on rooms or properties)",
+  "about.role.tenant.cap5": "View and cancel their own bookings; track payment status",
+  "about.role.owner.body":
+    "Owners publish and manage property listings and room inventory. They review and approve booking requests, track occupancy, and monitor earnings.",
+  "about.role.owner.cap1": "Create and publish property listings with photos, amenities and address",
+  "about.role.owner.cap2": "Add rooms with rent, bedrooms, bathrooms, area and availability dates",
+  "about.role.owner.cap3": "Review, approve or reject incoming booking requests",
+  "about.role.owner.cap4": "Track occupancy rate, approval rate and net earnings after platform fees",
+  "about.role.owner.cap5": "Access an analytics dashboard with recent bookings and top-performing rooms",
+  "about.role.admin.body":
+    "Admins have full platform access. They manage users, view system-wide analytics, trigger refunds, inspect audit logs, and moderate content.",
+  "about.role.admin.cap1": "View and manage all users, properties, rooms, bookings and payments",
+  "about.role.admin.cap2": "Access platform-wide analytics: users, bookings, payments, engagement",
+  "about.role.admin.cap3": "Trigger refunds and inspect payment statuses",
+  "about.role.admin.cap4": "Review and filter audit logs for any entity or action type",
+  "about.role.admin.cap5": "Moderate listings and resolve disputes",
+
+  /* how it works */
+  "how.eyebrow": "The workflow",
+  "how.title": "How NestSpace works",
+  "how.subtitle": "End-to-end walkthrough for tenants and owners, from sign-up to moving in.",
+  "how.tenantTitle": "For tenants",
+  "how.tenantSubtitle": "Follow these steps to find and book a room on {{app}}.",
+  "how.tenantCtaAccount": "Create a tenant account",
+  "how.tenantCtaBrowse": "Browse listings",
+  "how.ownerTitle": "For owners",
+  "how.ownerSubtitle": "Publish properties, add rooms, and manage bookings from a single dashboard.",
+  "how.ownerCtaAccount": "Create an owner account",
+  "how.tenant.s1.title": "Create your account",
+  "how.tenant.s1.body":
+    "Register as a tenant. You will receive a verification email, then be redirected to your tenant dashboard.",
+  "how.tenant.s2.title": "Search and filter rooms",
+  "how.tenant.s2.body":
+    "Browse published listings. Filter by city, rent range, bedrooms, bathrooms, facing direction, amenities, and availability date. Every filter lives in the URL so you can bookmark or share your search.",
+  "how.tenant.s3.title": "Open a listing",
+  "how.tenant.s3.body":
+    "View full room details: description, rent, deposit, available-from date, property address, and photo gallery.",
+  "how.tenant.s4.title": "Request a booking",
+  "how.tenant.s4.body":
+    "Choose your start and end dates, optionally add a message to the owner, and submit the request. The room status flips to RESERVED and a PENDING booking is created.",
+  "how.tenant.s5.title": "Owner approves",
+  "how.tenant.s5.body":
+    "The owner reviews your request and either approves or rejects it. On approval, the room becomes OCCUPIED and a Stripe Checkout session is generated.",
+  "how.tenant.s6.title": "Pay through Stripe Checkout",
+  "how.tenant.s6.body":
+    "Complete payment in Stripe's hosted Checkout. The backend listens for the webhook confirmation; once received, the payment status becomes SUCCEEDED.",
+  "how.tenant.s7.title": "Move in and review",
+  "how.tenant.s7.body":
+    "Once your stay begins, you can message the owner through the platform. After the booking ends, you may leave a review of the room or property.",
+  "how.owner.s1.title": "Register as an owner",
+  "how.owner.s1.body":
+    "Sign up with the Owner role. Verify your email, then land on the owner dashboard with an empty portfolio.",
+  "how.owner.s2.title": "Create a property",
+  "how.owner.s2.body":
+    "Fill in the title, address, city, state, and amenities. Upload up to 6 images (5 MB each, jpeg/png/webp/avif) via Cloudinary or the local filesystem. Set the status to PUBLISHED to make it visible in public search.",
+  "how.owner.s3.title": "Add rooms",
+  "how.owner.s3.body":
+    "Within each property, add one or more rooms. Set rent, currency, deposit, bedrooms, bathrooms, area, facing direction, and available-from date. Rooms appear in search as soon as the property is published.",
+  "how.owner.s4.title": "Review booking requests",
+  "how.owner.s4.body":
+    "When a tenant requests a booking, you will see it in the owner dashboard. Approve to open Stripe Checkout; reject to release the room back to AVAILABLE.",
+  "how.owner.s5.title": "Track occupancy and earnings",
+  "how.owner.s5.body":
+    "The analytics dashboard shows occupancy rate, approval rate, gross revenue, platform fees deducted, and a list of recent bookings and top-performing rooms.",
+  "how.lifecycleTitle": "Booking lifecycle",
+  "how.lifecycleSubtitle":
+    "Every booking moves through clearly defined statuses so tenants and owners always know where things stand.",
+  "how.tableStatus": "Status",
+  "how.tableMeaning": "Meaning",
+  "how.status.PENDING":
+    "The tenant has submitted a booking request. The room is RESERVED. No payment has been collected yet.",
+  "how.status.APPROVED":
+    "The owner accepted the request. The room is OCCUPIED. A Stripe Checkout session is generated for the tenant.",
+  "how.status.REJECTED": "The owner declined the request. The room returns to AVAILABLE. No payment is involved.",
+  "how.status.CANCELLED":
+    "Either party cancelled an approved or pending booking. The room returns to AVAILABLE. If the payment had already SUCCEEDED, it is refunded automatically.",
+  "how.status.EXPIRED": "The request was not acted on within the platform's time window. The room returns to AVAILABLE.",
+  "how.paymentsTitle": "Payments and refunds",
+  "how.paymentsSubtitle": "How money moves through the platform, end to end.",
+  "how.flow.1.label": "Booking approved",
+  "how.flow.1.body": "Backend creates a PENDING payment record linked to the booking.",
+  "how.flow.2.label": "Stripe Checkout",
+  "how.flow.2.body": "Tenant is redirected to Stripe's hosted Checkout page.",
+  "how.flow.3.label": "Webhook received",
+  "how.flow.3.body": "Stripe POSTs a verified webhook event to the backend.",
+  "how.flow.4.label": "Payment SUCCEEDED",
+  "how.flow.4.body": "Payment status updates; booking stays APPROVED; room stays OCCUPIED.",
+  "how.flow.5.label": "Cancellation",
+  "how.flow.5.body": "On booking cancellation, a SUCCEEDED payment is automatically marked REFUNDED.",
+  "how.refundsTitle": "Refund rules",
+  "how.refund.1": "If a booking is CANCELLED before the tenant pays, no charge occurs.",
+  "how.refund.2": "If a booking is CANCELLED after the payment SUCCEEDED, the full amount is refunded automatically.",
+  "how.refund.3": "If a payment FAILED or is CANCELED, no refund is needed.",
+  "how.refund.4":
+    "The platform fee (default 5 %) is computed by the backend from the environment variable STRIPE_PLATFORM_FEE_PERCENT and is deducted from the gross before any payout to the owner.",
+  "how.feeNote":
+    "The platform fee is a percentage of the booking total, calculated server-side from STRIPE_PLATFORM_FEE_PERCENT (default 5 %). The tenant pays the full amount at checkout; the fee is subtracted from the owner's payout — the tenant never sees a separate platform-fee line item.",
+  "how.faqTitle": "Frequently asked questions",
+  "how.faqSubtitle": "Quick answers to common workflow questions.",
+  "how.faq.1.q": "Can a tenant cancel a booking after paying?",
+  "how.faq.1.a":
+    "Yes. If the booking is APPROVED and the payment has SUCCEEDED, the tenant can cancel. The backend automatically marks the payment as REFUNDED and the room returns to AVAILABLE.",
+  "how.faq.2.q": "Can a tenant request a booking on a room that is already occupied?",
+  "how.faq.2.a":
+    "No. The backend validates that the room status is AVAILABLE before allowing a booking request. Once approved, the room flips to OCCUPIED, blocking further requests.",
+  "how.faq.3.q": "What happens if the owner neither approves nor rejects a request?",
+  "how.faq.3.a":
+    "The request will eventually expire and the room will return to AVAILABLE. The exact expiry window is enforced by the backend.",
+  "how.faq.4.q": "Do owners pay anything to list a property?",
+  "how.faq.4.a":
+    "No. Listing a property and adding rooms is free. The platform deducts its fee from booking revenue before payout.",
+  "how.faq.5.q": "Can an owner reject a booking after the tenant has already paid?",
+  "how.faq.5.a":
+    "If the owner rejects, the booking is REJECTED. If the payment had already SUCCEEDED, the backend refunds it automatically. The room returns to AVAILABLE.",
+  "how.faq.6.q": "Are there any fees for tenants?",
+  "how.faq.6.a":
+    "There are no listing fees or subscription fees for tenants. Tenants only pay the rent amount set by the owner, processed through Stripe Checkout.",
+
+  /* faq page */
+  "faq.eyebrow": "FAQ",
+  "faq.title": "Frequently Asked Questions",
+  "faq.subtitle": "Everything you need to know about accounts, searching, bookings, payments and more.",
+  "faq.jump": "Jump to section",
+  "faq.cat.accounts": "Accounts & roles",
+  "faq.cat.search": "Searching & listings",
+  "faq.cat.bookings": "Bookings",
+  "faq.cat.payments": "Payments & refunds",
+  "faq.cat.reviews": "Reviews & messaging",
+  "faq.cat.security": "Security & privacy",
+  "faq.accounts.1.q": "What are the three user roles?",
+  "faq.accounts.1.a":
+    "NestSpace has three roles: Tenant (searches and books rooms), Owner (publishes properties and approves bookings), and Admin (full platform access for moderation and analytics). Your role is enforced by the backend on every request.",
+  "faq.accounts.2.q": "How do I register?",
+  "faq.accounts.2.a1": "Visit",
+  "faq.accounts.2.a2":
+    ", fill in your name, email and password, and choose a role. You will receive an email verification link. Once verified, you will be redirected to the dashboard for your role.",
+  "faq.accounts.3.q": "Can I change my role after registering?",
+  "faq.accounts.3.a":
+    "Role changes are handled by an admin. An admin can assign a new role via the admin dashboard. The middleware enforces role-based access on every protected route.",
+  "faq.accounts.4.q": "What if I forget my password?",
+  "faq.accounts.4.a1": "Use the",
+  "faq.accounts.4.a2": "page to request a password-reset email. The reset link is time-limited and single-use.",
+  "faq.search.1.q": "How do I search for rooms?",
+  "faq.search.1.a1": "Go to",
+  "faq.search.1.a2":
+    "and use the filter panel. You can filter by city, rent range, bedrooms, bathrooms, room facing, amenities, and availability date. Filters are reflected in the URL, so you can bookmark or share your search.",
+  "faq.search.2.q": "Who can publish a listing?",
+  "faq.search.2.a":
+    "Only users registered as Owner or Admin can create and publish property listings. Tenants cannot publish listings.",
+  "faq.search.3.q": "What image formats are supported?",
+  "faq.search.3.a":
+    "Upload up to 6 images per entity (property or room). Accepted formats are jpeg, png, webp and avif. Each file must be 5 MB or smaller. Images are uploaded to Cloudinary in production or the local filesystem in development.",
+  "faq.search.4.q": "Can an owner edit a published listing?",
+  "faq.search.4.a":
+    "Yes. Owners can update their property and room details at any time. If significant changes are made, the property may need to be re-published. Admins can also edit any listing.",
+  "faq.bookings.1.q": "How do I book a room?",
+  "faq.bookings.1.a1": "Find a room on the",
+  "faq.bookings.1.a2":
+    ", open its detail view, select your start and end dates, optionally write a message to the owner, and submit the request. The room becomes RESERVED and the booking enters the PENDING state.",
+  "faq.bookings.2.q": "What booking statuses exist?",
+  "faq.bookings.2.a.intro": "A booking can be in one of five states:",
+  "faq.bookings.2.a.PENDING": "waiting for the owner's decision",
+  "faq.bookings.2.a.APPROVED": "the owner accepted; payment is now due",
+  "faq.bookings.2.a.REJECTED": "the owner declined; room released",
+  "faq.bookings.2.a.CANCELLED": "either party cancelled; room released",
+  "faq.bookings.2.a.EXPIRED": "the request timed out before a decision",
+  "faq.bookings.3.q": "How long does the owner have to respond?",
+  "faq.bookings.3.a":
+    "The backend enforces a time window for owner responses. If the owner neither approves nor rejects within that window, the booking status flips to EXPIRED and the room returns to AVAILABLE.",
+  "faq.bookings.4.q": "Can I book multiple rooms at once?",
+  "faq.bookings.4.a":
+    "Each room requires a separate booking request. There is no cart or multi-room checkout — each booking is tied to a single room and processed independently.",
+  "faq.payments.1.q": "How do payments work?",
+  "faq.payments.1.a":
+    "Once a booking is APPROVED, the backend creates a Stripe Checkout Session. The tenant is redirected to Stripe's hosted payment page. Stripe sends a verified webhook event back to the backend, which marks the payment as SUCCEEDED. All payments run in Stripe test mode on this platform.",
+  "faq.payments.2.q": "Is there a platform fee for tenants?",
+  "faq.payments.2.a":
+    "No. The platform fee is deducted from the owner's payout, not charged to the tenant. The tenant pays only the rent amount set by the owner. The fee percentage is computed server-side from the STRIPE_PLATFORM_FEE_PERCENT environment variable (default 5 %).",
+  "faq.payments.3.q": "When do refunds happen?",
+  "faq.payments.3.a":
+    "If a booking is CANCELLED after the payment has SUCCEEDED, the backend automatically marks the payment as REFUNDED. If the payment has not yet succeeded (PENDING or PROCESSING), no charge occurs. Partial refunds are not currently supported — a cancellation refunds the full amount.",
+  "faq.payments.4.q": "Can I see my payment history?",
+  "faq.payments.4.a":
+    "Yes. The tenant and owner dashboards display payment statuses for each booking. Admins can see all payments across the platform. Payment statuses follow the same lifecycle as bookings: PENDING, PROCESSING, SUCCEEDED, FAILED, REFUNDED, PARTIALLY_REFUNDED, CANCELED.",
+  "faq.reviews.1.q": "Who can leave a review?",
+  "faq.reviews.1.a":
+    "Only participants of an APPROVED booking can leave a review — that is, the tenant who stayed and the property owner. Reviews are limited to the specific booking and cannot be written for rooms or properties the user has never booked.",
+  "faq.reviews.2.q": "Can I review a property instead of a room?",
+  "faq.reviews.2.a":
+    "Yes. Reviews can target either a ROOM or the PROPERTY as a whole. Choose the review subject when submitting.",
+  "faq.reviews.3.q": "How does messaging work?",
+  "faq.reviews.3.a":
+    "Tenants and owners can send messages through the platform. Messages are linked to a property and stored in the database. Every message is associated with the sender and recipient user IDs and recorded in the audit log under the MESSAGE_SENT action.",
+  "faq.reviews.4.q": "Are messages moderated?",
+  "faq.reviews.4.a":
+    "Admins can review messages through the audit log and user management interfaces. Standard users cannot see messages sent between other users.",
+  "faq.security.1.q": "How is my data protected?",
+  "faq.security.1.a":
+    "Authentication uses JWT access tokens with rotating refresh tokens stored as httpOnly cookies. JavaScript cannot read the tokens. All API mutations require a valid session, and role-based access is enforced in the middleware and again in the backend.",
+  "faq.security.2.q": "What is audit logging?",
+  "faq.security.2.a":
+    "Every mutating action — booking creation, payment status change, image upload, review submission — is recorded in an audit log with the actor ID, entity ID, action type, before and after values, IP address and user agent. Admins can inspect the full audit trail.",
+  "faq.security.3.q": "Is the platform GDPR-friendly?",
+  "faq.security.3.a":
+    "The platform provides email verification, password reset, and role-based data access. Users can delete their accounts, which cascades according to the backend's data-retention configuration. For full legal review, consult a privacy specialist.",
+  "faq.security.4.q": "Are Stripe webhooks secure?",
+  "faq.security.4.a":
+    "Yes. The backend verifies the Stripe webhook signature using the STRIPE_WEBHOOK_SECRET before processing any payment event. Invalid or unauthenticated webhooks are rejected with a 401 response.",
+  "faq.pricingTitle": "Pricing and platform fees",
+  "faq.pricingSubtitle": "How rent is set, collected and distributed.",
+  "faq.pricing.p1":
+    "Rent amounts are set by property owners when they create or edit a room. {{app}} does not control or influence rent pricing.",
+  "faq.pricing.p2":
+    "When a booking is approved and the payment SUCCEEDED, the backend computes a platformFee using the STRIPE_PLATFORM_FEE_PERCENT environment variable (default 5 % of the booking total). This fee is deducted from the gross before the owner's payout. The tenant pays the full rent amount at checkout — there is no separate platform-fee line item for tenants, and there is no tenant-side listing fee.",
+  "faq.pricing.example": "Fee breakdown (example)",
+  "faq.pricing.monthlyRent": "Monthly rent",
+  "faq.pricing.tenantPays": "Tenant pays (total)",
+  "faq.pricing.platformFee": "Platform fee (5 %, server-side)",
+  "faq.pricing.ownerReceives": "Owner receives",
+  "faq.pricing.note":
+    "The fee percentage is a backend constant. The frontend displays computed totals returned by the API; owners see net earnings in their dashboard analytics.",
+  "faq.helpBadge": "Still have questions?",
+  "faq.helpTitle": "We're here to help",
+  "faq.helpBody":
+    "Browse the full FAQ above or get in touch. Sign in whenever you are ready to manage your account.",
+
+  /* contact page */
+  "contact.eyebrow": "Get in touch",
+  "contact.title": "Contact us",
+  "contact.subtitle": "Have a question, need help, or want to evaluate the platform? Reach out directly.",
+  "contact.form.subject": "Subject",
+  "contact.form.selectSubject": "Select a subject",
+  "contact.form.message": "Message",
+  "contact.form.messagePlaceholder": "Tell us what you need help with…",
+  "contact.form.note":
+    "This form opens your default email client with a pre-filled message. There is no backend contact endpoint — all communication happens directly via email.",
+  "contact.form.composing": "Composing…",
+  "contact.form.submit": "Open email client",
+  "contact.subject.general": "General inquiry",
+  "contact.subject.support": "Technical support",
+  "contact.subject.partnership": "Partnership",
+  "contact.subject.other": "Other",
+  "contact.success.title": "Message composed",
+  "contact.success.body":
+    "Your email client should have opened with a pre-filled message. Please send it to reach the team. If nothing happened, you can also email us directly.",
+  "contact.success.again": "Send another message",
+  "contact.toast.title": "Opening your email client",
+  "contact.toast.body":
+    "A new message has been composed with your details. Send it from your email app to reach the team.",
+  "contact.error.nameMin": "Name must be at least 2 characters",
+  "contact.error.nameMax": "Name must be 100 characters or fewer",
+  "contact.error.email": "Please enter a valid email address",
+  "contact.error.subject": "Please select a subject",
+  "contact.error.messageMin": "Message must be at least 10 characters",
+  "contact.error.messageMax": "Message must be 2,000 characters or fewer",
+  "contact.channels.title": "Contact channels",
+  "contact.channels.email": "Email",
+  "contact.channels.messagingTitle": "In-app messaging",
+  "contact.channels.messagingBody": "Logged-in users can message owners directly from a listing.",
+  "contact.channels.hoursTitle": "Response hours",
+  "contact.channels.hoursBody": "Monday – Friday, 9 AM – 6 PM UTC",
+  "contact.demo.badge": "Evaluators",
+  "contact.demo.title": "Try it without an account",
+  "contact.demo.body": "Sign in to access your dashboard and continue where you left off.",
+  "contact.quickTitle": "Quick answers",
+  "contact.quick.1.q": "How do I sign up as a tenant?",
+  "contact.quick.1.a":
+    "Visit /register and choose the Tenant role. After email verification you will land on your tenant dashboard.",
+  "contact.quick.2.q": "How do I publish a listing?",
+  "contact.quick.2.a":
+    "Register as an Owner, then use the owner dashboard to create a property and add rooms with photos and amenities.",
+  "contact.quick.3.q": "Is there a platform fee for tenants?",
+  "contact.quick.3.a":
+    "No. Tenants pay only the rent set by the owner. The platform fee (default 5%) is deducted from the owner's payout.",
+} as const;
+
+export type TranslationKey = keyof typeof en;
+
+const bn: Partial<Record<TranslationKey, string>> = {
+  "brand.name": "নেস্টস্পেস",
+  "brand.tagline": "বাড়ি ও ঘর",
+  "nav.browse": "ঘর খুঁজুন",
+  "nav.howItWorks": "কীভাবে কাজ করে",
+  "nav.about": "পরিচিতি",
+  "nav.faq": "সাধারণ প্রশ্ন",
+  "nav.contact": "যোগাযোগ",
+  "nav.login": "লগ ইন",
+  "nav.register": "শুরু করুন",
+  "nav.dashboard": "ড্যাশবোর্ড",
+  "nav.signOut": "সাইন আউট",
+  "nav.skipToContent": "মূল অংশে যান",
+  "nav.language": "ভাষা",
+  "nav.menu": "মেনু",
+
+  "action.save": "সংরক্ষণ করুন",
+  "action.saveChanges": "পরিবর্তন সংরক্ষণ করুন",
+  "action.cancel": "বাতিল",
+  "action.delete": "মুছুন",
+  "action.remove": "সরান",
+  "action.edit": "সম্পাদনা",
+  "action.view": "দেখুন",
+  "action.viewDetails": "বিস্তারিত দেখুন",
+  "action.back": "ফিরে যান",
+  "action.next": "পরবর্তী",
+  "action.previous": "পূর্ববর্তী",
+  "action.continue": "এগিয়ে যান",
+  "action.submit": "জমা দিন",
+  "action.retry": "আবার চেষ্টা করুন",
+  "action.clearAll": "সব মুছুন",
+  "action.close": "বন্ধ",
+  "action.confirm": "নিশ্চিত করুন",
+  "action.search": "খুঁজুন",
+  "action.filter": "ফিল্টার",
+  "action.sort": "সাজান",
+  "action.apply": "প্রয়োগ করুন",
+  "action.loading": "লোড হচ্ছে",
+  "action.signIn": "লগ ইন",
+  "action.signUp": "অ্যাকাউন্ট খুলুন",
+  "action.send": "পাঠান",
+  "action.copy": "কপি",
+  "action.copied": "কপি হয়েছে",
+
+  "state.empty": "এখানে এখনো কিছু নেই",
+  "state.error": "কিছু একটা সমস্যা হয়েছে",
+  "state.retry": "আবার চেষ্টা করুন",
+  "state.noResults": "কিছু মেলেনি",
+  "state.offline": "সার্ভারে পৌঁছানো যাচ্ছে না",
+
+  "auth.email": "ইমেইল",
+  "auth.password": "পাসওয়ার্ড",
+  "auth.name": "পুরো নাম",
+  "auth.phone": "মোবাইল নম্বর",
+  "auth.newPassword": "নতুন পাসওয়ার্ড",
+  "auth.confirmPassword": "নতুন পাসওয়ার্ড নিশ্চিত করুন",
+  "auth.currentPassword": "বর্তমান পাসওয়ার্ড",
+  "auth.signInTitle": "আবার স্বাগতম",
+  "auth.signInSubtitle": "আপনার বুকিং, বার্তা ও পেমেন্ট পরিচালনা করতে লগ ইন করুন।",
+  "auth.registerTitle": "অ্যাকাউন্ট তৈরি করুন",
+  "auth.demoTitle": "ডেমো অ্যাকাউন্ট",
+  "auth.demoSubtitle": "পাসওয়ার্ড ছাড়াই সঙ্গে সঙ্গে দেখে নিন।",
+  "auth.role.tenant": "ভাড়াটিয়া",
+  "auth.role.owner": "মালিক",
+  "auth.role.admin": "অ্যাডমিন",
+  "auth.forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
+  "auth.noAccount": "নতুন এসেছেন?",
+  "auth.haveAccount": "আগে থেকেই অ্যাকাউন্ট আছে?",
+  "auth.oneClick": "এক ক্লিকে",
+
+  "property.bedrooms": "বেডরুম",
+  "property.bathrooms": "বাথরুম",
+  "property.area": "আয়তন",
+  "property.perMonth": "/মাস",
+  "property.availableFrom": "উপলব্ধ থেকে",
+  "property.deposit": "ডিপোজিট",
+  "property.amenities": "সুবিধা",
+  "property.reviews": "রিভিউ",
+  "property.noReviews": "এখনো কোনো রিভিউ নেই",
+  "property.gallery": "ছবি",
+  "property.about": "এই সম্পত্তি সম্পর্কে",
+  "property.rooms": "ঘর",
+  "property.from": "শুরু",
+  "property.city": "শহর",
+  "property.allCities": "সব শহর",
+  "property.sortNewest": "নতুন আগে",
+  "property.sortTitle": "নাম অনুসারে",
+  "property.sortCity": "শহর অনুসারে",
+  "property.sortRentLow": "ভাড়া: কম থেকে বেশি",
+  "property.sortRentHigh": "ভাড়া: বেশি থেকে কম",
+  "property.sortLargest": "বড় আগে",
+  "property.anyRent": "যেকোনো ভাড়া",
+  "property.anySize": "যেকোনো আকার",
+  "property.searchPlaceholder": "নাম, শহর বা ঠিকানা দিয়ে খুঁজুন…",
+  "property.resultCount": "{count}টি সম্পত্তি পাওয়া গেছে",
+  "property.resultCountRoom": "{count}টি ঘর পাওয়া গেছে",
+  "property.matchCount": "{count}টি মিল",
+
+  "booking.title": "আমার বুকিং",
+  "booking.request": "বুকিংয়ের অনুরোধ",
+  "booking.requestSent": "অনুরোধ পাঠানো হয়েছে",
+  "booking.payNow": "এখনই পেমেন্ট করুন",
+  "booking.cancel": "বুকিং বাতিল করুন",
+  "booking.nights": "রাত",
+  "booking.night": "রাত",
+  "booking.total": "সর্বমোট",
+  "booking.timeline": "বুকিংয়ের ধাপ",
+  "booking.priceBreakdown": "খরচের বিবরণ",
+
+  "money.paymentDue": "পেমেন্ট বাকি",
+  "money.paymentComplete": "পেমেন্ট সম্পন্ন",
+  "money.paid": "পরিশোধিত",
+  "money.refunded": "ফেরত দেওয়া হয়েছে",
+  "money.pending": "অপেক্ষমাণ",
+  "money.processing": "প্রক্রিয়াধীন",
+
+  "status.PENDING": "অপেক্ষমাণ",
+  "status.APPROVED": "অনুমোদিত",
+  "status.REJECTED": "প্রত্যাখ্যাত",
+  "status.CANCELLED": "বাতিল",
+  "status.EXPIRED": "মেয়াদোত্তীর্ণ",
+  "status.AVAILABLE": "খালি",
+  "status.OCCUPIED": "ব্যবহৃত",
+  "status.MAINTENANCE": "মেরামত",
+  "status.PUBLISHED": "প্রকাশিত",
+  "status.DRAFT": "খসড়া",
+  "status.ARCHIVED": "আর্কাইভ",
+  "status.SUCCEEDED": "পরিশোধিত",
+  "status.FAILED": "ব্যর্থ",
+  "status.REFUNDED": "ফেরত দেওয়া হয়েছে",
+  "status.PARTIALLY_REFUNDED": "আংশিক ফেরত",
+  "status.PROCESSING": "প্রক্রিয়াধীন",
+
+  "dash.overview": "সারসংক্ষেপ",
+  "dash.bookings": "বুকিং",
+  "dash.favorites": "পছন্দের তালিকা",
+  "dash.messages": "বার্তা",
+  "dash.payments": "পেমেন্ট",
+  "dash.reviews": "রিভিউ",
+  "dash.settings": "সেটিংস",
+  "dash.listings": "লিস্টিং",
+  "dash.newListing": "নতুন লিস্টিং",
+  "dash.earnings": "আয়",
+  "dash.users": "ব্যবহারকারী",
+  "dash.amenities": "সুবিধাসমূহ",
+  "dash.auditLogs": "অডিট লগ",
+  "dash.properties": "সম্পত্তি",
+
+  "footer.rights": "অ্যাকাডেমিক প্রকল্প — বি৭এ৭ অ্যাসাইনমেন্ট।",
+  "footer.product": "প্রোডাক্ট",
+  "footer.company": "কোম্পানি",
+  "footer.support": "সহায়তা",
+  "footer.legal": "আইনি",
+
+  "misc.perMonth": "প্রতি মাসে",
+  "misc.required": "আবশ্যক",
+  "misc.optional": "ঐচ্ছিক",
+  "misc.showMore": "আরও দেখুন",
+  "misc.showLess": "কম দেখুন",
+  "misc.resultsFor": "ফলাফল",
+};
+
+export type Dictionary = Record<string, string>;
+
+const EN: Dictionary = en;
+
+/** Full English dictionary, with `{{name}}` placeholders resolved by the caller. */
+export function getDictionary(locale: Locale): Dictionary {
+  if (locale === "en") return EN;
+  const merged: Dictionary = { ...EN };
+  for (const [key, value] of Object.entries(bn)) {
+    if (value) merged[key] = value;
+  }
+  return merged;
+}

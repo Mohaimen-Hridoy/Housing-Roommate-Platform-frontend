@@ -4,25 +4,27 @@ import Link from "next/link";
 import { BrandMark } from "@/components/layout/site-chrome";
 import { Card, CardContent } from "@/components/ui/card";
 import { demoLoginAction, loginAction } from "@/app/(auth)/actions";
-import { LoginForm } from "@/components/auth/login-form";
 import { DemoLoginPanel } from "@/components/auth/demo-login-panel";
+import { LoginForm } from "@/components/auth/login-form";
+import { LanguageToggle } from "@/components/brand/language-toggle";
 
 export const metadata: Metadata = {
   title: "Sign in",
   description:
-    "Sign in to NestSpace to book rooms, manage your listings or administer the platform. One-click demo logins are available for all three roles.",
+    "Sign in to NestSpace to book rooms, manage your listings or administer the platform. Demo accounts are available for all three roles.",
 };
 
 export default function LoginPage() {
   return (
     <div className="min-h-dvh bg-background">
       <div className="container-page py-10">
-        <div className="mb-8 flex justify-center">
+        <div className="mb-8 flex items-center justify-between">
           <BrandMark />
+          <LanguageToggle />
         </div>
 
-        <div className="mx-auto grid w-full max-w-5xl gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
-          <Card>
+        <div className="mx-auto w-full max-w-xl space-y-6">
+          <Card className="surface-raised edge-light">
             <CardContent className="p-6 sm:p-8">
               <div className="mb-6 space-y-1.5">
                 <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>

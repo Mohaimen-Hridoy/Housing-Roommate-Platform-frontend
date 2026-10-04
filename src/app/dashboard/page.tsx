@@ -148,9 +148,9 @@ export default async function TenantOverviewPage() {
             action={{ label: "Browse rooms", href: "/properties" }}
           />
         ) : (
-          <Card>
+          <Card className="overflow-hidden border-border/80 shadow-sm">
             <CardContent className="p-0">
-              <ul className="divide-y divide-border">
+              <ul className="divide-y divide-border/70">
                 {recent.map((booking) => {
                   const nights = booking.endDate
                     ? nightsBetween(booking.startDate, booking.endDate)
@@ -159,10 +159,10 @@ export default async function TenantOverviewPage() {
                     <li key={booking.id}>
                       <Link
                         href={`/dashboard/bookings/${booking.id}`}
-                        className="flex flex-col gap-3 px-5 py-4 transition-colors hover:bg-muted/50 sm:flex-row sm:items-center sm:justify-between"
+                        className="group flex flex-col gap-3 px-5 py-4 transition-colors hover:bg-primary/[0.035] sm:flex-row sm:items-center sm:justify-between"
                       >
                         <div className="min-w-0 space-y-1">
-                          <p className="truncate text-sm font-medium">
+                          <p className="truncate text-sm font-medium transition-colors group-hover:text-primary">
                             {formatDate(booking.startDate, "d MMM yyyy")} →{" "}
                             {formatDate(booking.endDate, "d MMM yyyy")}
                           </p>

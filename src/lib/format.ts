@@ -6,16 +6,52 @@ function toDate(value: string | Date | null | undefined): Date | null {
   return isValid(date) ? date : null;
 }
 
+/**
+ * Currency symbols. `Intl` renders BDT as "BDT" or "৳" depending on locale and
+ * often in the wrong position, so the symbol is applied explicitly.
+ */
+const CURRENCY_SYMBOLS: Record<string, string> = {
+  usd: "$",
+  bdt: "৳",
+  eur: "€",
+  gbp: "£",
+  inr: "₹",
+  pkr: "₨",
+  npr: "₨",
+  cny: "¥",
+  jpy: "¥",
+  chf: "CHF",
+  sek: "kr",
+  nzd: "$",
+};
+
+/**
+ * Bangladeshi Taka groups by lakh and crore (12,50,000), which `en-IN`
+ * produces. Every other currency keeps Western grouping.
+ */
+function currencyLocale(code: string): string {
+  return code === "bdt" ? "en-IN" : "en-US";
+}
+
+/**
+ * Formats an amount in the currency the API supplied. The value is never
+ * converted or rescaled — a `usd` record stays in dollars.
+ */
 export function formatCurrency(amount: number | null | undefined, currency = "usd"): string {
   if (amount === null || amount === undefined || Number.isNaN(amount)) return "—";
+
+  const code = currency.toLowerCase();
+  const symbol = CURRENCY_SYMBOLS[code] ?? code.toUpperCase();
+  const fractionDigits = amount % 1 === 0 ? 0 : 2;
+
   try {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: currency.toUpperCase(),
-      maximumFractionDigits: amount % 1 === 0 ? 0 : 2,
+    const formatted = new Intl.NumberFormat(currencyLocale(code), {
+      minimumFractionDigits: fractionDigits,
+      maximumFractionDigits: fractionDigits,
     }).format(amount);
+    return `${symbol}${formatted}`;
   } catch {
-    return `${currency.toUpperCase()} ${amount.toFixed(2)}`;
+    return `${symbol} ${amount.toFixed(fractionDigits)}`;
   }
 }
 

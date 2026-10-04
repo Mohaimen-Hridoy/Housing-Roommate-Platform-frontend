@@ -53,11 +53,15 @@ export type PaymentProvider = "STRIPE" | "MOCK";
 export type ReviewSubject = "ROOM" | "PROPERTY";
 
 export const CURRENCIES = [
+  "bdt",
   "usd",
   "eur",
   "gbp",
   "cad",
   "aud",
+  "inr",
+  "pkr",
+  "npr",
   "jpy",
   "chf",
   "cny",

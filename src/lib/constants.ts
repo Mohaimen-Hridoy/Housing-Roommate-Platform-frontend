@@ -98,7 +98,10 @@ export interface DemoAccount {
   home: string;
 }
 
-/** Seeded by the backend (`npm run db:seed`) — used by the one-click demo login. */
+/**
+ * Seeded by the backend (`npm run db:seed`) and used by the one-click demo
+ * login required by the assignment.
+ */
 export const DEMO_ACCOUNTS: DemoAccount[] = [
   {
     role: "ADMIN",

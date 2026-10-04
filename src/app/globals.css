@@ -4,77 +4,106 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
-    --foreground: 222 47% 11%;
+    /* Palette adapted from the RentNest reference: deep forest green, mint,
+       terracotta. Every value is a token so dark mode can re-point them. */
+    --background: 231 100% 99%;
+    --foreground: 213 63% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 213 63% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 213 63% 12%;
 
-    --primary: 221 83% 45%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 169 100% 13%;
+    --primary-foreground: 160 39% 95%;
 
-    --secondary: 210 40% 94%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 206 47% 94%;
+    --secondary-foreground: 215 27% 24%;
 
-    --muted: 210 40% 95%;
-    --muted-foreground: 215 16% 42%;
+    --muted: 218 100% 95%;
+    --muted-foreground: 216 20% 34%;
 
-    --accent: 172 66% 30%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 161 100% 92%;
+    --accent-foreground: 171 100% 9%;
 
-    --destructive: 0 72% 45%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 4 62% 40%;
+    --destructive-foreground: 0 0% 100%;
 
-    --success: 142 62% 32%;
-    --success-foreground: 210 40% 98%;
+    --success: 158 64% 26%;
+    --success-foreground: 160 39% 95%;
 
-    --warning: 35 92% 42%;
-    --warning-foreground: 210 40% 98%;
+    --warning: 32 88% 38%;
+    --warning-foreground: 0 0% 100%;
 
-    --border: 214 30% 88%;
-    --input: 214 30% 88%;
-    --ring: 221 83% 45%;
+    --border: 214 40% 87%;
+    --input: 214 40% 87%;
+    --ring: 169 100% 13%;
 
-    --radius: 0.75rem;
+    /* Brand layer. `--mint` is the light, high-energy accent; `--brand` is
+       terracotta and is used for emphasis fills, never small body text. */
+    --mint: 163 70% 80%;
+    --mint-foreground: 171 100% 9%;
+    --brand: 11 60% 39%;
+    --brand-ink: 10 73% 29%;
+    --surface-mint: 160 39% 95%;
+
+    /* Deliberate radius scale rather than ad-hoc values. */
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-2xl: 1rem;
+    --radius-3xl: 1.5rem;
+    --radius: var(--radius-2xl);
+
+    /* Shadows are tinted with the brand green, never neutral black. */
+    --shadow-color: 169 100% 13%;
   }
 
   .dark {
-    --background: 222 47% 8%;
-    --foreground: 210 40% 96%;
+    --background: 195 38% 5%;
+    --foreground: 160 39% 95%;
 
-    --card: 222 44% 11%;
-    --card-foreground: 210 40% 96%;
+    --card: 196 34% 8%;
+    --card-foreground: 160 39% 95%;
 
-    --popover: 222 44% 11%;
-    --popover-foreground: 210 40% 96%;
+    --popover: 196 34% 8%;
+    --popover-foreground: 160 39% 95%;
 
-    --primary: 217 91% 62%;
-    --primary-foreground: 222 47% 11%;
+    /* In dark mode the mint carries the primary role, mirroring the mint focus
+       rings in the reference design. */
+    --primary: 163 70% 80%;
+    --primary-foreground: 171 100% 9%;
 
-    --secondary: 217 33% 18%;
-    --secondary-foreground: 210 40% 96%;
+    --secondary: 196 26% 15%;
+    --secondary-foreground: 160 39% 95%;
 
-    --muted: 217 33% 18%;
-    --muted-foreground: 215 20% 68%;
+    --muted: 196 26% 15%;
+    --muted-foreground: 195 16% 70%;
 
-    --accent: 172 66% 45%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 171 38% 14%;
+    --accent-foreground: 163 70% 80%;
 
-    --destructive: 0 63% 55%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 4 66% 58%;
+    --destructive-foreground: 195 38% 5%;
 
-    --success: 142 55% 45%;
-    --success-foreground: 222 47% 11%;
+    --success: 156 52% 45%;
+    --success-foreground: 195 38% 5%;
 
-    --warning: 35 92% 55%;
-    --warning-foreground: 222 47% 11%;
+    --warning: 36 92% 58%;
+    --warning-foreground: 195 38% 5%;
 
-    --border: 217 33% 22%;
-    --input: 217 33% 22%;
-    --ring: 217 91% 62%;
+    --border: 196 22% 19%;
+    --input: 196 22% 19%;
+    --ring: 163 70% 80%;
+
+    --mint: 163 60% 70%;
+    --mint-foreground: 171 100% 9%;
+    --brand: 14 68% 58%;
+    --brand-ink: 20 78% 72%;
+    --surface-mint: 196 30% 8%;
+
+    --shadow-color: 195 60% 2%;
   }
 }
 
@@ -83,9 +112,18 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
+    background-image: linear-gradient(hsl(160 39% 95% / 0.72) 0%, transparent 280px);
+  }
+
+  .dark body {
+    background-image: linear-gradient(hsl(171 40% 10% / 0.6) 0%, transparent 320px);
   }
 
   h1,
@@ -93,10 +131,27 @@
   h3,
   h4 {
     @apply font-semibold tracking-tight text-foreground;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 
   :focus-visible {
     @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  ::selection {
+    background-color: hsl(var(--mint) / 0.55);
+    color: hsl(var(--accent-foreground));
+  }
+
+  /* Prices, counts and dates get the mono face so digits align in tables. */
+  .tabular {
+    font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
   }
 }
 
@@ -106,7 +161,39 @@
   }
 
   .surface {
-    @apply rounded-xl border border-border bg-card text-card-foreground shadow-sm;
+    @apply rounded-2xl border border-border bg-card text-card-foreground;
+    box-shadow:
+      0 1px 2px hsl(var(--shadow-color) / 0.06),
+      0 10px 28px -14px hsl(var(--shadow-color) / 0.22);
+  }
+
+  .surface-raised {
+    @apply rounded-3xl border border-border bg-card text-card-foreground;
+    box-shadow:
+      0 2px 4px hsl(var(--shadow-color) / 0.06),
+      0 22px 48px -20px hsl(var(--shadow-color) / 0.30);
+  }
+
+  .surface-mint {
+    background-color: hsl(var(--surface-mint));
+    background-image: radial-gradient(38rem 20rem at 82% -10%, hsl(var(--mint) / 0.55), transparent 70%);
+  }
+
+  .dashboard-main {
+    background-image:
+      radial-gradient(52rem 26rem at 100% 0%, hsl(var(--mint) / 0.14), transparent 70%),
+      linear-gradient(180deg, hsl(var(--background)), hsl(var(--background)));
+  }
+
+  .interactive-surface {
+    @apply transition-[transform,box-shadow,border-color] duration-300 ease-out-expo;
+  }
+
+  .interactive-surface:hover {
+    @apply -translate-y-1 border-primary/35;
+    box-shadow:
+      0 2px 4px hsl(var(--shadow-color) / 0.08),
+      0 20px 44px -20px hsl(var(--shadow-color) / 0.32);
   }
 
   .skeleton {
@@ -121,14 +208,87 @@
   .grid-auto {
     @apply grid gap-6 sm:grid-cols-2 lg:grid-cols-3;
   }
+
+  /* Terracotta emphasis, reserved for headlines and key figures. */
+  .text-brand {
+    color: hsl(var(--brand));
+  }
+
+  .text-gradient-brand {
+    background-image: linear-gradient(100deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.88) 40%, hsl(var(--brand)) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .dark .text-gradient-brand {
+    background-image: linear-gradient(100deg, hsl(var(--primary)) 0%, hsl(var(--mint)) 45%, hsl(var(--brand)) 100%);
+  }
+
+  /* Lit bevel along the top edge of an elevated card. */
+  .edge-light {
+    position: relative;
+  }
+
+  .edge-light::before {
+    content: "";
+    position: absolute;
+    inset-inline: 1.25rem;
+    top: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--foreground) / 0.12), transparent);
+    pointer-events: none;
+  }
+
+  /* Staggered entrance for card grids. `--i` is the index, set inline. */
+  .stagger-item {
+    animation: property-card-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--i, 0) * 60ms);
+  }
+}
+
+@layer utilities {
+  .ease-out-expo {
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes property-card-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 10px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 18px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .stagger-item {
+    animation: none;
   }
 }

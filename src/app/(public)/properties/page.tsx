@@ -225,9 +225,13 @@ function PropertyResults({ items: properties, imageById, error, isEmpty }: Resul
   return (
     <>
       {error ? <ErrorState title="Some listings could not be loaded" message={error} className="mb-4" /> : null}
-      <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {properties.map((property) => (
-          <li key={property.id} className="h-full">
+<ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {properties.map((property, index) => (
+          <li
+            key={property.id}
+            className="stagger-item h-full"
+            style={{ "--i": Math.min(index, 8) } as React.CSSProperties}
+          >
             <PropertyCard property={property} image={imageById.get(property.id) ?? null} />
           </li>
         ))}
@@ -255,9 +259,13 @@ function RoomResults({ items: rooms, imageById, error, isEmpty }: ResultsProps<R
   return (
     <>
       {error ? <ErrorState title="Some rooms could not be loaded" message={error} className="mb-4" /> : null}
-      <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {rooms.map((room) => (
-          <li key={room.id} className="h-full">
+<ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {rooms.map((room, index) => (
+          <li
+            key={room.id}
+            className="stagger-item h-full"
+            style={{ "--i": Math.min(index, 8) } as React.CSSProperties}
+          >
             <RoomCard room={room} image={imageById.get(room.id) ?? null} />
           </li>
         ))}
