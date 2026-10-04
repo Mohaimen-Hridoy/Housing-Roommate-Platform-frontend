@@ -40,6 +40,26 @@ export interface ButtonProps
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, loading = false, children, disabled, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
+
+    // `Slot` requires exactly one child element, so a spinner sibling would throw
+    // during SSR. Link-styled buttons therefore never render one, and the busy
+    // state is announced with `aria-busy` instead. `disabled` is also invalid on
+    // an anchor, so it becomes `aria-disabled`.
+    if (asChild) {
+      return (
+        <Comp
+          className={cn(buttonVariants({ variant, size, className }))}
+          ref={ref}
+          aria-busy={loading || undefined}
+          aria-disabled={disabled || loading || undefined}
+          data-loading={loading || undefined}
+          {...props}
+        >
+          {children}
+        </Comp>
+      );
+    }
+
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}

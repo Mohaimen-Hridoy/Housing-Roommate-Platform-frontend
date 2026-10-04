@@ -54,7 +54,8 @@ export function toDateInputValue(value: string | Date | null | undefined): strin
   return date ? format(date, "yyyy-MM-dd") : "";
 }
 
-export function nightsBetween(start: string | Date, end: string | Date): number {
+/** Nights between two dates. Pending bookings may have no dates yet, which counts as 0. */
+export function nightsBetween(start: string | Date | null | undefined, end: string | Date | null | undefined): number {
   const from = toDate(start);
   const to = toDate(end);
   if (!from || !to) return 0;

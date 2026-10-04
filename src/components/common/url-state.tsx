@@ -71,7 +71,14 @@ export function useUrlState() {
     [pathname, router, searchParams],
   );
 
-  return { setParams, setPage, isPending, searchParams };
+  /** Drops every query-string parameter, returning to the unfiltered view. */
+  const clearParams = useCallback(() => {
+    startTransition(() => {
+      router.replace(pathname, { scroll: false });
+    });
+  }, [pathname, router]);
+
+  return { setParams, setPage, clearParams, isPending, searchParams };
 }
 
 interface SearchInputProps {
@@ -169,8 +176,9 @@ export function FilterSelect({
   className,
   allLabel = "All",
 }: FilterSelectProps) {
-  const current = useQueryParam(paramKey);
+  const urlValue = useQueryParam(paramKey);
   const { setParams, isPending } = useUrlState();
+  const current = value ?? urlValue;
 
   return (
     <div className={cn("min-w-[9.5rem]", className)} data-pending={isPending || undefined}>

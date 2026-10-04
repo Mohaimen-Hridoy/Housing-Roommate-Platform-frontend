@@ -226,12 +226,18 @@ const profileSchema = z.object({
     .refine((value) => !value || /^[+\d][\d\s-]{6,19}$/.test(value), "Enter a valid phone number"),
 });
 
-export function ProfileForm({ action }: { action: (state: ActionState, formData: FormData) => Promise<ActionState> }) {
+interface ProfileFormProps {
+  action: (state: ActionState, formData: FormData) => Promise<ActionState>;
+  /** Pre-fills the form, typically from `authApi.me()`. */
+  defaultValues?: { name?: string | null; phone?: string | null };
+}
+
+export function ProfileForm({ action, defaultValues }: ProfileFormProps) {
   return (
     <ServerActionForm
       action={action}
       schema={profileSchema}
-      defaultValues={{ name: "", phone: "" }}
+      defaultValues={{ name: defaultValues?.name ?? "", phone: defaultValues?.phone ?? "" }}
       submitLabel="Save changes"
     >
       {(form) => (

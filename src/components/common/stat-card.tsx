@@ -5,11 +5,12 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
-export type StatTone = "default" | "success" | "warning" | "danger" | "accent" | "info";
+export type StatTone = "default" | "neutral" | "success" | "warning" | "danger" | "accent" | "info";
 
 const TONE_STYLES: Record<StatTone, { icon: string; value: string }> = {
   default: { icon: "bg-primary/10 text-primary", value: "text-foreground" },
   info: { icon: "bg-primary/10 text-primary", value: "text-foreground" },
+  neutral: { icon: "bg-muted text-muted-foreground", value: "text-foreground" },
   success: { icon: "bg-success/12 text-success", value: "text-success" },
   warning: { icon: "bg-warning/15 text-warning", value: "text-warning" },
   danger: { icon: "bg-destructive/12 text-destructive", value: "text-destructive" },

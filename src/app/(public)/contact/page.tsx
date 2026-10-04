@@ -22,7 +22,6 @@ import { Input, Textarea } from "@/components/ui/input";
 import { Field } from "@/components/ui/field";
 import { PageHeader } from "@/components/common/page-header";
 import { APP_NAME } from "@/lib/constants";
-import type { Metadata } from "next";
 
 const contactSchema = z.object({
   name: z
@@ -67,12 +66,6 @@ const QUICK_FAQS = [
     answer: "No. Tenants pay only the rent set by the owner. The platform fee (default 5%) is deducted from the owner's payout.",
   },
 ];
-
-export const metadata: Metadata = {
-  title: "Contact us",
-  description: `Get in touch with the ${APP_NAME} team. We can help with onboarding, partnerships, technical questions and demo access.`,
-  alternates: { canonical: "/contact" },
-};
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);

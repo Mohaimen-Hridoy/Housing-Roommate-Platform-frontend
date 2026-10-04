@@ -218,6 +218,8 @@ export interface Payment {
   amount: number;
   currency: string;
   status: PaymentStatus;
+  /** Stripe PaymentIntent client secret. Selected on `GET /bookings/:id`; drives the Payment Element. */
+  clientSecret: string | null;
   createdAt: string;
   updatedAt: string;
   booking?: { property: { ownerId: string } };

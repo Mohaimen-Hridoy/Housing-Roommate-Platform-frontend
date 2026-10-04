@@ -61,7 +61,6 @@ export function CheckoutButton({ booking, payments = [], size = "default", class
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [starting, setStarting] = useState(false);
-  const [session, setSession] = useState<CheckoutSession | null>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [needsReload, setNeedsReload] = useState(false);
 

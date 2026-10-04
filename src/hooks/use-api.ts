@@ -1,6 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient, type UseQueryOptions } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import { apiClient, errorMessage } from "@/lib/api/client";
 import type { PaginationMeta } from "@/lib/types/api";
@@ -111,6 +112,9 @@ export function useApiMutation<TVariables, TResult = unknown>({
     onSuccess: async (data, variables) => {
       for (const key of invalidate) {
         await queryClient.invalidateQueries({ queryKey: key });
+      }
+      if (successMessage) {
+        toast.success(typeof successMessage === "string" ? successMessage : successMessage(data, variables));
       }
       await onSuccess?.(data, variables);
     },

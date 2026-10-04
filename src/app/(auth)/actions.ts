@@ -16,8 +16,6 @@ export interface ActionState {
   fieldErrors?: Record<string, string>;
 }
 
-export const IDLE_STATE: ActionState = { status: "idle" };
-
 function toFieldErrors(error: unknown): ActionState {
   if (error instanceof ApiRequestError) {
     return {
