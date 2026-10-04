@@ -21,55 +21,41 @@ import {
 import { Input, Textarea } from "@/components/ui/input";
 import { Field } from "@/components/ui/field";
 import { PageHeader } from "@/components/common/page-header";
+import { T } from "@/components/common/localized-text";
+import { useTranslation } from "@/components/providers/locale-provider";
 import { APP_NAME } from "@/lib/constants";
 
-const contactSchema = z.object({
-  name: z
-    .string()
-    .min(2, "Name must be at least 2 characters")
-    .max(100, "Name must be 100 characters or fewer"),
-  email: z.string().email("Please enter a valid email address"),
-  subject: z.enum(["general", "support", "partnership", "demo", "other"], {
-    required_error: "Please select a subject",
-  }),
-  message: z
-    .string()
-    .min(10, "Message must be at least 10 characters")
-    .max(2000, "Message must be 2,000 characters or fewer"),
-});
-
-type ContactFormValues = z.infer<typeof contactSchema>;
-
-const SUBJECT_LABELS: Record<ContactFormValues["subject"], string> = {
-  general: "General inquiry",
-  support: "Technical support",
-  partnership: "Partnership",
-  demo: "Demo / evaluation",
-  other: "Other",
+type ContactFormValues = {
+  name: string;
+  email: string;
+  subject: "general" | "support" | "partnership" | "demo" | "other";
+  message: string;
 };
 
+/** Subject ids map straight to `contact.subject.<id>` dictionary keys. */
+const SUBJECT_IDS = ["general", "support", "partnership", "demo", "other"] as const;
+
 const QUICK_FAQS = [
-  {
-    question: "How do I sign up as a tenant?",
-    answer: "Visit /register and choose the Tenant role. After email verification you will land on your tenant dashboard.",
-  },
-  {
-    question: "How do I publish a listing?",
-    answer: "Register as an Owner, then use the owner dashboard to create a property and add rooms with photos and amenities.",
-  },
-  {
-    question: "Are demo accounts available?",
-    answer: "Yes. Visit /login#demo for one-click login as Admin, Owner or Tenant using seeded accounts.",
-  },
-  {
-    question: "Is there a platform fee for tenants?",
-    answer: "No. Tenants pay only the rent set by the owner. The platform fee (default 5%) is deducted from the owner's payout.",
-  },
+  { questionKey: "contact.quick.1.q", answerKey: "contact.quick.1.a" },
+  { questionKey: "contact.quick.2.q", answerKey: "contact.quick.2.a" },
+  { questionKey: "contact.quick.demo.q", answerKey: "contact.quick.demo.a" },
+  { questionKey: "contact.quick.3.q", answerKey: "contact.quick.3.a" },
 ];
 
 export default function ContactPage() {
+  const t = useTranslation();
   const [submitted, setSubmitted] = useState(false);
   const [charCount, setCharCount] = useState(0);
+
+  // Built per render so validation messages follow the active language.
+  const contactSchema = z.object({
+    name: z.string().min(2, t("contact.error.nameMin")).max(100, t("contact.error.nameMax")),
+    email: z.string().email(t("contact.error.email")),
+    subject: z.enum(["general", "support", "partnership", "demo", "other"], {
+      required_error: t("contact.error.subject"),
+    }),
+    message: z.string().min(10, t("contact.error.messageMin")).max(2000, t("contact.error.messageMax")),
+  });
 
   const {
     register,
@@ -90,9 +76,9 @@ export default function ContactPage() {
   }, [messageValue]);
 
   function onSubmit(data: ContactFormValues) {
-    const subjectLabel = SUBJECT_LABELS[data.subject];
+    const subjectLabel = t(`contact.subject.${data.subject}`);
     const body = encodeURIComponent(
-      `Name: ${data.name}\nEmail: ${data.email}\nSubject: ${subjectLabel}\n\nMessage:\n${data.message}`,
+      `${t("contact.mail.name")}: ${data.name}\n${t("contact.mail.email")}: ${data.email}\n${t("contact.mail.subject")}: ${subjectLabel}\n\n${t("contact.mail.message")}:\n${data.message}`,
     );
     const mailto = `mailto:support@housing.local?subject=${encodeURIComponent(`[${APP_NAME}] ${subjectLabel}`)}&body=${body}`;
 
@@ -102,9 +88,8 @@ export default function ContactPage() {
       window.open(mailto, "_blank");
     }
 
-    toast.success("Opening your email client", {
-      description:
-        "A new message has been composed with your details. Send it from your email app to reach the team.",
+    toast.success(t("contact.toast.title"), {
+      description: t("contact.toast.body"),
     });
 
     setSubmitted(true);
@@ -115,11 +100,14 @@ export default function ContactPage() {
     <div className="container-page space-y-16 py-12 lg:py-16">
       <PageHeader
         title="Contact us"
+        titleKey="contact.title"
         description="Have a question, need help, or want to evaluate the platform? Reach out directly."
+        descriptionKey="contact.subtitle"
         eyebrow="Get in touch"
+        eyebrowKey="contact.eyebrow"
         breadcrumbs={[
-          { label: "Home", href: "/" },
-          { label: "Contact" },
+          { label: "Home", labelKey: "common.home", href: "/" },
+          { label: "Contact", labelKey: "nav.contact" },
         ]}
       />
 
@@ -131,23 +119,32 @@ export default function ContactPage() {
                 <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-success/10 text-success">
                   <Mail className="size-6" aria-hidden="true" />
                 </div>
-                <h3 className="text-lg font-semibold">Message composed</h3>
+                <h3 className="text-lg font-semibold">
+                  <T k="contact.success.title" fallback="Message composed" />
+                </h3>
                 <p className="text-sm text-muted-foreground">
-                  Your email client should have opened with a pre-filled message. Please send it to reach the
-                  team. If nothing happened, you can also email us directly at{" "}
+                  <T
+                    k="contact.success.body"
+                    fallback="Your email client should have opened with a pre-filled message. Please send it to reach the team. If nothing happened, you can also email us directly."
+                  />{" "}
                   <a href="mailto:support@housing.local" className="text-primary underline">
                     support@housing.local
                   </a>
                   .
                 </p>
                 <Button onClick={() => setSubmitted(false)} variant="outline" className="mt-2">
-                  Send another message
+                  <T k="contact.success.again" fallback="Send another message" />
                 </Button>
               </div>
             ) : (
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
                 <div className="grid gap-5 sm:grid-cols-2">
-                  <Field label="Full name" htmlFor="contact-name" required error={errors.name?.message}>
+                  <Field
+                    label={t("auth.name")}
+                    htmlFor="contact-name"
+                    required
+                    error={errors.name?.message}
+                  >
                     <Input
                       id="contact-name"
                       placeholder="Jane Smith"
@@ -156,7 +153,12 @@ export default function ContactPage() {
                       {...register("name")}
                     />
                   </Field>
-                  <Field label="Email" htmlFor="contact-email" required error={errors.email?.message}>
+                  <Field
+                    label={t("auth.email")}
+                    htmlFor="contact-email"
+                    required
+                    error={errors.email?.message}
+                  >
                     <Input
                       id="contact-email"
                       type="email"
@@ -168,24 +170,29 @@ export default function ContactPage() {
                   </Field>
                 </div>
 
-                <Field label="Subject" htmlFor="contact-subject" required error={errors.subject?.message}>
+                <Field
+                  label={t("contact.form.subject")}
+                  htmlFor="contact-subject"
+                  required
+                  error={errors.subject?.message}
+                >
                   <select
                     id="contact-subject"
                     className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     aria-invalid={!!errors.subject}
                     {...register("subject")}
                   >
-                    <option value="">Select a subject</option>
-                    <option value="general">General inquiry</option>
-                    <option value="support">Technical support</option>
-                    <option value="partnership">Partnership</option>
-                    <option value="demo">Demo / evaluation</option>
-                    <option value="other">Other</option>
+                    <option value="">{t("contact.form.selectSubject")}</option>
+                    {SUBJECT_IDS.map((id) => (
+                      <option key={id} value={id}>
+                        {t(`contact.subject.${id}`)}
+                      </option>
+                    ))}
                   </select>
                 </Field>
 
                 <Field
-                  label="Message"
+                  label={t("contact.form.message")}
                   htmlFor="contact-message"
                   required
                   error={errors.message?.message}
@@ -193,7 +200,7 @@ export default function ContactPage() {
                 >
                   <Textarea
                     id="contact-message"
-                    placeholder="Tell us what you need help with…"
+                    placeholder={t("contact.form.messagePlaceholder")}
                     rows={6}
                     aria-invalid={!!errors.message}
                     {...register("message")}
@@ -203,13 +210,15 @@ export default function ContactPage() {
                 <div className="flex items-start gap-2 rounded-lg border border-info/30 bg-info/5 p-4">
                   <Info className="mt-0.5 size-4 shrink-0 text-info" aria-hidden="true" />
                   <p className="text-xs text-muted-foreground">
-                    This form opens your default email client with a pre-filled message. There is no backend
-                    contact endpoint — all communication happens directly via email.
+                    <T
+                      k="contact.form.note"
+                      fallback="This form opens your default email client with a pre-filled message. There is no backend contact endpoint — all communication happens directly via email."
+                    />
                   </p>
                 </div>
 
                 <Button type="submit" size="lg" disabled={isSubmitting}>
-                  {isSubmitting ? "Composing…" : "Open email client"}
+                  {isSubmitting ? t("contact.form.composing") : t("contact.form.submit")}
                   <ArrowRight />
                 </Button>
               </form>
@@ -220,12 +229,16 @@ export default function ContactPage() {
         <aside className="space-y-6">
           <Card>
             <CardContent className="space-y-4 p-6">
-              <h3 className="text-sm font-semibold">Contact channels</h3>
+              <h3 className="text-sm font-semibold">
+                <T k="contact.channels.title" fallback="Contact channels" />
+              </h3>
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
                   <Mail className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
                   <div>
-                    <p className="text-sm font-medium">Email</p>
+                    <p className="text-sm font-medium">
+                      <T k="contact.channels.email" fallback="Email" />
+                    </p>
                     <a
                       href="mailto:support@housing.local"
                       className="text-sm text-primary hover:underline"
@@ -238,9 +251,14 @@ export default function ContactPage() {
                 <div className="flex items-start gap-3">
                   <MessageSquare className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
                   <div>
-                    <p className="text-sm font-medium">In-app messaging</p>
+                    <p className="text-sm font-medium">
+                      <T k="contact.channels.messagingTitle" fallback="In-app messaging" />
+                    </p>
                     <p className="text-xs text-muted-foreground">
-                      Logged-in users can message owners directly from a listing.
+                      <T
+                        k="contact.channels.messagingBody"
+                        fallback="Logged-in users can message owners directly from a listing."
+                      />
                     </p>
                   </div>
                 </div>
@@ -248,9 +266,14 @@ export default function ContactPage() {
                 <div className="flex items-start gap-3">
                   <User className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
                   <div>
-                    <p className="text-sm font-medium">Demo accounts</p>
+                    <p className="text-sm font-medium">
+                      <T k="auth.demoTitle" fallback="Demo accounts" />
+                    </p>
                     <p className="text-xs text-muted-foreground">
-                      Seeded accounts for Admin, Owner and Tenant at{" "}
+                      <T
+                        k="contact.channels.demoBody"
+                        fallback="Seeded accounts for Admin, Owner and Tenant."
+                      />{" "}
                       <Link href="/login#demo" className="text-primary hover:underline">
                         /login#demo
                       </Link>
@@ -261,8 +284,12 @@ export default function ContactPage() {
                 <div className="flex items-start gap-3">
                   <Building2 className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
                   <div>
-                    <p className="text-sm font-medium">Response hours</p>
-                    <p className="text-xs text-muted-foreground">Monday – Friday, 9 AM – 6 PM UTC</p>
+                    <p className="text-sm font-medium">
+                      <T k="contact.channels.hoursTitle" fallback="Response hours" />
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      <T k="contact.channels.hoursBody" fallback="Monday – Friday, 9 AM – 6 PM UTC" />
+                    </p>
                   </div>
                 </div>
               </div>
@@ -273,16 +300,20 @@ export default function ContactPage() {
             <CardContent className="space-y-3 p-6">
               <Badge variant="accent" className="gap-1.5">
                 <MessageSquare className="size-3" aria-hidden="true" />
-                Evaluators
+                <T k="contact.demo.badge" fallback="Evaluators" />
               </Badge>
-              <h3 className="text-sm font-semibold">Try it without an account</h3>
+              <h3 className="text-sm font-semibold">
+                <T k="contact.demo.title" fallback="Try it without an account" />
+              </h3>
               <p className="text-xs text-muted-foreground">
-                The sign-in page has one-click demo login for all three roles. No email, no password — just
-                click and go.
+                <T
+                  k="contact.demo.body2"
+                  fallback="The sign-in page has one-click demo login for all three roles. No email, no password — just click and go."
+                />
               </p>
               <Button asChild size="sm" variant="outline" className="w-full">
                 <Link href="/login#demo">
-                  Open demo login
+                  <T k="auth.openDemoLogin" fallback="Open demo login" />
                   <ArrowRight />
                 </Link>
               </Button>
@@ -291,15 +322,17 @@ export default function ContactPage() {
 
           <Card>
             <CardContent className="p-6">
-              <h3 className="mb-3 text-sm font-semibold">Quick answers</h3>
+              <h3 className="mb-3 text-sm font-semibold">
+                <T k="contact.quickTitle" fallback="Quick answers" />
+              </h3>
               <Accordion type="single" collapsible>
-                {QUICK_FAQS.map((faq) => (
-                  <AccordionItem key={faq.question} value={faq.question}>
+                {QUICK_FAQS.map((faq, index) => (
+                  <AccordionItem key={faq.questionKey} value={`quick-${index}`}>
                     <AccordionTrigger className="text-left text-xs">
-                      {faq.question}
+                      <T k={faq.questionKey} fallback={faq.questionKey} />
                     </AccordionTrigger>
                     <AccordionContent className="text-xs">
-                      {faq.answer}
+                      <T k={faq.answerKey} fallback={faq.answerKey} />
                     </AccordionContent>
                   </AccordionItem>
                 ))}

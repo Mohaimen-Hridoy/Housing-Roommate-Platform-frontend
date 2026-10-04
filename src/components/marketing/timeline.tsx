@@ -3,9 +3,11 @@
 import type { ReactNode } from "react";
 
 import { Card, CardContent } from "@/components/ui/card";
+import { T } from "@/components/common/localized-text";
+import { useTranslation } from "@/components/providers/locale-provider";
 
 interface TimelineProps {
-  steps: { step: string; title: string; description: ReactNode }[];
+  steps: { step: string; title: string; description: ReactNode; titleKey?: string }[];
   heading?: string;
 }
 
@@ -20,7 +22,9 @@ export function Timeline({ steps, heading }: TimelineProps) {
             className="rounded-xl border border-border bg-card p-5"
           >
             <span className="text-sm font-semibold tabular-nums text-primary">{item.step}</span>
-            <h4 className="mt-2 text-sm font-semibold">{item.title}</h4>
+            <h4 className="mt-2 text-sm font-semibold">
+              {item.titleKey ? <T k={item.titleKey} fallback={item.title} /> : item.title}
+            </h4>
             <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
           </li>
         ))}
@@ -30,27 +34,31 @@ export function Timeline({ steps, heading }: TimelineProps) {
 }
 
 interface StatusTableProps {
-  statuses: { label: string; meaning: string }[];
+  statuses: { label: string; meaning: ReactNode; labelKey?: string }[];
 }
 
 export function StatusTable({ statuses }: StatusTableProps) {
+  const t = useTranslation();
+
   return (
     <div className="overflow-hidden rounded-xl border border-border">
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-border bg-muted/40">
             <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Status
+              {t("how.tableStatus")}
             </th>
             <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Meaning
+              {t("how.tableMeaning")}
             </th>
           </tr>
         </thead>
         <tbody>
           {statuses.map((row) => (
             <tr key={row.label} className="border-b border-border last:border-0">
-              <td className="px-4 py-3 font-medium">{row.label}</td>
+              <td className="px-4 py-3 font-medium">
+                {row.labelKey ? <T k={row.labelKey} fallback={row.label} /> : row.label}
+              </td>
               <td className="px-4 py-3 text-muted-foreground">{row.meaning}</td>
             </tr>
           ))}
@@ -61,7 +69,7 @@ export function StatusTable({ statuses }: StatusTableProps) {
 }
 
 interface FlowDiagramProps {
-  steps: { label: string; description: string }[];
+  steps: { label: string; description: ReactNode; labelKey?: string }[];
 }
 
 export function FlowDiagram({ steps }: FlowDiagramProps) {
@@ -76,7 +84,9 @@ export function FlowDiagram({ steps }: FlowDiagramProps) {
                   {index + 1}
                 </span>
                 <div>
-                  <p className="text-sm font-semibold">{item.label}</p>
+                  <p className="text-sm font-semibold">
+                    {item.labelKey ? <T k={item.labelKey} fallback={item.label} /> : item.label}
+                  </p>
                   <p className="text-sm text-muted-foreground">{item.description}</p>
                 </div>
               </div>

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, MessageSquare } from "lucide-react";
 
@@ -13,7 +13,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { PageHeader, SectionHeading } from "@/components/common/page-header";
+import { T } from "@/components/common/localized-text";
 import { APP_NAME } from "@/lib/constants";
+import { formatCurrency } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "Frequently Asked Questions",
@@ -22,12 +24,25 @@ export const metadata: Metadata = {
 };
 
 type FaqItem = {
-  question: string;
-  answer: React.ReactNode;
+  /** Dictionary key for the question text. */
+  questionKey: string;
+  /** Dictionary key for the plain-text answer. */
+  answerKey?: string;
+  /**
+   * For answers with an inline link, the copy is split either side of it:
+   * `before` renders before the link, `after` renders after it.
+   */
+  answer?: React.ReactNode;
+  link?: { href: string; label: string };
+  beforeKey?: string;
+  afterKey?: string;
+  /** Bullet list rendered under the answer, used for the booking statuses. */
+  bullets?: { statusKey: string; textKey: string }[];
 };
 
 type FaqCategory = {
   id: string;
+  labelKey: string;
   label: string;
   icon?: React.ReactNode;
   items: FaqItem[];
@@ -37,286 +52,207 @@ const CATEGORIES: FaqCategory[] = [
   {
     id: "accounts",
     label: "Accounts & roles",
+    labelKey: "faq.cat.accounts",
     items: [
       {
-        question: "What are the three user roles?",
-        answer: (
-          <p>
-            NestSpace has three roles: <strong>Tenant</strong> (searches and books rooms),{" "}
-            <strong>Owner</strong> (publishes properties and approves bookings), and <strong>Admin</strong>{" "}
-            (full platform access for moderation and analytics). Your role is enforced by the backend on every
-            request.
-          </p>
-        ),
+        questionKey: "faq.accounts.1.q",
+        answerKey: "faq.accounts.1.a",
       },
       {
-        question: "How do I register?",
-        answer: (
-          <p>
-            Visit{" "}
-            <Link href="/register" className="text-primary underline">
-              /register
-            </Link>
-            , fill in your name, email and password, and choose a role. You will receive an email verification
-            link. Once verified, you will be redirected to the dashboard for your role.
-          </p>
-        ),
+        questionKey: "faq.accounts.2.q",
+        beforeKey: "faq.accounts.2.a1",
+        link: { href: "/register", label: "/register" },
+        afterKey: "faq.accounts.2.a2",
       },
       {
-        question: "Can I change my role after registering?",
-        answer: (
-          <p>
-            Role changes are handled by an admin. An admin can assign a new role via the admin dashboard. The
-            middleware enforces role-based access on every protected route.
-          </p>
-        ),
+        questionKey: "faq.accounts.3.q",
+        answerKey: "faq.accounts.3.a",
       },
       {
-        question: "What if I forget my password?",
-        answer: (
-          <p>
-            Use the{" "}
-            <Link href="/forgot-password" className="text-primary underline">
-              /forgot-password
-            </Link>{" "}
-            page to request a password-reset email. The reset link is time-limited and single-use.
-          </p>
-        ),
+        questionKey: "faq.accounts.4.q",
+        beforeKey: "faq.accounts.4.a1",
+        link: { href: "/forgot-password", label: "/forgot-password" },
+        afterKey: "faq.accounts.4.a2",
       },
     ],
   },
   {
     id: "search",
     label: "Searching & listings",
+    labelKey: "faq.cat.search",
     items: [
       {
-        question: "How do I search for rooms?",
-        answer: (
-          <p>
-            Go to{" "}
-            <Link href="/properties" className="text-primary underline">
-              /properties
-            </Link>{" "}
-            and use the filter panel. You can filter by city, rent range, bedrooms, bathrooms, room facing,
-            amenities, and availability date. Filters are reflected in the URL, so you can bookmark or share
-            your search.
-          </p>
-        ),
+        questionKey: "faq.search.1.q",
+        beforeKey: "faq.search.1.a1",
+        link: { href: "/properties", label: "/properties" },
+        afterKey: "faq.search.1.a2",
       },
       {
-        question: "Who can publish a listing?",
-        answer: (
-          <p>
-            Only users registered as <strong>Owner</strong> or <strong>Admin</strong> can create and publish
-            property listings. Tenants cannot publish listings.
-          </p>
-        ),
+        questionKey: "faq.search.2.q",
+        answerKey: "faq.search.2.a",
       },
       {
-        question: "What image formats are supported?",
-        answer: (
-          <p>
-            Upload up to 6 images per entity (property or room). Accepted formats are jpeg, png, webp and
-            avif. Each file must be 5 MB or smaller. Images are uploaded to Cloudinary in production or the
-            local filesystem in development.
-          </p>
-        ),
+        questionKey: "faq.search.3.q",
+        answerKey: "faq.search.3.a",
       },
       {
-        question: "Can an owner edit a published listing?",
-        answer: (
-          <p>
-            Yes. Owners can update their property and room details at any time. If significant changes are
-            made, the property may need to be re-published. Admins can also edit any listing.
-          </p>
-        ),
+        questionKey: "faq.search.4.q",
+        answerKey: "faq.search.4.a",
       },
     ],
   },
   {
     id: "bookings",
     label: "Bookings",
+    labelKey: "faq.cat.bookings",
     items: [
       {
-        question: "How do I book a room?",
-        answer: (
-          <p>
-            Find a room on the{" "}
-            <Link href="/properties" className="text-primary underline">
-              properties page
-            </Link>
-            , open its detail view, select your start and end dates, optionally write a message to the owner,
-            and submit the request. The room becomes RESERVED and the booking enters the PENDING state.
-          </p>
-        ),
+        questionKey: "faq.bookings.1.q",
+        beforeKey: "faq.bookings.1.a1",
+        link: { href: "/properties", label: "/properties" },
+        afterKey: "faq.bookings.1.a2",
       },
       {
-        question: "What booking statuses exist?",
-        answer: (
-          <div>
-            <p>A booking can be in one of five states:</p>
-            <ul className="mt-2 list-inside list-disc space-y-1 text-muted-foreground">
-              <li>
-                <strong>PENDING</strong> — waiting for the owner&rsquo;s decision
-              </li>
-              <li>
-                <strong>APPROVED</strong> — the owner accepted; payment is now due
-              </li>
-              <li>
-                <strong>REJECTED</strong> — the owner declined; room released
-              </li>
-              <li>
-                <strong>CANCELLED</strong> — either party cancelled; room released
-              </li>
-              <li>
-                <strong>EXPIRED</strong> — the request timed out before a decision
-              </li>
-            </ul>
-          </div>
-        ),
+        questionKey: "faq.bookings.2.q",
+        answerKey: "faq.bookings.2.a.intro",
+        bullets: [
+          { statusKey: "status.PENDING", textKey: "faq.bookings.2.a.PENDING" },
+          { statusKey: "status.APPROVED", textKey: "faq.bookings.2.a.APPROVED" },
+          { statusKey: "status.REJECTED", textKey: "faq.bookings.2.a.REJECTED" },
+          { statusKey: "status.CANCELLED", textKey: "faq.bookings.2.a.CANCELLED" },
+          { statusKey: "status.EXPIRED", textKey: "faq.bookings.2.a.EXPIRED" },
+        ],
       },
       {
-        question: "How long does the owner have to respond?",
-        answer:
-          "The backend enforces a time window for owner responses. If the owner neither approves nor rejects within that window, the booking status flips to EXPIRED and the room returns to AVAILABLE.",
+        questionKey: "faq.bookings.3.q",
+        answerKey: "faq.bookings.3.a",
       },
       {
-        question: "Can I book multiple rooms at once?",
-        answer:
-          "Each room requires a separate booking request. There is no cart or multi-room checkout — each booking is tied to a single room and processed independently.",
+        questionKey: "faq.bookings.4.q",
+        answerKey: "faq.bookings.4.a",
       },
     ],
   },
   {
     id: "payments",
     label: "Payments & refunds",
+    labelKey: "faq.cat.payments",
     items: [
       {
-        question: "How do payments work?",
-        answer: (
-          <p>
-            Once a booking is APPROVED, the backend creates a Stripe Checkout Session. The tenant is redirected
-            to Stripe&rsquo;s hosted payment page. Stripe sends a verified webhook event back to the backend,
-            which marks the payment as SUCCEEDED. All payments run in Stripe test mode on this platform.
-          </p>
-        ),
+        questionKey: "faq.payments.1.q",
+        answerKey: "faq.payments.1.a",
       },
       {
-        question: "Is there a platform fee for tenants?",
-        answer: (
-          <p>
-            No. The platform fee is deducted from the owner&rsquo;s payout, not charged to the tenant. The
-            tenant pays only the rent amount set by the owner. The fee percentage is computed server-side from
-            the STRIPE_PLATFORM_FEE_PERCENT environment variable (default 5 %).
-          </p>
-        ),
+        questionKey: "faq.payments.2.q",
+        answerKey: "faq.payments.2.a",
       },
       {
-        question: "When do refunds happen?",
-        answer: (
-          <p>
-            If a booking is CANCELLED after the payment has SUCCEEDED, the backend automatically marks the
-            payment as REFUNDED. If the payment has not yet succeeded (PENDING or PROCESSING), no charge
-            occurs. Partial refunds are not currently supported — a cancellation refunds the full amount.
-          </p>
-        ),
+        questionKey: "faq.payments.3.q",
+        answerKey: "faq.payments.3.a",
       },
       {
-        question: "Can I see my payment history?",
-        answer: (
-          <p>
-            Yes. The tenant and owner dashboards display payment statuses for each booking. Admins can see all
-            payments across the platform. Payment statuses follow the same lifecycle as bookings: PENDING,
-            PROCESSING, SUCCEEDED, FAILED, REFUNDED, PARTIALLY_REFUNDED, CANCELED.
-          </p>
-        ),
+        questionKey: "faq.payments.4.q",
+        answerKey: "faq.payments.4.a",
       },
     ],
   },
   {
     id: "reviews",
     label: "Reviews & messaging",
+    labelKey: "faq.cat.reviews",
     items: [
       {
-        question: "Who can leave a review?",
-        answer: (
-          <p>
-            Only participants of an APPROVED booking can leave a review — that is, the tenant who stayed and
-            the property owner. Reviews are limited to the specific booking and cannot be written for rooms or
-            properties the user has never booked.
-          </p>
-        ),
+        questionKey: "faq.reviews.1.q",
+        answerKey: "faq.reviews.1.a",
       },
       {
-        question: "Can I review a property instead of a room?",
-        answer:
-          "Yes. Reviews can target either a ROOM or the PROPERTY as a whole. Choose the review subject when submitting.",
+        questionKey: "faq.reviews.2.q",
+        answerKey: "faq.reviews.2.a",
       },
       {
-        question: "How does messaging work?",
-        answer: (
-          <p>
-            Tenants and owners can send messages through the platform. Messages are linked to a property and
-            stored in the database. Every message is associated with the sender and recipient user IDs and
-            recorded in the audit log under the MESSAGE_SENT action.
-          </p>
-        ),
+        questionKey: "faq.reviews.3.q",
+        answerKey: "faq.reviews.3.a",
       },
       {
-        question: "Are messages moderated?",
-        answer:
-          "Admins can review messages through the audit log and user management interfaces. Standard users cannot see messages sent between other users.",
+        questionKey: "faq.reviews.4.q",
+        answerKey: "faq.reviews.4.a",
       },
     ],
   },
   {
     id: "security",
     label: "Security & privacy",
+    labelKey: "faq.cat.security",
     items: [
       {
-        question: "How is my data protected?",
-        answer: (
-          <p>
-            Authentication uses JWT access tokens with rotating refresh tokens stored as httpOnly cookies.
-            JavaScript cannot read the tokens. All API mutations require a valid session, and role-based
-            access is enforced in the middleware and again in the backend.
-          </p>
-        ),
+        questionKey: "faq.security.1.q",
+        answerKey: "faq.security.1.a",
       },
       {
-        question: "What is audit logging?",
-        answer: (
-          <p>
-            Every mutating action — booking creation, payment status change, image upload, review submission —
-            is recorded in an audit log with the actor ID, entity ID, action type, before and after values, IP
-            address and user agent. Admins can inspect the full audit trail.
-          </p>
-        ),
+        questionKey: "faq.security.2.q",
+        answerKey: "faq.security.2.a",
       },
       {
-        question: "Is the platform GDPR-friendly?",
-        answer:
-          "The platform provides email verification, password reset, and role-based data access. Users can delete their accounts, which cascades according to the backend's data-retention configuration. For full legal review, consult a privacy specialist.",
+        questionKey: "faq.security.3.q",
+        answerKey: "faq.security.3.a",
       },
       {
-        question: "Are Stripe webhooks secure?",
-        answer:
-          "Yes. The backend verifies the Stripe webhook signature using the STRIPE_WEBHOOK_SECRET before processing any payment event. Invalid or unauthenticated webhooks are rejected with a 401 response.",
+        questionKey: "faq.security.4.q",
+        answerKey: "faq.security.4.a",
       },
     ],
   },
 ];
 
+/** Renders one FAQ answer, handling the plain, inline-link and bullet variants. */
+function FaqAnswer({ item }: { item: FaqItem }) {
+  if (item.bullets) {
+    return (
+      <div>
+        <p>
+          <T k={item.answerKey ?? ""} fallback="" />
+        </p>
+        <ul className="mt-2 list-inside list-disc space-y-1 text-muted-foreground">
+          {item.bullets.map((bullet) => (
+            <li key={bullet.statusKey}>
+              <strong>
+                <T k={bullet.statusKey} fallback={bullet.statusKey} />
+              </strong>{" "}
+              <T k={bullet.textKey} fallback={bullet.textKey} />
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
+  if (item.link) {
+    return (
+      <p>
+        <T k={item.beforeKey ?? ""} fallback="" />{" "}
+        <Link href={item.link.href} className="text-primary underline">
+          {item.link.label}
+        </Link>{" "}
+        <T k={item.afterKey ?? ""} fallback="" />
+      </p>
+    );
+  }
+
+  return <p>{item.answerKey ? <T k={item.answerKey} fallback={item.answerKey} /> : item.answer}</p>;
+}
 export default function FaqPage() {
   return (
     <div className="container-page space-y-16 py-12 lg:py-16">
       <PageHeader
         title="Frequently Asked Questions"
+        titleKey="faq.title"
         description="Everything you need to know about accounts, searching, bookings, payments and more."
+        descriptionKey="faq.subtitle"
         eyebrow="FAQ"
+        eyebrowKey="faq.eyebrow"
         breadcrumbs={[
-          { label: "Home", href: "/" },
-          { label: "FAQ" },
+          { label: "Home", labelKey: "common.home", href: "/" },
+          { label: "FAQ", labelKey: "nav.faq" },
         ]}
       />
 
@@ -324,13 +260,19 @@ export default function FaqPage() {
         {CATEGORIES.map((category) => (
           <Card key={category.id}>
             <CardContent className="space-y-3 p-5">
-              <p className="text-sm font-semibold">{category.label}</p>
+              <p className="text-sm font-semibold">
+                <T k={category.labelKey} fallback={category.label} />
+              </p>
               <p className="text-xs text-muted-foreground">
-                {category.items.length} question{category.items.length === 1 ? "" : "s"}
+                <T
+                  k="unit.questions"
+                  vars={{ count: category.items.length }}
+                  fallback={`${category.items.length} question${category.items.length === 1 ? "" : "s"}`}
+                />
               </p>
               <Button asChild variant="ghost" size="sm" className="px-0">
                 <Link href={`#${category.id}`}>
-                  Jump to section
+                  <T k="faq.jump" fallback="Jump to section" />
                   <ArrowRight className="size-3.5" />
                 </Link>
               </Button>
@@ -343,12 +285,20 @@ export default function FaqPage() {
 
       {CATEGORIES.map((category) => (
         <section key={category.id} id={category.id} className="scroll-mt-24 space-y-4">
-          <SectionHeading title={category.label} description="" />
+          <SectionHeading
+            title={category.label}
+            titleKey={category.labelKey}
+            description=""
+          />
           <Accordion type="single" collapsible className="w-full">
-            {category.items.map((item) => (
-              <AccordionItem key={item.question} value={item.question}>
-                <AccordionTrigger className="text-left">{item.question}</AccordionTrigger>
-                <AccordionContent>{item.answer}</AccordionContent>
+            {category.items.map((item, index) => (
+              <AccordionItem key={item.questionKey} value={`${category.id}-${index}`}>
+                <AccordionTrigger className="text-left">
+                  <T k={item.questionKey} fallback={item.questionKey} />
+                </AccordionTrigger>
+                <AccordionContent>
+                  <FaqAnswer item={item} />
+                </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
@@ -360,54 +310,67 @@ export default function FaqPage() {
       <section id="pricing" className="scroll-mt-24 space-y-4">
         <SectionHeading
           title="Pricing and platform fees"
+          titleKey="faq.pricingTitle"
           description="How rent is set, collected and distributed."
+          descriptionKey="faq.pricingSubtitle"
         />
         <Card className="border-info/30 bg-info/5">
           <CardContent className="space-y-4 p-6">
             <p className="text-sm leading-relaxed text-muted-foreground">
-              Rent amounts are set by <strong className="text-foreground">property owners</strong> when they
-              create or edit a room. {APP_NAME} does not control or influence rent pricing.
+              <T
+                k="faq.pricing.p1"
+                vars={{ app: APP_NAME }}
+                fallback={`Rent amounts are set by property owners when they create or edit a room. ${APP_NAME} does not control or influence rent pricing.`}
+              />
             </p>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              When a booking is approved and the payment{" "}
-              <strong className="text-foreground">SUCCEEDED</strong>, the backend computes a{" "}
-              <code className="rounded bg-muted px-1.5 py-0.5 text-xs">platformFee</code> using the{" "}
-              <code className="rounded bg-muted px-1.5 py-0.5 text-xs">STRIPE_PLATFORM_FEE_PERCENT</code>{" "}
-              environment variable (default <strong className="text-foreground">5 %</strong> of the booking
-              total). This fee is deducted from the gross before the owner&rsquo;s payout. The tenant pays the
-              full rent amount at checkout — there is no separate platform-fee line item for tenants, and there
-              is no tenant-side listing fee.
+              <T
+                k="faq.pricing.p2"
+                fallback="When a booking is approved and the payment SUCCEEDED, the backend computes a platformFee using the STRIPE_PLATFORM_FEE_PERCENT environment variable (default 5 % of the booking total). This fee is deducted from the gross before the owner's payout. The tenant pays the full rent amount at checkout — there is no separate platform-fee line item for tenants, and there is no tenant-side listing fee."
+              />
             </p>
             <div className="rounded-lg border border-border bg-card p-4">
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                Fee breakdown (example)
+                <T k="faq.pricing.example" fallback="Fee breakdown (example)" />
               </p>
               <div className="mt-3 space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Monthly rent</span>
-                  <span className="font-medium">$1,000.00</span>
+                  <span className="text-muted-foreground">
+                    <T k="faq.pricing.monthlyRent" fallback="Monthly rent" />
+                  </span>
+                  <span className="font-medium tabular-nums">{formatCurrency(1000, "BDT")}</span>
                 </div>
                 <Separator />
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Tenant pays (total)</span>
-                  <span className="font-medium">$1,000.00</span>
+                  <span className="text-muted-foreground">
+                    <T k="faq.pricing.tenantPays" fallback="Tenant pays (total)" />
+                  </span>
+                  <span className="font-medium tabular-nums">{formatCurrency(1000, "BDT")}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">
-                    Platform fee (5 %, server-side)
+                    <T k="faq.pricing.platformFee" fallback="Platform fee (5 %, server-side)" />
                   </span>
-                  <span className="font-medium text-destructive">-$50.00</span>
+                  <span className="font-medium tabular-nums text-destructive">
+                    −{formatCurrency(50, "BDT")}
+                  </span>
                 </div>
                 <Separator />
                 <div className="flex justify-between">
-                  <span className="font-medium">Owner receives</span>
-                  <span className="font-semibold text-success">$950.00</span>
+                  <span className="font-medium">
+                    <T k="faq.pricing.ownerReceives" fallback="Owner receives" />
+                  </span>
+                  <span className="font-semibold tabular-nums text-success">
+                    {formatCurrency(950, "BDT")}
+                  </span>
                 </div>
               </div>
             </div>
             <p className="text-xs text-muted-foreground">
-              The fee percentage is a backend constant. The frontend displays computed totals returned by the
-              API; owners see net earnings in their dashboard analytics.
+              <T
+                k="faq.pricing.note"
+                fallback="The fee percentage is a backend constant. The frontend displays computed totals returned by the API; owners see net earnings in their dashboard analytics."
+              />
             </p>
           </CardContent>
         </Card>
@@ -419,23 +382,29 @@ export default function FaqPage() {
         <div className="space-y-3">
           <Badge variant="accent" className="gap-1.5">
             <MessageSquare className="size-3" aria-hidden="true" />
-            Still have questions?
+            <T k="faq.helpBadge" fallback="Still have questions?" />
           </Badge>
-          <h2 className="text-2xl font-semibold tracking-tight">We&rsquo;re here to help</h2>
+          <h2 className="text-2xl font-semibold tracking-tight">
+            <T k="faq.helpTitle" fallback="We’re here to help" />
+          </h2>
           <p className="max-w-xl text-sm text-muted-foreground">
-            Browse the full FAQ above or get in touch. If you want to explore the platform first, the demo
-            login gives you instant access to any role.
+            <T
+              k="faq.helpBody"
+              fallback="Browse the full FAQ above or get in touch. If you want to explore the platform first, the demo login gives you instant access to any role."
+            />
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
           <Button asChild>
             <Link href="/contact">
-              Contact us
+              <T k="action.contactUs" fallback="Contact us" />
               <ArrowRight />
             </Link>
           </Button>
           <Button asChild variant="outline">
-            <Link href="/login#demo">Open demo login</Link>
+            <Link href="/login#demo">
+              <T k="auth.openDemoLogin" fallback="Open demo login" />
+            </Link>
           </Button>
         </div>
       </section>
