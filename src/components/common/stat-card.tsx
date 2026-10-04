@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { CountUp } from "@/components/brand/count-up";
 import { cn } from "@/lib/utils";
 
 export type StatTone = "default" | "neutral" | "success" | "warning" | "danger" | "accent" | "info";
@@ -47,7 +48,13 @@ export function StatCard({ label, value, icon: Icon, tone = "default", hint, hre
       ) : null}
       <div className="min-w-0 flex-1">
         <p className="truncate text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
-        <p className={cn("mt-1 text-2xl font-semibold tabular-nums tracking-tight", styles.value)}>{value}</p>
+        <p className={cn("mt-1 text-2xl font-semibold tabular-nums tracking-tight", styles.value)}>
+          {typeof value === "number" && Number.isFinite(value) ? (
+            <CountUp value={value} decimals={Number.isInteger(value) ? 0 : 2} />
+          ) : (
+            value
+          )}
+        </p>
         {hint ? <p className="mt-1 truncate text-xs text-muted-foreground">{hint}</p> : null}
       </div>
     </Card>

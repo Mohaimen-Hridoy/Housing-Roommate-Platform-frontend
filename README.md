@@ -32,7 +32,13 @@ npm run dev                    # http://localhost:4000
 |---|---|
 | Type safety | `npm run typecheck` |
 | Lint | `npm run lint` |
+| Translation coverage | `npm run i18n:check` |
+| Everything at once | `npm run verify` |
 | Production build | `npm run build` |
+
+`npm run verify` is the gate to run before every commit: typecheck, then lint, then the
+dictionary guard (duplicate keys, Bangla keys with no English source, English values left in
+the Bangla dictionary, and a coverage report).
 
 ---
 
@@ -49,6 +55,7 @@ npm run dev                    # http://localhost:4000
 | Charts | Recharts |
 | Media | `next/image` via `SmartImage` / `ImageGallery` |
 | Toasts | Sonner |
+| i18n | Hand-rolled typed dictionary (no runtime library) — see [Internationalisation](#internationalisation) |
 
 ---
 
@@ -127,6 +134,57 @@ failure path a toast plus an `error.tsx` boundary — a page never renders blank
 
 ---
 
+## Internationalisation
+
+Every user-facing string in the app is served in **English and Bangla** (`en` / `bn`). There is no
+i18n runtime dependency — the dictionary is a plain typed object, so it is tree-shaken, fully
+type-checked, and readable in one file.
+
+| Piece | Where | Why |
+|---|---|---|
+| Dictionaries | `src/lib/i18n/dictionaries.ts` | `en` is the source of truth; `bn` is typed as a full mirror of it |
+| Default locale | `DEFAULT_LOCALE` in the same file | `bn` — the product targets Bangladesh, so a first-time visitor lands on Bangla |
+| Cookie | `hsg_locale`, via `src/lib/i18n/locale.ts` | Readable by the server, so the **first paint** is already correct |
+| Server Components | `getServerTranslator()` in `src/lib/i18n/server.ts` | Correct copy for crawlers and no client-side flash |
+| Client Components | `useTranslation()` / `<T k="…">` | Reads the live locale from `LocaleProvider` |
+| Page titles + Open Graph | `localizedMetadata()` in `src/lib/i18n/metadata.ts` | `generateMetadata` per locale, not a static `metadata` export |
+| Guard | `scripts/i18n-check.mjs` via `npm run i18n:check` | Fails the build on duplicate keys, unreachable Bangla keys, or English text left in a Bangla value |
+
+```bash
+npm run i18n:check
+# i18n:check — 593/593 keys translated into bn (100%)
+```
+
+Adding copy means adding the key to **both** dictionaries; the `bn` object is a `Record` over the
+`en` keys, so an omitted translation is a compile error rather than a silent English string. Text
+that must stay verbatim (brand names, emails, `BDT`, routes like `/login#demo`) is intentionally
+left untranslated inside the Bangla strings.
+
+---
+
+## Design system and motion
+
+The palette is defined once as HSL tokens in `src/app/globals.css` (deep forest `#004337`, mint
+`#aaf0dc`, terracotta `#a13e28`) and dark mode re-points the same tokens rather than restyling
+components. Radius, shadow and easing scales are tokens too, so spacing is never ad-hoc.
+
+Motion is built from four small primitives plus a handful of CSS classes:
+
+| Primitive | Behaviour |
+|---|---|
+| `Reveal` | Reveals once on scroll via `IntersectionObserver`; content is in the DOM from the start, so it never gates rendering or hurts crawlers |
+| `RevealGroup` | Cascades `Reveal` across a page's sections with a capped stagger |
+| `CountUp` | Counts a figure up on first view, writing straight to the DOM so no frame schedules a React render |
+| `SpotlightCard` | Pointer-tracked highlight; the pointer position is written to two CSS custom properties, never to state |
+| `.aurora` / `.grain` | Slow-drifting colour wash and fine film grain behind hero, CTA and auth surfaces |
+| `.shine` | Sheen that sweeps across a primary button on hover |
+
+Every animation is disabled under `prefers-reduced-motion: reduce` — ambient loops freeze on their
+first frame, `Reveal` renders instantly, and `CountUp` jumps straight to the final value. Bundle
+cost for the whole system is under 1 kB per route.
+
+---
+
 ## Requirement coverage
 
 | Assignment requirement | Where it lives |
@@ -200,20 +258,25 @@ src/
 ├── components/
 │   ├── ui/              # Radix primitives (button, dialog, select, table, …)
 │   ├── common/          # StatCard, StatusBadge, EmptyState, Pagination, skeletons, …
+│   ├── brand/           # logo, HeroArt, Reveal/RevealGroup, CountUp, SpotlightCard, language toggle
+│   ├── marketing/       # Timeline, StatusTable, FlowDiagram, StatsBand, RoleCard
 │   ├── layout/          # SiteHeader/Footer, DashboardShell
 │   ├── auth/            # server-action form bridge, login/register/demo panels
 │   ├── property/        # cards, filters, booking wizard, favourite + contact actions
 │   ├── payment/         # Stripe checkout button, return-page shell
 │   ├── dashboard/       # per-role sections and chart wrappers
-│   └── providers/       # TanStack Query + session context + Sonner
+│   └── providers/       # TanStack Query + session + locale context, Sonner
 ├── hooks/               # use-debounce, use-pagination, use-auth, use-api
 ├── lib/
 │   ├── api/             # server.ts (RSC), client.ts (browser), endpoints.ts (typed)
 │   ├── auth/            # session.ts (cookies), tokens.ts (JWT decode + cookie names)
+│   ├── i18n/            # dictionaries.ts, locale.ts, server.ts, metadata.ts
 │   ├── types/api.ts     # exact mirror of the backend domain types
 │   ├── constants.ts     # enum labels, tones, demo accounts, route map
 │   ├── format.ts        # currency, dates, numbers, percentages
 │   └── config.ts        # env-derived config
+├── scripts/
+│   └── i18n-check.mjs   # dictionary integrity + coverage guard
 └── middleware.ts        # route-level RBAC
 ```
 
