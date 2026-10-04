@@ -1,7 +1,11 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { StatCardSkeleton } from "@/components/common/stat-card";
 import { cn } from "@/lib/utils";
+
+// Re-exported so `loading.tsx` files can pull every skeleton from one module.
+export { StatCardSkeleton };
 
 export function CardSkeleton({ className }: { className?: string }) {
   return (

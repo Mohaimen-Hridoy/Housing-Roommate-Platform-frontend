@@ -290,9 +290,7 @@ export interface AuditLog {
 }
 
 export interface ImageUploadLimits {
-  maxFiles: number;
-  maxFileSizeBytes: number;
-  allowedMime: string[];
+  allowedMimeTypes: string[];
 }
 
 /* --------------------------------------------------------- admin analytics */

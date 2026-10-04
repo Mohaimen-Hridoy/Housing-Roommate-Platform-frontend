@@ -78,3 +78,9 @@ export function formatArea(squareMetres: number | null | undefined): string {
   if (!squareMetres) return "—";
   return `${squareMetres} m²`;
 }
+
+/** Shortens long text for table cells and card summaries. */
+export function truncate(value: string | null | undefined, max: number): string {
+  if (!value) return "—";
+  return value.length <= max ? value : `${value.slice(0, max - 1).trimEnd()}…`;
+}
