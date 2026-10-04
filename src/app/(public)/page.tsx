@@ -24,6 +24,8 @@ import { RoomStatusBadge } from "@/components/common/status-badge";
 import { T } from "@/components/common/localized-text";
 import { HeroArt } from "@/components/brand/hero-art";
 import { Reveal } from "@/components/brand/reveal";
+import { CountUp } from "@/components/brand/count-up";
+import { SpotlightCard } from "@/components/brand/spotlight-card";
 import { formatCurrency } from "@/lib/format";
 import { APP_NAME } from "@/lib/constants";
 import type { ImageAsset, PropertyListItem, RoomListItem } from "@/lib/types/api";
@@ -127,71 +129,101 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="surface-mint border-b border-border">
+      <section className="aurora grain surface-mint relative border-b border-border">
         <div className="container-page py-16 lg:py-24">
           <div className="grid gap-12 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,1fr)] lg:items-center">
           <div className="space-y-7">
-            <Badge variant="accent" className="gap-1.5">
-              <Sparkles className="size-3" aria-hidden="true" />
-              <T k="home.eyebrow" fallback="Housing & roommate platform" />
-            </Badge>
+            <Reveal distance={16}>
+              <Badge variant="accent" className="gap-1.5">
+                <Sparkles className="size-3" aria-hidden="true" />
+                <T k="home.eyebrow" fallback="Housing & roommate platform" />
+              </Badge>
+            </Reveal>
 
-            <h1 className="text-4xl font-semibold leading-[1.05] tracking-[-0.02em] sm:text-5xl lg:text-[3.4rem]">
-              <span className="text-gradient-brand">
-                <T k="home.titleAccent" fallback="Find a room" />
-              </span>{" "}
-              <T k="home.titleRest" fallback="you will actually want to live in" />
-            </h1>
+            <Reveal distance={22} delay={0.06}>
+              <h1 className="text-4xl font-semibold leading-[1.05] tracking-[-0.02em] sm:text-5xl lg:text-[3.4rem]">
+                <span className="text-gradient-brand">
+                  <T k="home.titleAccent" fallback="Find a room" />
+                </span>{" "}
+                <T k="home.titleRest" fallback="you will actually want to live in" />
+              </h1>
+            </Reveal>
 
-            <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              <T
-                k="home.subtitle"
-                vars={{ app: APP_NAME }}
-                fallback={`${APP_NAME} connects tenants with property owners. Browse verified rooms, request a booking, pay through Stripe and manage everything from a single dashboard â€” with occupancy, revenue and approval analytics for the people who own the buildings.`}
-              />
-            </p>
+            <Reveal distance={20} delay={0.12}>
+              <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+                <T
+                  k="home.subtitle"
+                  vars={{ app: APP_NAME }}
+                  fallback={`${APP_NAME} connects tenants with property owners. Browse verified rooms, request a booking, pay through Stripe and manage everything from a single dashboard — with occupancy, revenue and approval analytics for the people who own the buildings.`}
+                />
+              </p>
+            </Reveal>
 
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <Button asChild size="lg">
-                <Link href="/properties">
-                  <T k="home.ctaBrowse" fallback="Browse available rooms" />
-                  <ArrowRight />
-                </Link>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <Link href="/register">
-                  <T k="home.ctaList" fallback="List your property" />
-                </Link>
-              </Button>
-            </div>
+            <Reveal distance={18} delay={0.18}>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <Button asChild size="lg">
+                  <Link href="/properties">
+                    <T k="home.ctaBrowse" fallback="Browse available rooms" />
+                    <ArrowRight />
+                  </Link>
+                </Button>
+                <Button asChild size="lg" variant="outline">
+                  <Link href="/register">
+                    <T k="home.ctaList" fallback="List your property" />
+                  </Link>
+                </Button>
+              </div>
+            </Reveal>
 
-            <dl className="grid max-w-lg grid-cols-3 gap-4 border-t border-border/70 pt-6">
-              {[
-                { label: "home.statRoles", value: "3", fallback: "Roles" },
-                { label: "home.statEndpoints", value: "79", fallback: "API endpoints" },
-                { label: "home.statPayments", value: "Stripe", fallback: "Payments" },
-              ].map((item) => (
-                <div key={item.label}>
+            <Reveal distance={18} delay={0.24}>
+              <dl className="grid max-w-lg grid-cols-3 gap-4 border-t border-border/70 pt-6">
+                {[
+                  {
+                    label: "home.statRoles",
+                    value: 3,
+                    fallback: "Roles",
+                  },
+                  {
+                    label: "home.statEndpoints",
+                    value: 79,
+                    fallback: "API endpoints",
+                  },
+                ].map((item) => (
+                  <div key={item.label}>
+                    <dt className="text-xs uppercase tracking-wide text-muted-foreground">
+                      <T k={item.label} fallback={item.fallback} />
+                    </dt>
+                    <dd className="tabular mt-1 text-2xl font-semibold">
+                      <CountUp value={item.value} />
+                    </dd>
+                  </div>
+                ))}
+                <div>
                   <dt className="text-xs uppercase tracking-wide text-muted-foreground">
-                    <T k={item.label} fallback={item.fallback} />
+                    <T k="home.statPayments" fallback="Payments" />
                   </dt>
-                  <dd className="tabular mt-1 text-2xl font-semibold">{item.value}</dd>
+                  <dd className="tabular mt-1 text-2xl font-semibold">Stripe</dd>
                 </div>
-              ))}
-            </dl>
+              </dl>
+            </Reveal>
           </div>
 
-          <Reveal distance={28} className="order-first lg:order-none">
+          <Reveal distance={28} delay={0.1} className="order-first lg:order-none">
             <HeroArt className="mx-auto w-full max-w-lg drop-shadow-[0_24px_48px_hsl(var(--shadow-color)/0.16)]" />
           </Reveal>
         </div>
 
         <div className="mt-14">
-          <Card className="surface-raised edge-light overflow-hidden">
+          <Reveal distance={22}>
+            <Card className="surface-raised edge-light overflow-hidden">
             <CardContent className="p-0">
               <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-4">
                 <div>
-                  <p className="text-sm font-semibold">
+                  <p className="flex items-center gap-2 text-sm font-semibold">
+                    <span className="relative flex size-2" aria-hidden="true">
+                      <span className="absolute inline-flex size-full rounded-full bg-success animate-pulse-ring" />
+                      <span className="relative inline-flex size-2 rounded-full bg-success" />
+                    </span>
                     <T k="home.listingsTitle" fallback="Newest published listings" />
                   </p>
                   <p className="text-xs text-muted-foreground">
@@ -212,7 +244,7 @@ export default async function HomePage() {
                     <li key={property.id}>
                       <Link
                         href={`/properties/${property.id}`}
-                        className="flex items-center gap-4 px-5 py-4 transition-colors hover:bg-muted/50"
+                        className="group flex items-center gap-4 px-5 py-4 transition-colors hover:bg-muted/50"
                       >
                         <div className="relative size-14 shrink-0 overflow-hidden rounded-lg border border-border bg-muted">
                           <SmartImage
@@ -223,10 +255,12 @@ export default async function HomePage() {
                           />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-medium">{property.title}</p>
+                          <p className="truncate text-sm font-medium transition-colors group-hover:text-primary">
+                            {property.title}
+                          </p>
                           <p className="truncate text-xs text-muted-foreground">
                             {property.city}
-                            {property.state ? `, ${property.state}` : ""} Â·{" "}
+                            {property.state ? `, ${property.state}` : ""} ·{" "}
                             <T
                               k="home.amenityCount"
                               vars={{ count: property.amenities.length }}
@@ -234,6 +268,10 @@ export default async function HomePage() {
                             />
                           </p>
                         </div>
+                        <ArrowRight
+                          className="size-4 shrink-0 -translate-x-1 text-muted-foreground opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
+                          aria-hidden="true"
+                        />
                       </Link>
                     </li>
                   ))}
@@ -248,40 +286,49 @@ export default async function HomePage() {
               )}
             </CardContent>
           </Card>
+          </Reveal>
         </div>
         </div>
       </section>
 
       <section className="container-page py-16">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-semibold tracking-tight">
-            <T k="home.featuresTitle" fallback="Everything the workflow needs" />
-          </h2>
-          <p className="mt-3 text-muted-foreground">
-            <T
-              k="home.featuresSubtitle"
-              fallback="Not a static mockup â€” every feature below is wired to the live backend API."
-            />
-          </p>
-        </div>
+        <Reveal distance={20}>
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-semibold tracking-tight">
+              <T k="home.featuresTitle" fallback="Everything the workflow needs" />
+            </h2>
+            <p className="mt-3 text-muted-foreground">
+              <T
+                k="home.featuresSubtitle"
+                fallback="Not a static mockup — every feature below is wired to the live backend API."
+              />
+            </p>
+          </div>
+        </Reveal>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {FEATURES.map((feature) => {
+          {FEATURES.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <Card key={feature.titleKey} className="h-full">
-                <CardContent className="space-y-3 p-6">
-                  <span className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <Icon className="size-5" aria-hidden="true" />
-                  </span>
-                  <h3 className="text-base font-semibold">
-                    <T k={feature.titleKey} fallback={feature.titleKey} />
-                  </h3>
-                  <p className="text-sm leading-relaxed text-muted-foreground">
-                    <T k={feature.bodyKey} fallback={feature.bodyKey} />
-                  </p>
-                </CardContent>
-              </Card>
+              <Reveal key={feature.titleKey} as="article" distance={18} delay={index * 0.06}>
+                <SpotlightCard className="h-full">
+                  <div className="space-y-3 p-6">
+                    <span className="relative flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                      <span
+                        className="absolute inset-0 rounded-lg bg-primary/10 opacity-0 blur-md transition-opacity duration-500 group-hover:opacity-100"
+                        aria-hidden="true"
+                      />
+                      <Icon className="size-5" aria-hidden="true" />
+                    </span>
+                    <h3 className="text-base font-semibold">
+                      <T k={feature.titleKey} fallback={feature.titleKey} />
+                    </h3>
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      <T k={feature.bodyKey} fallback={feature.bodyKey} />
+                    </p>
+                  </div>
+                </SpotlightCard>
+              </Reveal>
             );
           })}
         </div>
@@ -289,29 +336,45 @@ export default async function HomePage() {
 
       <section className="border-y border-border bg-muted/30">
         <div className="container-page py-16">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-semibold tracking-tight">
-              <T k="home.stepsTitle" fallback="How it works" />
-            </h2>
-            <p className="mt-3 text-muted-foreground">
-              <T
-                k="home.stepsSubtitle"
-                fallback="Four steps from signing up to moving in, for both tenants and owners."
-              />
-            </p>
-          </div>
+          <Reveal distance={20}>
+            <div className="mx-auto max-w-2xl text-center">
+              <h2 className="text-3xl font-semibold tracking-tight">
+                <T k="home.stepsTitle" fallback="How it works" />
+              </h2>
+              <p className="mt-3 text-muted-foreground">
+                <T
+                  k="home.stepsSubtitle"
+                  fallback="Four steps from signing up to moving in, for both tenants and owners."
+                />
+              </p>
+            </div>
+          </Reveal>
 
           <ol className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {STEPS.map((item) => (
-              <li key={item.step} className="relative rounded-xl border border-border bg-card p-6">
-                <span className="text-sm font-semibold tabular-nums text-primary">{item.step}</span>
-                <h3 className="mt-2 text-base font-semibold">
-                  <T k={item.titleKey} fallback={item.titleKey} />
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  <T k={item.bodyKey} fallback={item.bodyKey} />
-                </p>
-              </li>
+            {STEPS.map((item, index) => (
+              <Reveal
+                key={item.step}
+                as="li"
+                distance={18}
+                delay={index * 0.08}
+                className="relative"
+              >
+                <span
+                  className="absolute inset-x-6 -top-3 hidden h-px bg-gradient-to-r from-transparent via-primary/35 to-transparent lg:block"
+                  aria-hidden="true"
+                />
+                <div className="surface interactive-surface h-full p-6">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold tabular-nums text-primary">
+                    {item.step}
+                  </span>
+                  <h3 className="mt-3 text-base font-semibold">
+                    <T k={item.titleKey} fallback={item.titleKey} />
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    <T k={item.bodyKey} fallback={item.bodyKey} />
+                  </p>
+                </div>
+              </Reveal>
             ))}
           </ol>
         </div>
@@ -319,115 +382,126 @@ export default async function HomePage() {
 
       {hasContent ? (
         <section className="container-page py-16">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <h2 className="text-3xl font-semibold tracking-tight">
-                <T k="home.valueTitle" fallback="Best value right now" />
-              </h2>
-              <p className="mt-2 text-muted-foreground">
-                <T
-                  k="home.valueSubtitle"
-                  fallback="The lowest-rent rooms currently marked available on the platform."
-                />
-              </p>
+          <Reveal distance={18}>
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <h2 className="text-3xl font-semibold tracking-tight">
+                  <T k="home.valueTitle" fallback="Best value right now" />
+                </h2>
+                <p className="mt-2 text-muted-foreground">
+                  <T
+                    k="home.valueSubtitle"
+                    fallback="The lowest-rent rooms currently marked available on the platform."
+                  />
+                </p>
+              </div>
+              <Button asChild variant="outline">
+                <Link href="/properties?status=AVAILABLE&sortBy=rent&sortOrder=asc">
+                  <T k="home.valueCta" fallback="See all available rooms" />
+                  <ArrowRight />
+                </Link>
+              </Button>
             </div>
-            <Button asChild variant="outline">
-              <Link href="/properties?status=AVAILABLE&sortBy=rent&sortOrder=asc">
-                <T k="home.valueCta" fallback="See all available rooms" />
-                <ArrowRight />
-              </Link>
-            </Button>
-          </div>
+          </Reveal>
 
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {affordableRooms.map((room) => (
-              <Link
-                key={room.id}
-                href={`/properties/${room.property.id}`}
-                className="group overflow-hidden rounded-xl border border-border bg-card transition-shadow hover:shadow-md"
-              >
-                <div className="relative aspect-[16/10] bg-muted">
-                  <SmartImage
-                    image={roomImageById.get(room.id) ?? null}
-                    seed={room.id}
-                    alt={room.title}
-                    sizes="(max-width: 640px) 100vw, 33vw"
-                  />
-                  <span className="absolute left-3 top-3">
-                    <RoomStatusBadge status={room.status} />
-                  </span>
-                </div>
-                <div className="space-y-1.5 p-5">
-                  <div className="flex items-start justify-between gap-3">
-                    <h3 className="text-base font-semibold group-hover:text-primary">{room.title}</h3>
-                    <p className="shrink-0 text-base font-semibold tabular-nums text-primary">
-                      {formatCurrency(room.rent, room.currency)}
-                      <span className="text-xs font-normal text-muted-foreground">
-                        <T k="property.perMonth" fallback="/mo" />
-                      </span>
+            {affordableRooms.map((room, index) => (
+              <Reveal key={room.id} as="article" distance={18} delay={index * 0.07}>
+                <Link
+                  href={`/properties/${room.property.id}`}
+                  className="group surface spotlight relative isolate block h-full overflow-hidden transition-transform duration-300 ease-out-expo hover:-translate-y-1"
+                >
+                  <div className="relative aspect-[16/10] overflow-hidden bg-muted">
+                    <SmartImage
+                      image={roomImageById.get(room.id) ?? null}
+                      seed={room.id}
+                      alt={room.title}
+                      sizes="(max-width: 640px) 100vw, 33vw"
+                    />
+                    <span
+                      className="absolute inset-0 bg-gradient-to-t from-primary/25 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                      aria-hidden="true"
+                    />
+                    <span className="absolute left-3 top-3">
+                      <RoomStatusBadge status={room.status} />
+                    </span>
+                  </div>
+                  <div className="space-y-1.5 p-5">
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="text-base font-semibold transition-colors group-hover:text-primary">
+                        {room.title}
+                      </h3>
+                      <p className="shrink-0 text-base font-semibold tabular-nums text-primary">
+                        {formatCurrency(room.rent, room.currency)}
+                        <span className="text-xs font-normal text-muted-foreground">
+                          <T k="property.perMonth" fallback="/mo" />
+                        </span>
+                      </p>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      {room.property.title} · {room.property.city}
                     </p>
+                    <div className="flex flex-wrap gap-3 pt-1 text-xs text-muted-foreground">
+                      {room.bedrooms !== null ? (
+                        <span>
+                          <T k="unit.beds" vars={{ count: room.bedrooms }} fallback={`${room.bedrooms} bed`} />
+                        </span>
+                      ) : null}
+                      {room.bathrooms !== null ? (
+                        <span>
+                          <T
+                            k="unit.baths"
+                            vars={{ count: room.bathrooms }}
+                            fallback={`${room.bathrooms} bath`}
+                          />
+                        </span>
+                      ) : null}
+                      {room.area !== null ? <span>{room.area} m²</span> : null}
+                    </div>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    {room.property.title} Â· {room.property.city}
-                  </p>
-                  <div className="flex flex-wrap gap-3 pt-1 text-xs text-muted-foreground">
-                    {room.bedrooms !== null ? (
-                      <span>
-                        <T k="unit.beds" vars={{ count: room.bedrooms }} fallback={`${room.bedrooms} bed`} />
-                      </span>
-                    ) : null}
-                    {room.bathrooms !== null ? (
-                      <span>
-                        <T
-                          k="unit.baths"
-                          vars={{ count: room.bathrooms }}
-                          fallback={`${room.bathrooms} bath`}
-                        />
-                      </span>
-                    ) : null}
-                    {room.area !== null ? <span>{room.area} mÂ²</span> : null}
-                  </div>
-                </div>
-              </Link>
+                </Link>
+              </Reveal>
             ))}
           </div>
         </section>
       ) : null}
 
       <section className="container-page pb-20">
-        <Card className="overflow-hidden border-primary/20 bg-primary/[0.04]">
-          <CardContent className="flex flex-col items-start gap-6 p-8 sm:p-10 lg:flex-row lg:items-center lg:justify-between">
-            <div className="space-y-3">
-              <Badge variant="info" className="gap-1.5">
-                <Star className="size-3" aria-hidden="true" />
-                <T k="home.ctaBadge" fallback="Evaluator friendly" />
-              </Badge>
-              <h2 className="text-2xl font-semibold tracking-tight">
-                <T k="contact.demo.title" fallback="Try it without an account" />
-              </h2>
-              <p className="max-w-xl text-sm text-muted-foreground">
-                <T
-                  k="contact.demo.body"
-                  fallback="The sign-in page has a one-click demo login for all three roles â€” admin, owner and tenant â€” using seeded accounts. You will land straight on that roleâ€™s dashboard."
-                />
-              </p>
-              <div className="flex flex-wrap gap-2 pt-1">
-                {(["admin", "owner", "tenant"] as const).map((role) => (
-                  <Badge key={role} variant="outline" className="gap-1.5">
-                    <Building2 className="size-3" aria-hidden="true" />
-                    <T k={`auth.role.${role}`} fallback={role} />
-                  </Badge>
-                ))}
+        <Reveal distance={22}>
+          <Card className="aurora relative overflow-hidden border-primary/20 bg-primary/[0.04]">
+            <CardContent className="relative flex flex-col items-start gap-6 p-8 sm:p-10 lg:flex-row lg:items-center lg:justify-between">
+              <div className="space-y-3">
+                <Badge variant="info" className="gap-1.5">
+                  <Star className="size-3" aria-hidden="true" />
+                  <T k="home.ctaBadge" fallback="Evaluator friendly" />
+                </Badge>
+                <h2 className="text-2xl font-semibold tracking-tight">
+                  <T k="contact.demo.title" fallback="Try it without an account" />
+                </h2>
+                <p className="max-w-xl text-sm text-muted-foreground">
+                  <T
+                    k="contact.demo.body"
+                    fallback="The sign-in page has a one-click demo login for all three roles — admin, owner and tenant — using seeded accounts. You will land straight on that role’s dashboard."
+                  />
+                </p>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {(["admin", "owner", "tenant"] as const).map((role) => (
+                    <Badge key={role} variant="outline" className="gap-1.5">
+                      <Building2 className="size-3" aria-hidden="true" />
+                      <T k={`auth.role.${role}`} fallback={role} />
+                    </Badge>
+                  ))}
+                </div>
               </div>
-            </div>
-            <Button asChild size="lg" className="shrink-0">
-              <Link href="/login#demo">
-                <T k="auth.openDemoLogin" fallback="Open demo login" />
-                <ArrowRight />
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
+              <Button asChild size="lg" className="shrink-0">
+                <Link href="/login#demo">
+                  <T k="auth.openDemoLogin" fallback="Open demo login" />
+                  <ArrowRight />
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </Reveal>
       </section>
     </>
   );

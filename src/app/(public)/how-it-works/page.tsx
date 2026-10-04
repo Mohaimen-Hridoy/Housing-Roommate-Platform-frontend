@@ -248,7 +248,7 @@ export default function HowItWorksPage() {
             <p className="text-sm text-muted-foreground">
               <T
                 k="how.feeNote"
-                fallback="The platform fee is a percentage of the booking total, calculated server-side from STRIPE_PLATFORM_FEE_PERCENT (default 5 %). The tenant pays the full amount at checkout; the fee is subtracted from the owner's payout â€” the tenant never sees a separate platform-fee line item."
+                fallback="The platform fee is a percentage of the booking total, calculated server-side from STRIPE_PLATFORM_FEE_PERCENT (default 5 %). The tenant pays the full amount at checkout; the fee is subtracted from the owner's payout — the tenant never sees a separate platform-fee line item."
               />
             </p>
           </CardContent>

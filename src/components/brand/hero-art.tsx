@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react";
+
 /**
  * Hero artwork for the marketing pages.
  *
@@ -36,8 +38,10 @@ export function HeroArt({ className }: { className?: string }) {
 
       {/* backdrop */}
       <rect x="20" y="16" width="480" height="428" rx="34" fill="url(#sky)" />
-      <circle cx="404" cy="98" r="46" fill="hsl(var(--brand) / 0.18)" />
-      <circle cx="404" cy="98" r="26" fill="hsl(var(--brand) / 0.32)" />
+      <g className="animate-float-slow" style={{ transformOrigin: "404px 98px" }}>
+        <circle cx="404" cy="98" r="46" fill="hsl(var(--brand) / 0.18)" />
+        <circle cx="404" cy="98" r="26" fill="hsl(var(--brand) / 0.32)" />
+      </g>
 
       {/* building */}
       <rect x="92" y="132" width="212" height="252" rx="20" fill="url(#facade)" stroke="hsl(var(--border))" />
@@ -73,8 +77,16 @@ export function HeroArt({ className }: { className?: string }) {
       <path d="M330 384h44l-6 40h-32l-6-40Z" fill="hsl(var(--brand) / 0.85)" />
 
       {/* floating booking card */}
-      <g>
-        <rect x="316" y="176" width="164" height="112" rx="18" fill="hsl(var(--card))" stroke="hsl(var(--border))" />
+      <g className="animate-float" style={{ transformOrigin: "398px 232px" }}>
+        <rect
+          x="316"
+          y="176"
+          width="164"
+          height="112"
+          rx="18"
+          fill="hsl(var(--card))"
+          stroke="hsl(var(--border))"
+        />
         <rect x="332" y="192" width="132" height="44" rx="10" fill="hsl(var(--muted))" />
         <path
           d="M346 224l14-11 11 8 14-13 13 10 14-12 18 18"
@@ -82,6 +94,8 @@ export function HeroArt({ className }: { className?: string }) {
           strokeWidth="2.4"
           strokeLinecap="round"
           strokeLinejoin="round"
+          style={{ "--draw-length": 130 } as CSSProperties}
+          className="animate-draw"
         />
         <rect x="332" y="248" width="66" height="8" rx="4" fill="hsl(var(--muted))" />
         <rect x="332" y="264" width="96" height="8" rx="4" fill="hsl(var(--muted))" />
@@ -89,7 +103,10 @@ export function HeroArt({ className }: { className?: string }) {
       </g>
 
       {/* verified badge */}
-      <g>
+      <g
+        className="animate-float-slow"
+        style={{ transformOrigin: "134px 211px", animationDelay: "-3s" }}
+      >
         <rect x="70" y="188" width="128" height="46" rx="16" fill="hsl(var(--card))" stroke="hsl(var(--border))" />
         <circle cx="94" cy="211" r="11" fill="hsl(var(--primary))" />
         <path

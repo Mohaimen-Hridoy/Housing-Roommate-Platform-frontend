@@ -168,8 +168,8 @@ export default async function AboutPage() {
                   index === 1
                     ? `Finding a room or managing a rental portfolio is fragmented. Listings live on marketplaces, payments go through ad-hoc channels, and communication disappears the moment a tenancy ends. ${APP_NAME} brings all of that into one platform.`
                     : index === 2
-                      ? "For tenants, that means verified listings, real-time availability, a structured booking flow, and secure Stripe Checkout payments â€” no phone calls to confirm a room is still free. For owners, it means a self-service dashboard to publish properties, approve requests, and track occupancy and earnings with computed analytics."
-                      : "The platform is designed around three distinct roles â€” Tenant, Owner and Admin â€” so every user sees only what is relevant to them and every action is auditable."
+? "For tenants, that means verified listings, real-time availability, a structured booking flow, and secure Stripe Checkout payments — no phone calls to confirm a room is still free. For owners, it means a self-service dashboard to publish properties, approve requests, and track occupancy and earnings with computed analytics."
+            : "The platform is designed around three distinct roles — Tenant, Owner and Admin — so every user sees only what is relevant to them and every action is auditable."
                 }
               />
             </p>
