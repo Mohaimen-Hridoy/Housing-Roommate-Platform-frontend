@@ -10,6 +10,8 @@ import { cn } from "@/lib/utils";
 
 interface ErrorStateProps {
   title?: string;
+  /** Dictionary key. Falls back to `title` when the locale has no entry. */
+  titleKey?: string;
   message: string;
   onRetry?: () => void;
   className?: string;
@@ -17,7 +19,7 @@ interface ErrorStateProps {
 }
 
 /** Inline failure panel — a page never renders blank after an API error. */
-export function ErrorState({ title, message, onRetry, className, variant = "warning" }: ErrorStateProps) {
+export function ErrorState({ title, titleKey, message, onRetry, className, variant = "warning" }: ErrorStateProps) {
   const t = useTranslation();
 
   // Resolved after mount: reading `navigator.onLine` during render would give the
@@ -35,12 +37,17 @@ export function ErrorState({ title, message, onRetry, className, variant = "warn
   }, []);
 
   const Icon = offline ? WifiOff : AlertTriangle;
+  const resolvedTitle = titleKey ? t(titleKey) : title;
+  const heading =
+    offline
+      ? t("state.offlineTitle")
+      : (resolvedTitle === titleKey ? title : resolvedTitle) ?? t("state.error");
 
   return (
     <Alert variant={variant} className={cn("flex-col items-start gap-3 sm:flex-row sm:items-center", className)}>
       <Icon className="size-4 shrink-0" aria-hidden="true" />
       <div className="flex-1 space-y-0.5">
-        <AlertTitle>{offline ? t("state.offlineTitle") : (title ?? t("state.error"))}</AlertTitle>
+        <AlertTitle>{heading}</AlertTitle>
         <AlertDescription>{message}</AlertDescription>
       </div>
       {onRetry ? (

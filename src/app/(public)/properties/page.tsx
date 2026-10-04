@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { Building2, DoorOpen } from "lucide-react";
 
@@ -239,7 +239,7 @@ interface ResultsProps<T> {
 
 function PropertyResults({ items: properties, imageById, error, isEmpty }: ResultsProps<PropertyListItem>) {
   if (error && properties.length === 0) {
-    return <ErrorState title="Could not load properties" message={error} />;
+    return <ErrorState title="Could not load properties" titleKey="browse.error.properties" message={error} />;
   }
 
   if (isEmpty) {
@@ -257,7 +257,7 @@ function PropertyResults({ items: properties, imageById, error, isEmpty }: Resul
 
   return (
     <>
-      {error ? <ErrorState title="Some listings could not be loaded" message={error} className="mb-4" /> : null}
+      {error ? <ErrorState title="Some listings could not be loaded" titleKey="browse.error.partialProperties" message={error} className="mb-4" /> : null}
 <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {properties.map((property, index) => (
           <li
@@ -275,7 +275,7 @@ function PropertyResults({ items: properties, imageById, error, isEmpty }: Resul
 
 function RoomResults({ items: rooms, imageById, error, isEmpty }: ResultsProps<RoomListItem>) {
   if (error && rooms.length === 0) {
-    return <ErrorState title="Could not load rooms" message={error} />;
+    return <ErrorState title="Could not load rooms" titleKey="browse.error.rooms" message={error} />;
   }
 
   if (isEmpty) {
@@ -293,7 +293,7 @@ function RoomResults({ items: rooms, imageById, error, isEmpty }: ResultsProps<R
 
   return (
     <>
-      {error ? <ErrorState title="Some rooms could not be loaded" message={error} className="mb-4" /> : null}
+      {error ? <ErrorState title="Some rooms could not be loaded" titleKey="browse.error.partialRooms" message={error} className="mb-4" /> : null}
 <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {rooms.map((room, index) => (
           <li

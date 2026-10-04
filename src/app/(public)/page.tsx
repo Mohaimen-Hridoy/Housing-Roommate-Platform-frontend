@@ -35,62 +35,56 @@ export const metadata: Metadata = {
 const FEATURES = [
   {
     icon: Search,
-    title: "Search that actually filters",
-    description:
-      "Filter by city, rent range, bedrooms, facing and availability. Every filter lives in the URL, so you can bookmark or share exactly what you are looking at.",
+    titleKey: "home.feature.search.title",
+    bodyKey: "home.feature.search.body",
   },
   {
     icon: CalendarCheck,
-    title: "Bookings with real state",
-    description:
-      "Requests move through pending, approved, rejected and cancelled — and the room availability updates with them, so you never request a room that is already taken.",
+    titleKey: "home.feature.booking.title",
+    bodyKey: "home.feature.booking.body",
   },
   {
     icon: CreditCard,
-    title: "Stripe test-mode payments",
-    description:
-      "Approved bookings open a Stripe Checkout Session. Payments settle through a verified webhook, and cancellations issue refunds automatically.",
+    titleKey: "home.feature.payments.title",
+    bodyKey: "home.feature.payments.body",
   },
   {
     icon: ShieldCheck,
-    title: "Role-based access",
-    description:
-      "Tenants, owners and admins each get their own dashboard and their own permissions, enforced in the middleware and again in the API.",
+    titleKey: "home.feature.roles.title",
+    bodyKey: "home.feature.roles.body",
   },
   {
     icon: TrendingUp,
-    title: "Owner analytics",
-    description:
-      "Occupancy rate, approval rate, revenue and platform fees — computed from real booking and payment data, not estimates.",
+    titleKey: "home.feature.analytics.title",
+    bodyKey: "home.feature.analytics.body",
   },
   {
     icon: BadgeCheck,
-    title: "Verified accounts",
-    description:
-      "Email verification, password reset and a full audit trail of every mutating action, with actor, entity and IP recorded.",
+    titleKey: "home.feature.verified.title",
+    bodyKey: "home.feature.verified.body",
   },
 ];
 
 const STEPS = [
   {
     step: "01",
-    title: "Create your account",
-    description: "Register as a tenant to book, or as an owner to publish listings and approve requests.",
+    titleKey: "home.step.account.title",
+    bodyKey: "home.step.account.body",
   },
   {
     step: "02",
-    title: "Search or publish",
-    description: "Tenants filter live listings; owners create a property and add rooms with photos and amenities.",
+    titleKey: "home.step.search.title",
+    bodyKey: "home.step.search.body",
   },
   {
     step: "03",
-    title: "Request and approve",
-    description: "A booking request reserves the room while the owner reviews it, then approves or rejects.",
+    titleKey: "home.step.request.title",
+    bodyKey: "home.step.request.body",
   },
   {
     step: "04",
-    title: "Pay and review",
-    description: "Pay through Stripe Checkout, then leave a review once the stay is complete.",
+    titleKey: "home.step.pay.title",
+    bodyKey: "home.step.pay.body",
   },
 ];
 
@@ -193,12 +187,16 @@ export default async function HomePage() {
             <CardContent className="p-0">
               <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-4">
                 <div>
-                  <p className="text-sm font-semibold">Newest published listings</p>
-                  <p className="text-xs text-muted-foreground">Live from the API</p>
+                  <p className="text-sm font-semibold">
+                    <T k="home.listingsTitle" fallback="Newest published listings" />
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    <T k="home.listingsLive" fallback="Live from the API" />
+                  </p>
                 </div>
                 <Button asChild variant="ghost" size="sm">
                   <Link href="/properties">
-                    View all
+                    <T k="common.viewAll" fallback="View all" />
                     <ArrowRight />
                   </Link>
                 </Button>
@@ -224,8 +222,12 @@ export default async function HomePage() {
                           <p className="truncate text-sm font-medium">{property.title}</p>
                           <p className="truncate text-xs text-muted-foreground">
                             {property.city}
-                            {property.state ? `, ${property.state}` : ""} · {property.amenities.length}{" "}
-                            amenities
+                            {property.state ? `, ${property.state}` : ""} ·{" "}
+                            <T
+                              k="home.amenityCount"
+                              vars={{ count: property.amenities.length }}
+                              fallback={`${property.amenities.length} amenities`}
+                            />
                           </p>
                         </div>
                       </Link>
@@ -234,7 +236,10 @@ export default async function HomePage() {
                 </ul>
               ) : (
                 <p className="px-5 py-10 text-center text-sm text-muted-foreground">
-                  No published listings yet. Seed the backend or sign in as an owner to publish one.
+                  <T
+                    k="home.listingsEmpty"
+                    fallback="No published listings yet. Seed the backend or sign in as an owner to publish one."
+                  />
                 </p>
               )}
             </CardContent>
@@ -245,9 +250,14 @@ export default async function HomePage() {
 
       <section className="container-page py-16">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-semibold tracking-tight">Everything the workflow needs</h2>
+          <h2 className="text-3xl font-semibold tracking-tight">
+            <T k="home.featuresTitle" fallback="Everything the workflow needs" />
+          </h2>
           <p className="mt-3 text-muted-foreground">
-            Not a static mockup — every feature below is wired to the live backend API.
+            <T
+              k="home.featuresSubtitle"
+              fallback="Not a static mockup — every feature below is wired to the live backend API."
+            />
           </p>
         </div>
 
@@ -255,13 +265,17 @@ export default async function HomePage() {
           {FEATURES.map((feature) => {
             const Icon = feature.icon;
             return (
-              <Card key={feature.title} className="h-full">
+              <Card key={feature.titleKey} className="h-full">
                 <CardContent className="space-y-3 p-6">
                   <span className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
                     <Icon className="size-5" aria-hidden="true" />
                   </span>
-                  <h3 className="text-base font-semibold">{feature.title}</h3>
-                  <p className="text-sm leading-relaxed text-muted-foreground">{feature.description}</p>
+                  <h3 className="text-base font-semibold">
+                    <T k={feature.titleKey} fallback={feature.titleKey} />
+                  </h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    <T k={feature.bodyKey} fallback={feature.bodyKey} />
+                  </p>
                 </CardContent>
               </Card>
             );
@@ -272,9 +286,14 @@ export default async function HomePage() {
       <section className="border-y border-border bg-muted/30">
         <div className="container-page py-16">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-semibold tracking-tight">How it works</h2>
+            <h2 className="text-3xl font-semibold tracking-tight">
+              <T k="home.stepsTitle" fallback="How it works" />
+            </h2>
             <p className="mt-3 text-muted-foreground">
-              Four steps from signing up to moving in, for both tenants and owners.
+              <T
+                k="home.stepsSubtitle"
+                fallback="Four steps from signing up to moving in, for both tenants and owners."
+              />
             </p>
           </div>
 
@@ -282,8 +301,12 @@ export default async function HomePage() {
             {STEPS.map((item) => (
               <li key={item.step} className="relative rounded-xl border border-border bg-card p-6">
                 <span className="text-sm font-semibold tabular-nums text-primary">{item.step}</span>
-                <h3 className="mt-2 text-base font-semibold">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
+                <h3 className="mt-2 text-base font-semibold">
+                  <T k={item.titleKey} fallback={item.titleKey} />
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  <T k={item.bodyKey} fallback={item.bodyKey} />
+                </p>
               </li>
             ))}
           </ol>
@@ -294,14 +317,19 @@ export default async function HomePage() {
         <section className="container-page py-16">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <h2 className="text-3xl font-semibold tracking-tight">Best value right now</h2>
+              <h2 className="text-3xl font-semibold tracking-tight">
+                <T k="home.valueTitle" fallback="Best value right now" />
+              </h2>
               <p className="mt-2 text-muted-foreground">
-                The lowest-rent rooms currently marked available on the platform.
+                <T
+                  k="home.valueSubtitle"
+                  fallback="The lowest-rent rooms currently marked available on the platform."
+                />
               </p>
             </div>
             <Button asChild variant="outline">
               <Link href="/properties?status=AVAILABLE&sortBy=rent&sortOrder=asc">
-                See all available rooms
+                <T k="home.valueCta" fallback="See all available rooms" />
                 <ArrowRight />
               </Link>
             </Button>
@@ -330,15 +358,29 @@ export default async function HomePage() {
                     <h3 className="text-base font-semibold group-hover:text-primary">{room.title}</h3>
                     <p className="shrink-0 text-base font-semibold tabular-nums text-primary">
                       {formatCurrency(room.rent, room.currency)}
-                      <span className="text-xs font-normal text-muted-foreground">/mo</span>
+                      <span className="text-xs font-normal text-muted-foreground">
+                        <T k="property.perMonth" fallback="/mo" />
+                      </span>
                     </p>
                   </div>
                   <p className="text-sm text-muted-foreground">
                     {room.property.title} · {room.property.city}
                   </p>
                   <div className="flex flex-wrap gap-3 pt-1 text-xs text-muted-foreground">
-                    {room.bedrooms !== null ? <span>{room.bedrooms} bed</span> : null}
-                    {room.bathrooms !== null ? <span>{room.bathrooms} bath</span> : null}
+                    {room.bedrooms !== null ? (
+                      <span>
+                        <T k="unit.beds" vars={{ count: room.bedrooms }} fallback={`${room.bedrooms} bed`} />
+                      </span>
+                    ) : null}
+                    {room.bathrooms !== null ? (
+                      <span>
+                        <T
+                          k="unit.baths"
+                          vars={{ count: room.bathrooms }}
+                          fallback={`${room.bathrooms} bath`}
+                        />
+                      </span>
+                    ) : null}
                     {room.area !== null ? <span>{room.area} m²</span> : null}
                   </div>
                 </div>
@@ -354,25 +396,29 @@ export default async function HomePage() {
             <div className="space-y-3">
               <Badge variant="info" className="gap-1.5">
                 <Star className="size-3" aria-hidden="true" />
-                Evaluator friendly
+                <T k="home.ctaBadge" fallback="Evaluator friendly" />
               </Badge>
-              <h2 className="text-2xl font-semibold tracking-tight">Try it without an account</h2>
+              <h2 className="text-2xl font-semibold tracking-tight">
+                <T k="contact.demo.title" fallback="Try it without an account" />
+              </h2>
               <p className="max-w-xl text-sm text-muted-foreground">
-                The sign-in page has a one-click demo login for all three roles — admin, owner and tenant —
-                using seeded accounts. You will land straight on that role&rsquo;s dashboard.
+                <T
+                  k="contact.demo.body"
+                  fallback="The sign-in page has a one-click demo login for all three roles — admin, owner and tenant — using seeded accounts. You will land straight on that role’s dashboard."
+                />
               </p>
               <div className="flex flex-wrap gap-2 pt-1">
-                {["Admin", "Owner", "Tenant"].map((role) => (
+                {(["admin", "owner", "tenant"] as const).map((role) => (
                   <Badge key={role} variant="outline" className="gap-1.5">
                     <Building2 className="size-3" aria-hidden="true" />
-                    {role}
+                    <T k={`auth.role.${role}`} fallback={role} />
                   </Badge>
                 ))}
               </div>
             </div>
             <Button asChild size="lg" className="shrink-0">
               <Link href="/login#demo">
-                Open demo login
+                <T k="auth.openDemoLogin" fallback="Open demo login" />
                 <ArrowRight />
               </Link>
             </Button>

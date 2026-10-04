@@ -126,6 +126,7 @@ const en = {
   "auth.noAccount": "New here?",
   "auth.haveAccount": "Already have an account?",
   "auth.oneClick": "One click",
+  "auth.openDemoLogin": "Open demo login",
   "auth.demoBadge": "Quick demo access",
   "auth.demoTitle2": "One-click demo login",
   "auth.demoBody":
@@ -294,6 +295,7 @@ const en = {
   "action.browseAllRooms": "Browse all rooms",
   "action.contactUs": "Contact us",
   "action.stillNeedHelp": "Still need help?",
+  "action.tryDemo": "Try the demo",
 
   /* counts and units */
   "unit.beds": "{{count}} bedroom",
@@ -980,6 +982,11 @@ const bn: Partial<Record<TranslationKey, string>> = {
   "misc.showMore": "আরও দেখুন",
   "misc.showLess": "কম দেখুন",
   "misc.resultsFor": "ফলাফল",
+  "action.createAccount": "অ্যাকাউন্ট তৈরি করুন",
+  "action.browseAllProperties": "সব সম্পত্তি দেখুন",
+  "action.browseAllRooms": "সব ঘর দেখুন",
+  "action.contactUs": "যোগাযোগ করুন",
+  "action.stillNeedHelp": "আপনার কি এখনো সাহায্য দরকার?",
 
   /* landing page */
   "home.eyebrow": "হাউসিং ও রুমমেট প্ল্যাটফর্ম",
@@ -993,7 +1000,141 @@ const bn: Partial<Record<TranslationKey, string>> = {
   "home.statRoles": "ভূমিকা",
   "home.statEndpoints": "API এন্ডপয়েন্ট",
   "home.statPayments": "পেমেন্ট",
+  "home.listingsTitle": "সাম্প্রতিক প্রকাশিত লিস্টিং",
+  "home.listingsLive": "সরাসরি API থেকে",
+  "home.listingsEmpty":
+    "এখনো কোনো প্রকাশিত লিস্টিং নেই। ব্যাকএন্ড সিড করুন অথবা মালিক হিসেবে সাইন ইন করে একটি প্রকাশ করুন।",
+  "home.amenityCount": "{{count}}টি সুবিধা",
+  "home.featuresTitle": "পুরো ওয়ার্কফ্লোর জন্য যা দরকার",
+  "home.featuresSubtitle":
+    "কোনো স্ট্যাটিক মকআপ নয় — নিচের প্রতিটি ফিচার সরাসরি ব্যাকএন্ড API-এর সঙ্গে যুক্ত।",
+  "home.stepsTitle": "কীভাবে কাজ করে",
+  "home.stepsSubtitle": "সাইনআপ থেকে উঠে পড়া পর্যন্ত চারটি ধাপ — ভাড়াটিয়া ও মালিক উভয়ের জন্য।",
+  "home.valueTitle": "এখন সবচেয়ে ভালো দাম",
+  "home.valueSubtitle": "প্ল্যাটফর্মে বর্তমানে খালি হিসেবে চিহ্নিত সবচেয়ে কম ভাড়ার ঘরগুলো।",
+  "home.valueCta": "সব খালি ঘর দেখুন",
+  "home.ctaBadge": "মূল্যায়নের জন্য উপযোগী",
+  "home.feature.search.title": "সত্যিকারের ফিল্টারযুক্ত সার্চ",
+  "home.feature.search.body":
+    "শহর, ভাড়ার সীমা, বেডরুম, দিক আর উপলব্ধতা দিয়ে ফিল্টার করুন। প্রতিটি ফিল্টার URL-এ থাকে, তাই আপনি যা খুঁজছেন তা ঠিক বুকমার্ক বা শেয়ার করতে পারবেন।",
+  "home.feature.booking.title": "সত্যিকারের স্টেটাসসহ বুকিং",
+  "home.feature.booking.body":
+    "অনুরোধ অপেক্ষমাণ, অনুমোদিত, প্রত্যাখ্যাত ও বাতিল — এই অবস্থাগুলোর সঙ্গে ঘরের খালিতাও বদলায়, তাই আপনি কখনো আগে থেকেই ধৃত ঘরের অনুরোধ করবেন না।",
+  "home.feature.payments.title": "Stripe টেস্ট-মোড পেমেন্ট",
+  "home.feature.payments.body":
+    "অনুমোদিত বুকিংয়ে একটি Stripe Checkout Session খোলে। পেমেন্ট যাচাই করা ওয়েবহুকের মাধ্যমে নিষ্পত্তি হয়, আর বাতিলে স্বয়ংক্রিয়ভাবে রিফান্ড হয়।",
+  "home.feature.roles.title": "ভূমিকাভিত্তিক প্রবেশাধিকার",
+  "home.feature.roles.body":
+    "ভাড়াটিয়া, মালিক ও অ্যাডমিন প্রত্যেকেই পান নিজস্ব ড্যাশবোর্ড ও নিজস্ব অনুমতি, যা মিডলওয়্যারে এবং API-তে আবারও প্রয়োগ করা হয়।",
+  "home.feature.analytics.title": "মালিকদের জন্য বিশ্লেষণ",
+  "home.feature.analytics.body":
+    "খালি থাকার হার, অনুমোদনের হার, আয় ও প্ল্যাটফর্ম ফি — অনুমান নয়, বাস্তব বুকিং ও পেমেন্টের তথ্য থেকে হিসাব করা।",
+  "home.feature.verified.title": "যাচাই করা অ্যাকাউন্ট",
+  "home.feature.verified.body":
+    "ইমেইল যাচাই, পাসওয়ার্ড রিসেট এবং প্রতিটি পরিবর্তনশীল অ্যাকশনের সম্পূর্ণ অডিট ট্রেইল — অপারেটর, এনটিটি ও আইপি সহ রেকর্ড করা।",
+  "home.step.account.title": "অ্যাকাউন্ট তৈরি করুন",
+  "home.step.account.body":
+    "বুক করতে ভাড়াটিয়া হিসেবে, বা লিস্টিং প্রকাশ ও অনুরোধ অনুমোদন করতে মালিক হিসেবে নিবন্ধন করুন।",
+  "home.step.search.title": "খুঁজুন বা প্রকাশ করুন",
+  "home.step.search.body":
+    "ভাড়াটিয়ারা সরাসরি লিস্টিং ফিল্টার করেন; মালিকরা সম্পত্তি তৈরি করে ছবি ও সুবিধাসহ ঘর যোগ করেন।",
+  "home.step.request.title": "অনুরোধ ও অনুমোদন",
+  "home.step.request.body":
+    "বুকিংয়ের অনুরোধ পাঠানোর সঙ্গে সঙ্গে ঘরটি সংরক্ষিত হয়, মালিক যাচাই করে অনুমোদন বা প্রত্যাখ্যান করেন।",
+  "home.step.pay.title": "পেমেন্ট ও রিভিউ",
+  "home.step.pay.body":
+    "Stripe Checkout দিয়ে পেমেন্ট করুন, তারপর থাকা শেষ হলে একটি রিভিউ লিখুন।",
+  "auth.openDemoLogin": "ডেমো লগ ইন খুলুন",
+
+  /* counts and units */
+  "unit.beds": "{{count}}টি বেডরুম",
+  "unit.baths": "{{count}}টি বাথরুম",
+  "unit.rooms": "{{count}}টি ঘর",
+  "unit.more": "+{{count}}টি আরও",
+  "unit.questions": "{{count}}টি প্রশ্ন",
+  "card.viewDetailsAria": "{{title}}-এর বিবরণ দেখুন",
+  "card.roomDetailsAria": "{{property}}-এর ঘর {{room}}-এর বিবরণ দেখুন",
+  "common.home": "হোম",
+  "common.viewAll": "সব দেখুন",
 "action.sortBy": "সাজানোর নিয়ম",
+  "action.tryDemo": "ডেমো দেখুন",
+
+  /* about */
+  "about.eyebrow": "আমাদের লক্ষ্য",
+  "about.title": "নেস্টস্পেস সম্পর্কে",
+  "about.subtitle":
+    "স্বচ্ছতা, গতি এবং ভূমিকাভিত্তিক স্পষ্টতার জন্য তৈরি একটি উন্মুক্ত হাউসিং ও রুমমেট প্ল্যাটফর্ম।",
+  "about.missionTitle": "নেস্টস্পেস কেন",
+  "about.mission1":
+    "ঘর খোঁজা বা ভাড়ার পোর্টফোলিও সামলানো আজকাল ছড়িয়ে ছিটিয়ে। লিস্টিং থাকে মার্কেটপ্লেসে, পেমেন্ট হয় নানা অসম সুতোর মাধ্যজে, আর ভাড়া শেষ হলেই যোগাযোগের সমস্ত নথি হারিয়ে যায়। {{app}} এসবের সবকিছু একটি প্ল্যাটফর্মে নিয়ে আসে।",
+  "about.mission2":
+    "ভাড়াটিয়াদের জন্য এর মানে — যাচাই করা লিস্টিং, সঙ্গে সঙ্গে হালনাগাদ খালিতা, সুশৃঙ্খল বুকিং প্রক্রিয়া এবং নিরাপদ Stripe Checkout পেমেন্ট — ঘর খালি আছে কি না নিশ্চিত করতে আর ফোন করার দরকার নেই। মালিকদের জন্য এর মানে — সম্পত্তি প্রকাশ, অনুরোধ অনুমোদন এবং হিসাব করা বিশ্লেষণের মাধ্যমে খালি থাকার হার ও আয় দেখার একটি সেলফ-সার্ভিস ড্যাশবোর্ড।",
+  "about.mission3":
+    "প্ল্যাটফর্মটি তিনটি স্বতন্ত্র ভূমিকা — ভাড়াটিয়া, মালিক ও অ্যাডমিন — কেন্দ্রিক করে সাজানো, যাতে প্রত্যেক ব্যবহারকারী কেবল নিজের কাজের প্রাসঙ্গিক অংশই দেখেন এবং প্রতিটি অ্যাকশন অডিটযোগ্য হয়।",
+  "about.buildTitle": "যেভাবে তৈরি",
+  "about.buildBody":
+    "নেস্টস্পেস একটি ফুল-স্ট্যাক ফ্রন্টএন্ড, যা একটি সত্যিকারের প্রোডাকশন ব্যাকএন্ডের আয়না। ব্যাকএন্ডটি একটি অভিন্ন এনভেলোপ অনুসরণ করে ৭৯টি API এন্ডপয়েন্ট প্রকাশ করে, প্রতিটি মিউটেশন লগ করা হয়, এবং ভূমিকা মিডলওয়্যারে ও প্রতিটি রিজলভারে আবারও যাচাই করা হয়।",
+  "about.feature.rbac.title": "ভূমিকাভিত্তিক প্রবেশাধিকার নিয়ন্ত্রণ",
+  "about.feature.rbac.body":
+    "ভাড়াটিয়া, মালিক ও অ্যাডমিন প্রত্যেকেই আলাদা ড্যাশবোর্ড ও অনুমতির সেট পান। API ও মিডলওয়্যারে এগুলি প্রয়োগ করা হয়, যাতে তথ্য আলাদা থাকে।",
+  "about.feature.stripe.title": "Stripe টেস্ট-মোড পেমেন্ট",
+  "about.feature.stripe.body":
+    "অনুমোদিত বুকিংয়ের জন্য একটি Stripe Checkout Session খোলে। পেমেন্ট যাচাই করা ওয়েবহুকের মাধ্যমে নিষ্পত্তি হয়, আর বাতিলের ক্ষেত্রে SUCCEEDED পেমেন্টের জন্য স্বয়ংক্রিয়ভাবে রিফান্ড হয়।",
+  "about.feature.jwt.title": "রোটেটিং রিফ্রেশ টোকেনসহ JWT",
+  "about.feature.jwt.body":
+    "অ্যাক্সেস টোকনে ব্যবহারকারীর ভূমিকা ও আইডি থাকে; প্রতিবার ব্যবহারে রিফ্রেশ টোকন রোটেট হয়। টোকেনগুলো httpOnly কুকিতে জমা থাকে, তাই JavaScript কখনো সেগুলো পড়তে পারে না।",
+  "about.feature.audit.title": "অডিট লগ",
+  "about.feature.audit.body":
+    "প্রতিটি পরিবর্তনশীল অ্যাকশনে অপারেটর, এনটিটি, অ্যাকশন, আগের ও পরের মান, আইপি ও ইউজার এজেন্ট রেকর্ড হয় — যা কমপ্লায়েন্স ও ডিবাগ করা সহজ করে।",
+  "about.feature.images.title": "Cloudinary দিয়ে ছবি আপলোড",
+  "about.feature.images.body":
+    "প্রোডাকশনে সম্পত্তি ও ঘরের ছবি Cloudinary-তে যায়, ডেভেলপমেন্টে লোকাল ফাইলসিস্টেম বিকল্প হিসেবে কাজ করে। আপলোড সীমা ৬টি ফাইল, প্রতিটি ৫ MB, jpeg/png/webp/avif।",
+  "about.stackTitle": "টেক স্ট্যাক",
+  "about.stack.frontend": "ফ্রন্টএন্ড ফ্রেমওয়ার্ক",
+  "about.stack.language": "ভাষা",
+  "about.stack.styling": "স্টাইলিং",
+  "about.stack.data": "ডেটা ফেচিং",
+  "about.stack.forms": "ফর্ম",
+  "about.stack.icons": "আইকন",
+  "about.stack.notifications": "নোটিফিকেশন",
+  "about.stack.charts": "চার্ট",
+  "about.stack.backend": "ব্যাকএন্ড ফ্রেমওয়ার্ক",
+  "about.stack.orm": "ORM",
+  "about.stack.database": "ডেটাবেস",
+  "about.stack.auth": "অথেন্টিকেশন",
+  "about.stack.payments": "পেমেন্ট",
+  "about.stack.images": "ছবি সংরক্ষণ",
+  "about.stack.envelope": "API এনভেলোপ",
+  "about.rolesTitle": "তিনটি ভূমিকার জন্য তৈরি",
+  "about.rolesSubtitle": "প্রত্যেক ভূমিকা পায় নিজস্ব ড্যাশবোর্ড, অনুমতির সেট ও হোম রুট।",
+  "about.overviewTitle": "প্ল্যাটফর্মের সারসংক্ষেপ",
+  "about.stat.roles": "ভূমিকা",
+  "about.stat.endpoints": "API এন্ডপয়েন্ট",
+  "about.stat.auth": "অথ",
+  "about.stat.payments": "পেমেন্ট",
+  "about.stat.database": "ডেটাবেস",
+  "about.stat.frontend": "ফ্রন্টএন্ড",
+  "about.role.tenant.body":
+    "ভাড়াটিয়ারা এমন মানুষ যারা একটি ঘর বা গোটা সম্পত্তি খুঁজছেন। তারা লিস্টিং খুঁজে ও ফিল্টার করে, নিজসের বার্তা সহ বুকিংয়ের অনুরোধ করে, Stripe দিয়ে পেমেন্ট করে এবং থাকা শেষে রিভিউ লেখে।",
+  "about.role.tenant.cap1": "শহর, ভাড়ার সীমা, সুবিধা ও ঘরের বৈশিষ্ট্য দিয়ে লিস্টিং খুঁজে ও ফিল্টার করা",
+  "about.role.tenant.cap2": "শুরু ও শেষ তারিখ এবং মালিকের জন্য বার্তাসহ বুকিংয়ের অনুরোধ করা",
+  "about.role.tenant.cap3": "বুকিং অনুমোদিত হলে Stripe Checkout দিয়ে পেমেন্ট করা",
+  "about.role.tenant.cap4": "থাকা শেষ হলে ঘর বা সম্পত্তির রিভিউ লেখা",
+  "about.role.tenant.cap5": "নিজের বুকিং দেখা ও বাতিল করা এবং পেমেন্টের অবস্থা অনুসরণ করা",
+  "about.role.owner.body":
+    "মালিকরা সম্পত্তির লিস্টিং ও ঘরের তালিকা প্রকাশ ও সামলান। তারা বুকিংয়ের অনুরোধ যাচাই ও অনুমোদন করেন, খালি থাকার হার দেখেন এবং আয় পর্যবেক্ষণ করেন।",
+  "about.role.owner.cap1": "ছবি, সুবিধা ও ঠিকানাসহ সম্পত্তির লিস্টিং তৈরি ও প্রকাশ",
+  "about.role.owner.cap2": "ভাড়া, বেডরুম, বাথরুম, আয়তন ও উপলব্ধতার তারিখসহ ঘর যোগ করা",
+  "about.role.owner.cap3": "আসা বুকিংয়ের অনুরোধ যাচাই, অনুমোদন বা প্রত্যাখ্যান করা",
+  "about.role.owner.cap4": "খালি থাকার হার, অনুমোদনের হার এবং প্ল্যাটফর্ম ফি কেটে নেওয়ার পর নিট আয় দেখা",
+  "about.role.owner.cap5": "সাম্প্রতিক বুকিং ও সেরা চলতি ঘরসহ বিশ্লেষণ ড্যাশবোর্ড ব্যবহার",
+  "about.role.admin.body":
+    "অ্যাডমিনদের প্ল্যাটফর্মের পূর্ণ প্রবেশাধিকার থাকে। তারা ব্যবহারকারী সামলান, সারা সিস্টেমের বিশ্লেষণ দেখেন, রিফান্ড চালু করেন, অডিট লগ পরীক্ষা করেন এবং কনটেন্ট মডারেট করেন।",
+  "about.role.admin.cap1": "সব ব্যবহারকারী, সম্পত্তি, ঘর, বুকিং ও পেমেন্ট দেখা ও সামলানো",
+  "about.role.admin.cap2": "প্ল্যাটফর্ম-পরিসরের বিশ্লেষণ: ব্যবহারকারী, বুকিং, পেমেন্ট, সক্রিয়তা",
+  "about.role.admin.cap3": "রিফান্ড চালু করা এবং পেমেন্টের অবস্থা পরীক্ষা",
+  "about.role.admin.cap4": "যেকোনো এনটিটি বা অ্যাকশন ধরনের জন্য অডিট লগ দেখা ও ফিল্টার",
+  "about.role.admin.cap5": "লিস্টিং মডারেট করা ও বিরোধ নিষ্পত্তি",
 
   /* browse / marketplace */
   "browse.eyebrow": "মার্কেটপ্লেস",
@@ -1024,6 +1165,14 @@ const bn: Partial<Record<TranslationKey, string>> = {
   "browse.empty.rooms.title": "এই ফিল্টারে কোনো খালি ঘর মেলেনি",
   "browse.empty.rooms.body":
     "মালিকরা ঘর প্রস্তুত হলে তা খালি হিসেবে চিহ্নিত করেন। আরও দেখতে ভাড়ার সীমা বাড়ান বা তারিখের ফিল্টার সরান।",
+  "browse.error.properties": "সম্পত্তি লোড করা যায়নি",
+  "browse.error.rooms": "ঘর লোড করা যায়নি",
+  "browse.error.partialProperties": "কিছু লিস্টিং লোড করা যায়নি",
+  "browse.error.partialRooms": "কিছু ঘর লোড করা যায়নি",
+  "home.ctaTitle": "পরবর্তী ঘর খুঁজতে প্রস্তুত?",
+  "home.ctaBody":
+    "ঘর দেখতে, লিস্টিং সামলাতে এবং আপনার হাউসিং যাত্রা গোছানো রাখতে একটি অ্যাকাউন্ট তৈরি করুন।",
+  "home.ctaAction": "সাইন ইন",
 };
 
 export type Dictionary = Record<string, string>;
