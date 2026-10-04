@@ -33,6 +33,12 @@ export interface ClientRequestOptions {
   body?: unknown;
   formData?: FormData;
   signal?: AbortSignal;
+  /**
+   * Called with 0–100 as a `multipart/form-data` body is sent. Only available
+   * when `formData` is set, because that request is issued over `XMLHttpRequest`
+   * rather than `fetch` — `fetch` has no upload progress event.
+   */
+  onUploadProgress?: (percent: number) => void;
 }
 
 export interface ClientResult<T> {
@@ -67,6 +73,56 @@ function toFieldErrors(errors: unknown): ApiFieldError[] {
   });
 }
 
+interface RawResponse {
+  status: number;
+  ok: boolean;
+  text: string;
+}
+
+/**
+ * Issues a multipart request over `XMLHttpRequest`.
+ *
+ * The only reason this exists is upload progress: `fetch` cannot report bytes
+ * sent, so anything with a `FormData` body and an `onUploadProgress` callback
+ * takes this path. The response shape matches `fetch` so the caller can share one
+ * parsing path.
+ */
+function sendWithProgress(
+  url: string,
+  formData: FormData,
+  options: ClientRequestOptions,
+): Promise<RawResponse> {
+  return new Promise((resolve, reject) => {
+    const request = new XMLHttpRequest();
+    request.open(options.method ?? "POST", url, true);
+    request.withCredentials = true;
+    request.setRequestHeader("Accept", "application/json");
+
+    request.upload.onprogress = (event) => {
+      if (!event.lengthComputable || event.total === 0) return;
+      options.onUploadProgress?.(Math.min(100, Math.round((event.loaded / event.total) * 100)));
+    };
+
+    request.onload = () => {
+      resolve({ status: request.status, ok: request.status >= 200 && request.status < 300, text: request.responseText });
+    };
+
+    request.onerror = () =>
+      reject(new ClientApiError("Network error — is the backend API reachable?", 0));
+
+    const abort = () => request.abort();
+    if (options.signal) {
+      if (options.signal.aborted) {
+        abort();
+        return;
+      }
+      options.signal.addEventListener("abort", abort, { once: true });
+    }
+
+    request.send(formData);
+  });
+}
+
 /**
  * All browser traffic goes through the internal `/api/proxy` route, which
  * attaches the httpOnly access token server-side. That keeps the token out of
@@ -77,6 +133,7 @@ export async function apiClient<T>(
   options: ClientRequestOptions = {},
 ): Promise<ClientResult<T>> {
   const headers = new Headers({ Accept: "application/json" });
+  const url = `${PROXY_PREFIX}${path}${buildQuery(options.query)}`;
   let body: BodyInit | undefined;
 
   if (options.formData) {
@@ -86,22 +143,42 @@ export async function apiClient<T>(
     body = JSON.stringify(options.body);
   }
 
-  let response: Response;
-  try {
-    response = await fetch(`${PROXY_PREFIX}${path}${buildQuery(options.query)}`, {
-      method: options.method ?? "GET",
-      headers,
-      body,
-      signal: options.signal,
-      credentials: "same-origin",
-      cache: "no-store",
-    });
-  } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") throw error;
-    throw new ClientApiError("Network error — is the backend API reachable?", 0);
+  let status: number;
+  let ok: boolean;
+  let text: string;
+
+  if (options.formData && options.onUploadProgress) {
+    // Report 100% once the body is out; the response may still be in flight.
+    try {
+      const raw = await sendWithProgress(url, options.formData, options);
+      status = raw.status;
+      ok = raw.ok;
+      text = raw.text;
+      options.onUploadProgress(100);
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") throw error;
+      throw error;
+    }
+  } else {
+    let response: Response;
+    try {
+      response = await fetch(url, {
+        method: options.method ?? "GET",
+        headers,
+        body,
+        signal: options.signal,
+        credentials: "same-origin",
+        cache: "no-store",
+      });
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") throw error;
+      throw new ClientApiError("Network error — is the backend API reachable?", 0);
+    }
+    status = response.status;
+    ok = response.ok;
+    text = await response.text();
   }
 
-  const text = await response.text();
   let payload: ApiResponse<T> | null = null;
   if (text) {
     try {
@@ -111,10 +188,10 @@ export async function apiClient<T>(
     }
   }
 
-  if (!response.ok || !payload?.success) {
+  if (!ok || !payload?.success) {
     throw new ClientApiError(
-      payload?.message ?? `Request failed with status ${response.status}`,
-      response.status,
+      payload?.message ?? `Request failed with status ${status}`,
+      status,
       toFieldErrors(payload?.errors ?? payload?.error?.details),
     );
   }

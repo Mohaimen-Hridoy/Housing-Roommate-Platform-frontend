@@ -9,6 +9,7 @@ import { SmartImage } from "@/components/common/smart-image";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { useOwnerMutation } from "@/components/dashboard/owner/use-owner-mutation";
 import { formatFileSize } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -39,6 +40,8 @@ export function PhotosPanel({ propertyId, images, onImagesChange }: PhotosPanelP
   const [rejected, setRejected] = useState<string[]>([]);
   const [deleting, setDeleting] = useState<ImageAsset | null>(null);
   const [dragging, setDragging] = useState(false);
+  /** 0–100 while an upload is in flight, `null` otherwise. */
+  const [progress, setProgress] = useState<number | null>(null);
 
   const pickedRef = useRef<PickedFile[]>([]);
   useEffect(() => {
@@ -98,26 +101,29 @@ export function PhotosPanel({ propertyId, images, onImagesChange }: PhotosPanelP
     if (inputRef.current) inputRef.current.value = "";
   };
 
-  const uploading = pendingKey === "upload";
+const uploading = pendingKey === "upload";
 
-  const upload = async () => {
-    if (picked.length === 0) return;
-    const formData = new FormData();
-    for (const entry of picked) {
-      formData.append("images", entry.file, entry.file.name);
-    }
+const upload = async () => {
+  if (picked.length === 0) return;
+  const formData = new FormData();
+  for (const entry of picked) {
+    formData.append("images", entry.file, entry.file.name);
+  }
 
-    const created = await run<ImageAsset[]>("upload", `/properties/${propertyId}/images`, {
-      method: "POST",
-      formData,
-      successMessage: `${picked.length} photo${picked.length === 1 ? "" : "s"} uploaded.`,
-    });
+  setProgress(0);
+  const created = await run<ImageAsset[]>("upload", `/properties/${propertyId}/images`, {
+    method: "POST",
+    formData,
+    onUploadProgress: setProgress,
+    successMessage: `${picked.length} photo${picked.length === 1 ? "" : "s"} uploaded.`,
+  });
+  setProgress(null);
 
-    if (created) {
-      onImagesChange([...images, ...created]);
-      clearPicked();
-    }
-  };
+  if (created) {
+    onImagesChange([...images, ...created]);
+    clearPicked();
+  }
+};
 
   const setPrimary = async (image: ImageAsset) => {
     const updated = await run<ImageAsset>(`primary-${image.id}`, `/images/${image.id}/primary`, {
@@ -231,9 +237,23 @@ export function PhotosPanel({ propertyId, images, onImagesChange }: PhotosPanelP
           </div>
 
           {uploading ? (
-            <p className="text-xs text-muted-foreground" role="status" aria-live="polite">
-              Uploading {picked.length} file{picked.length === 1 ? "" : "s"} to the server — keep this tab open.
-            </p>
+            <div className="space-y-1.5" role="status" aria-live="polite">
+              <div className="flex items-center justify-between text-xs text-muted-foreground">
+                <span>
+                  Uploading {picked.length} file{picked.length === 1 ? "" : "s"} — keep this tab
+                  open.
+                </span>
+                <span className="tabular font-medium text-foreground">
+                  {progress ?? 0}%
+                </span>
+              </div>
+              <Progress
+                value={progress ?? 0}
+                aria-label="Upload progress"
+                className="h-1.5"
+                indicatorClassName="bg-gradient-to-r from-primary to-mint"
+              />
+            </div>
           ) : null}
 
           <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
