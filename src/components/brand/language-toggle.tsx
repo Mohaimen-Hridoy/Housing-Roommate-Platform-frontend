@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useLocale } from "@/components/providers/locale-provider";
+import { useLocale, useTranslation } from "@/components/providers/locale-provider";
 import { LOCALES, LOCALE_LABEL, type Locale } from "@/lib/i18n/dictionaries";
 import { cn } from "@/lib/utils";
 
@@ -21,6 +21,7 @@ const LANGUAGE_NAMES: Record<Locale, string> = {
 /** Compact language switcher. Writes a cookie so SSR renders the chosen locale. */
 export function LanguageToggle({ className }: { className?: string }) {
   const { locale, setLocale } = useLocale();
+  const t = useTranslation();
 
   return (
     <DropdownMenu>
@@ -29,7 +30,7 @@ export function LanguageToggle({ className }: { className?: string }) {
           variant="ghost"
           size="sm"
           className={cn("gap-1.5 px-2.5", className)}
-          aria-label={`Language: ${LANGUAGE_NAMES[locale]}`}
+          aria-label={t("language.ariaLabel", { name: LANGUAGE_NAMES[locale] })}
         >
           <Languages className="size-4" aria-hidden="true" />
           <span className="text-xs font-semibold">{LOCALE_LABEL[locale]}</span>
@@ -41,6 +42,7 @@ export function LanguageToggle({ className }: { className?: string }) {
             key={option}
             onSelect={() => setLocale(option)}
             aria-current={option === locale}
+            aria-label={t("language.switchTo", { name: LANGUAGE_NAMES[option] })}
             className={cn("justify-between gap-3", option === locale && "bg-accent font-medium")}
           >
             <span>{LANGUAGE_NAMES[option]}</span>

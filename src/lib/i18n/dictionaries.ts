@@ -684,6 +684,9 @@ const en = {
     "Browse the full FAQ above or get in touch. Sign in whenever you are ready to manage your account.",
 
   /* contact page */
+  "language.ariaLabel": "Language: {name}",
+  "language.switchTo": "Switch language to {name}",
+
   "contact.eyebrow": "Get in touch",
   "contact.title": "Contact us",
   "contact.subtitle": "Have a question, need help, or want to evaluate the platform? Reach out directly.",
@@ -1282,6 +1285,9 @@ const bn: Partial<Record<TranslationKey, string>> = {
     "উপরে পুরো FAQ দেখুন অথবা সরাসরি যোগাযোগ করুন। আগে প্ল্যাটফর্মটি দেখতে চাইলে ডেমো লগ ইন যেকোনো ভূমিকায় সঙ্গে সঙ্গে প্রবেশাধিকার দেয়।",
 
   /* contact page */
+  "language.ariaLabel": "ভাষা: {name}",
+  "language.switchTo": "ভাষা {name}-এ পরিবর্তন করুন",
+
   "contact.eyebrow": "যোগাযোগ করুন",
   "contact.title": "যোগাযোগ করুন",
   "contact.subtitle":
