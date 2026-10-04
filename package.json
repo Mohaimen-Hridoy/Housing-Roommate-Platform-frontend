@@ -5,8 +5,8 @@
   "description": "Apollo Level-2 Web Development (B7A7) — Housing & Roommate Platform frontend built on the B7A6 backend API.",
   "scripts": {
     "dev": "next dev --port 3000",
-    "build": "next build",
-    "start": "next start",
+    "build": "node scripts/build.mjs",
+    "start": "node scripts/start.mjs",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "i18n:check": "node scripts/i18n-check.mjs",
