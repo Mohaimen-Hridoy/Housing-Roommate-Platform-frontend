@@ -4,7 +4,7 @@
   "private": true,
   "description": "Apollo Level-2 Web Development (B7A7) — Housing & Roommate Platform frontend built on the B7A6 backend API.",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port 3000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
