@@ -6,57 +6,53 @@ import { ServerActionForm } from "@/components/auth/server-action-form";
 import { Field, FieldRow } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useTranslation } from "@/components/providers/locale-provider";
 import { cn } from "@/lib/utils";
 import type { ActionState } from "@/app/(auth)/actions";
 
-const schema = z
-  .object({
-    role: z.enum(["TENANT", "OWNER"]),
-    name: z.string().min(2, "Name must be at least 2 characters").max(100, "Name is too long"),
-    email: z.string().min(1, "Email is required").email("Enter a valid email address"),
-    phone: z
-      .string()
-      .optional()
-      .refine((value) => !value || /^[+\d][\d\s-]{6,19}$/.test(value), "Enter a valid phone number"),
-    password: z
-      .string()
-      .min(8, "Password must be at least 8 characters")
-      .regex(/[A-Za-z]/, "Include at least one letter")
-      .regex(/[0-9]/, "Include at least one number"),
-    confirmPassword: z.string().min(1, "Please confirm your password"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
-
 const ROLE_OPTIONS = [
-  {
-    value: "TENANT" as const,
-    title: "I am looking for a room",
-    description: "Search listings, request a booking and pay securely.",
-  },
-  {
-    value: "OWNER" as const,
-    title: "I want to list a property",
-    description: "Publish listings, manage rooms and approve bookings.",
-  },
+  { value: "TENANT" as const, titleKey: "register.roleTenant", bodyKey: "register.roleTenantBody" },
+  { value: "OWNER" as const, titleKey: "register.roleOwner", bodyKey: "register.roleOwnerBody" },
 ];
 
 export function RegisterForm({ action }: { action: (state: ActionState, formData: FormData) => Promise<ActionState> }) {
+  const t = useTranslation();
+
+  // Built per render so validation messages follow the active language.
+  const schema = z
+    .object({
+      role: z.enum(["TENANT", "OWNER"]),
+      name: z.string().min(2, t("auth.err.nameMin")).max(100, t("auth.err.nameMax")),
+      email: z.string().min(1, t("auth.err.emailRequired")).email(t("auth.err.emailInvalid")),
+      phone: z
+        .string()
+        .optional()
+        .refine((value) => !value || /^[+\d][\d\s-]{6,19}$/.test(value), t("auth.err.phoneInvalid")),
+      password: z
+        .string()
+        .min(8, t("auth.err.passwordMin"))
+        .regex(/[A-Za-z]/, t("auth.err.passwordLetter"))
+        .regex(/[0-9]/, t("auth.err.passwordDigit")),
+      confirmPassword: z.string().min(1, t("auth.err.confirmRequired")),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t("auth.err.passwordMismatch"),
+      path: ["confirmPassword"],
+    });
+
   return (
     <ServerActionForm
       action={action}
       schema={schema}
       defaultValues={{ role: "TENANT", name: "", email: "", phone: "", password: "", confirmPassword: "" }}
-      submitLabel="Create account"
+      submitLabel={t("action.signUp")}
     >
       {(form) => {
         const role = form.watch("role");
         return (
           <div className="space-y-5">
             <fieldset className="space-y-2">
-              <legend className="text-sm font-medium">Account type</legend>
+              <legend className="text-sm font-medium">{t("register.accountType")}</legend>
               <div className="grid gap-3 sm:grid-cols-2">
                 {ROLE_OPTIONS.map((option) => (
                   <label
@@ -75,15 +71,20 @@ export function RegisterForm({ action }: { action: (state: ActionState, formData
                         className="size-4 accent-[hsl(var(--primary))]"
                         {...form.register("role")}
                       />
-                      <span className="text-sm font-medium">{option.title}</span>
+                      <span className="text-sm font-medium">{t(option.titleKey)}</span>
                     </span>
-                    <span className="pl-6 text-xs text-muted-foreground">{option.description}</span>
+                    <span className="pl-6 text-xs text-muted-foreground">{t(option.bodyKey)}</span>
                   </label>
                 ))}
               </div>
             </fieldset>
 
-            <Field label="Full name" htmlFor="name" error={form.formState.errors.name?.message} required>
+            <Field
+              label={t("auth.name")}
+              htmlFor="name"
+              error={form.formState.errors.name?.message}
+              required
+            >
               <Input
                 id="name"
                 autoComplete="name"
@@ -94,7 +95,12 @@ export function RegisterForm({ action }: { action: (state: ActionState, formData
             </Field>
 
             <FieldRow>
-              <Field label="Email" htmlFor="email" error={form.formState.errors.email?.message} required>
+              <Field
+                label={t("auth.email")}
+                htmlFor="email"
+                error={form.formState.errors.email?.message}
+                required
+              >
                 <Input
                   id="email"
                   type="email"
@@ -106,16 +112,16 @@ export function RegisterForm({ action }: { action: (state: ActionState, formData
               </Field>
 
               <Field
-                label="Phone"
+                label={t("auth.phone")}
                 htmlFor="phone"
-                hint="Optional"
+                hint={t("misc.optional")}
                 error={form.formState.errors.phone?.message}
               >
                 <Input
                   id="phone"
                   type="tel"
                   autoComplete="tel"
-                  placeholder="+1 555 0100"
+                  placeholder="+880 1700 000000"
                   aria-invalid={Boolean(form.formState.errors.phone)}
                   {...form.register("phone")}
                 />
@@ -123,19 +129,24 @@ export function RegisterForm({ action }: { action: (state: ActionState, formData
             </FieldRow>
 
             <FieldRow>
-              <Field label="Password" htmlFor="password" error={form.formState.errors.password?.message} required>
+              <Field
+                label={t("auth.password")}
+                htmlFor="password"
+                error={form.formState.errors.password?.message}
+                required
+              >
                 <Input
                   id="password"
                   type="password"
                   autoComplete="new-password"
-                  placeholder="At least 8 characters"
+                  placeholder={t("register.passwordPlaceholder")}
                   aria-invalid={Boolean(form.formState.errors.password)}
                   {...form.register("password")}
                 />
               </Field>
 
               <Field
-                label="Confirm password"
+                label={t("register.confirmPassword")}
                 htmlFor="confirmPassword"
                 error={form.formState.errors.confirmPassword?.message}
                 required
@@ -144,18 +155,15 @@ export function RegisterForm({ action }: { action: (state: ActionState, formData
                   id="confirmPassword"
                   type="password"
                   autoComplete="new-password"
-                  placeholder="Repeat your password"
+                  placeholder={t("register.confirmPlaceholder")}
                   aria-invalid={Boolean(form.formState.errors.confirmPassword)}
                   {...form.register("confirmPassword")}
                 />
               </Field>
             </FieldRow>
 
-            <p className="text-xs text-muted-foreground">
-              By creating an account you agree to the platform terms. Passwords are hashed with bcrypt on
-              the server and never stored in plain text.
-            </p>
-            <Label className="sr-only">Account type</Label>
+            <p className="text-xs text-muted-foreground">{t("register.terms")}</p>
+            <Label className="sr-only">{t("register.accountType")}</Label>
           </div>
         );
       }}

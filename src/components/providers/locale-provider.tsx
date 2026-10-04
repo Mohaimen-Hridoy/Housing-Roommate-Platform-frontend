@@ -20,10 +20,16 @@ interface LocaleContextValue {
 
 const LocaleContext = React.createContext<LocaleContextValue | null>(null);
 
-/** Replaces `{{name}}` placeholders. Missing keys fall back to the key itself. */
+/**
+ * Replaces `{name}` and `{{name}}` placeholders.
+ *
+ * Both brace styles are accepted because the dictionary uses each in different
+ * places, and a value that survives to the screen reads as a bug. Unknown names
+ * are left untouched so a missing variable is visible rather than silently blank.
+ */
 function interpolate(template: string, vars?: Record<string, string | number>): string {
   if (!vars) return template;
-  return template.replace(/\{\{(\w+)\}\}/g, (match, name: string) =>
+  return template.replace(/\{\{?(\w+)\}?\}/g, (match, name: string) =>
     name in vars ? String(vars[name]) : match,
   );
 }

@@ -5,30 +5,31 @@ import { SearchX, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ActiveFilterChips, FilterSelect, SearchInput, SortSelect, useUrlState } from "@/components/common/url-state";
+import { useTranslation } from "@/components/providers/locale-provider";
 
 const PROPERTY_SORTS = [
-  { value: "publishedAt:desc", label: "Newest first" },
-  { value: "title:asc", label: "Title A–Z" },
-  { value: "city:asc", label: "City A–Z" },
+  { value: "publishedAt:desc", key: "property.sortNewest" },
+  { value: "title:asc", key: "property.sortTitle" },
+  { value: "city:asc", key: "property.sortCity" },
 ];
 
 const ROOM_SORTS = [
-  { value: "rent:asc", label: "Rent: low to high" },
-  { value: "rent:desc", label: "Rent: high to low" },
-  { value: "area:desc", label: "Largest first" },
+  { value: "rent:asc", key: "property.sortRentLow" },
+  { value: "rent:desc", key: "property.sortRentHigh" },
+  { value: "area:desc", key: "property.sortLargest" },
 ];
 
 const PRICE_BANDS = [
-  { value: "0-400", label: "Up to 400" },
-  { value: "400-800", label: "400 – 800" },
-  { value: "800-1200", label: "800 – 1,200" },
-  { value: "1200-", label: "1,200 and above" },
+  { value: "0-400", key: "browse.price.upTo400" },
+  { value: "400-800", key: "browse.price.400to800" },
+  { value: "800-1200", key: "browse.price.800to1200" },
+  { value: "1200-", key: "browse.price.1200plus" },
 ];
 
 const BEDROOM_OPTIONS = [
-  { value: "1", label: "1+ bedroom" },
-  { value: "2", label: "2+ bedrooms" },
-  { value: "3", label: "3+ bedrooms" },
+  { value: "1", key: "browse.beds.1" },
+  { value: "2", key: "browse.beds.2" },
+  { value: "3", key: "browse.beds.3" },
 ];
 
 interface BrowseFiltersProps {
@@ -44,6 +45,9 @@ interface BrowseFiltersProps {
  */
 export function BrowseFilters({ view, cities }: BrowseFiltersProps) {
   const { searchParams, clearParams } = useUrlState();
+  const t = useTranslation();
+
+  const sorts = view === "rooms" ? ROOM_SORTS : PROPERTY_SORTS;
 
   return (
     <div className="space-y-4">
@@ -51,10 +55,8 @@ export function BrowseFilters({ view, cities }: BrowseFiltersProps) {
         <div className="flex-1">
           <SearchInput
             paramKey="search"
-            label={view === "rooms" ? "Search rooms" : "Search properties"}
-            placeholder={
-              view === "rooms" ? "Search by room title or property…" : "Search by title, city or address…"
-            }
+            label={t(view === "rooms" ? "browse.searchRooms" : "browse.searchProperties")}
+            placeholder={t("property.searchPlaceholder")}
           />
         </div>
 
@@ -62,40 +64,40 @@ export function BrowseFilters({ view, cities }: BrowseFiltersProps) {
           {view === "properties" ? (
             <FilterSelect
               paramKey="city"
-              label="City"
-              allLabel="All cities"
+              label={t("property.city")}
+              allLabel={t("property.allCities")}
               options={cities.map((city) => ({ value: city, label: city }))}
             />
           ) : (
             <>
               <FilterSelect
                 paramKey="price"
-                label="Monthly rent"
-                allLabel="Any rent"
-                options={PRICE_BANDS}
+                label={t("browse.rentLabel")}
+                allLabel={t("property.anyRent")}
+                options={PRICE_BANDS.map((band) => ({ value: band.value, label: t(band.key) }))}
               />
               <FilterSelect
                 paramKey="bedrooms"
-                label="Bedrooms"
-                allLabel="Any size"
-                options={BEDROOM_OPTIONS}
+                label={t("property.bedrooms")}
+                allLabel={t("property.anySize")}
+                options={BEDROOM_OPTIONS.map((option) => ({ value: option.value, label: t(option.key) }))}
               />
             </>
           )}
 
           <SortSelect
-            options={view === "rooms" ? ROOM_SORTS : PROPERTY_SORTS}
-            label="Sort by"
+            options={sorts.map((sort) => ({ value: sort.value, label: t(sort.key) }))}
+            label={t("action.sortBy")}
           />
         </div>
       </div>
 
       <ActiveFilterChips
         labels={{
-          search: "Search",
-          city: "City",
-          price: "Rent",
-          bedrooms: "Bedrooms",
+          search: t("action.search"),
+          city: t("property.city"),
+          price: t("browse.rentLabel"),
+          bedrooms: t("property.bedrooms"),
         }}
       />
 
@@ -104,12 +106,12 @@ export function BrowseFilters({ view, cities }: BrowseFiltersProps) {
       <div className="flex items-center justify-between gap-3 border-t border-border pt-4">
         <p className="flex items-center gap-2 text-sm text-muted-foreground">
           <SlidersHorizontal className="size-4 shrink-0" aria-hidden="true" />
-          Filters are stored in the URL — bookmark or share this exact view.
+          {t("browse.toolbarNote")}
         </p>
         {hasActiveFilters(searchParams) ? (
           <Button type="button" variant="ghost" size="sm" onClick={() => clearParams()}>
             <SearchX />
-            Clear all
+            {t("action.clearAll")}
           </Button>
         ) : null}
       </div>
@@ -120,12 +122,13 @@ export function BrowseFilters({ view, cities }: BrowseFiltersProps) {
 /** Available-from date, sent to `/rooms` as `availableFrom`. */
 function RoomAvailabilityFilters() {
   const { searchParams, setParams } = useUrlState();
+  const t = useTranslation();
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-4">
       <div className="w-full sm:w-56">
         <label htmlFor="availableFrom" className="mb-1.5 block text-sm font-medium">
-          Available from
+          {t("property.availableFrom")}
         </label>
         <Input
           id="availableFrom"

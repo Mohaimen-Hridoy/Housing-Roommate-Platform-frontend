@@ -7,6 +7,7 @@ import { useState } from "react";
 
 import { BrandMark, UserMenu } from "@/components/layout/site-chrome";
 import { useAuthContext } from "@/components/providers/app-providers";
+import { useTranslation } from "@/components/providers/locale-provider";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -14,6 +15,8 @@ import { cn, initialsOf } from "@/lib/utils";
 
 export interface NavItem {
   label: string;
+  /** Dictionary key. Falls back to `label` when the locale has no entry. */
+  labelKey?: string;
   href: string;
   icon: LucideIcon;
   exact?: boolean;
@@ -22,6 +25,7 @@ export interface NavItem {
 
 export interface NavSection {
   title: string;
+  titleKey?: string;
   items: NavItem[];
 }
 
@@ -29,12 +33,14 @@ interface DashboardShellProps {
   sections: NavSection[];
   /** Shown at the top of the sidebar, e.g. "Tenant dashboard". */
   areaLabel: string;
+  areaLabelKey?: string;
   children: React.ReactNode;
 }
 
-export function DashboardShell({ sections, areaLabel, children }: DashboardShellProps) {
+export function DashboardShell({ sections, areaLabel, areaLabelKey, children }: DashboardShellProps) {
   const pathname = usePathname();
   const { user } = useAuthContext();
+  const t = useTranslation();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const sidebar = (
@@ -42,17 +48,22 @@ export function DashboardShell({ sections, areaLabel, children }: DashboardShell
       <div className="flex items-center justify-between gap-2">
         <BrandMark />
       </div>
-      <p className="-mt-4 text-xs font-semibold uppercase tracking-wider text-primary">{areaLabel}</p>
+      <p className="-mt-4 text-xs font-semibold uppercase tracking-wider text-primary">
+        {areaLabelKey ? t(areaLabelKey) : areaLabel}
+      </p>
 
-      <nav aria-label={`${areaLabel} navigation`} className="flex-1 space-y-6 overflow-y-auto">
-        {sections.map((section) => (
-          <div key={section.title} className="space-y-1">
+      <nav aria-label={t("nav.dashboardNav", { area: areaLabel })} className="flex-1 space-y-6 overflow-y-auto">
+        {sections.map((section) => {
+          const sectionTitle = section.titleKey ? t(section.titleKey) : section.title;
+          return (
+          <div key={section.titleKey ?? section.title} className="space-y-1">
             <p className="px-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-              {section.title}
+              {sectionTitle === section.titleKey ? section.title : sectionTitle}
             </p>
             {section.items.map((item) => {
               const active = item.exact ? pathname === item.href : pathname.startsWith(item.href);
               const Icon = item.icon ?? ClipboardList;
+              const label = item.labelKey ? t(item.labelKey) : item.label;
               return (
                 <Link
                   key={item.href}
@@ -67,7 +78,9 @@ export function DashboardShell({ sections, areaLabel, children }: DashboardShell
                   )}
                 >
                   <Icon className="size-4 shrink-0" aria-hidden="true" />
-                  <span className="flex-1 truncate">{item.label}</span>
+                  <span className="flex-1 truncate">
+                    {label === item.labelKey ? item.label : label}
+                  </span>
                   {item.badge ? (
                     <span className="rounded-full bg-primary/12 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
                       {item.badge}
@@ -77,7 +90,8 @@ export function DashboardShell({ sections, areaLabel, children }: DashboardShell
               );
             })}
           </div>
-        ))}
+          );
+        })}
       </nav>
 
       <Separator />
@@ -89,7 +103,7 @@ export function DashboardShell({ sections, areaLabel, children }: DashboardShell
               <AvatarFallback>{initialsOf(user.name, user.email)}</AvatarFallback>
             </Avatar>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium">{user.name ?? "Account"}</p>
+              <p className="truncate text-sm font-medium">{user.name ?? t("nav.account")}</p>
               <p className="truncate text-xs text-muted-foreground">{user.email}</p>
             </div>
           </div>
@@ -112,7 +126,7 @@ export function DashboardShell({ sections, areaLabel, children }: DashboardShell
           aria-controls="dashboard-mobile-nav"
           onClick={() => setMobileOpen((value) => !value)}
         >
-          {mobileOpen ? "Close" : "Menu"}
+          {mobileOpen ? t("action.close") : t("nav.menu")}
           <ChevronDown className={cn("size-4 transition-transform", mobileOpen && "rotate-180")} />
         </Button>
       </div>
@@ -137,10 +151,11 @@ export function DashboardShell({ sections, areaLabel, children }: DashboardShell
 
 export function SignOutButton() {
   const { signOut } = useAuthContext();
+  const t = useTranslation();
   return (
     <Button variant="outline" size="sm" onClick={() => void signOut()}>
       <LogOut className="size-4" />
-      Sign out
+      {t("nav.signOut")}
     </Button>
   );
 }

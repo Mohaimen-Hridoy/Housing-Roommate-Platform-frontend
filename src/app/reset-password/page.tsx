@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { ResetPasswordForm } from "@/components/auth/password-forms";
 import { resetPasswordAction } from "@/app/(auth)/actions";
 import { BrandMark } from "@/components/layout/site-chrome";
+import { LanguageToggle } from "@/components/brand/language-toggle";
+import { T } from "@/components/common/localized-text";
 import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
@@ -21,15 +23,21 @@ export default async function ResetPasswordPage({
   return (
     <div className="min-h-dvh bg-background">
       <div className="container-page py-10">
-        <div className="mb-8 flex justify-center">
+        <div className="mb-8 flex items-center justify-between">
           <BrandMark />
+          <LanguageToggle />
         </div>
 
         <Card className="mx-auto w-full max-w-md">
           <CardContent className="p-6 sm:p-8">
-            <h1 className="text-2xl font-semibold tracking-tight">Set a new password</h1>
+            <h1 className="text-2xl font-semibold tracking-tight">
+              <T k="auth.resetTitle" fallback="Set a new password" />
+            </h1>
             <p className="mt-1.5 text-sm text-muted-foreground">
-              Choose a strong password you have not used on this account before.
+              <T
+                k="auth.resetBody"
+                fallback="Choose a strong password you have not used on this account before."
+              />
             </p>
 
             {token ? (
@@ -39,7 +47,10 @@ export default async function ResetPasswordPage({
             ) : (
               <Alert variant="warning" className="mt-6">
                 <AlertDescription>
-                  This reset link is missing its token. Request a new link from the forgot-password page.
+                  <T
+                    k="auth.resetMissingToken"
+                    fallback="This reset link is missing its token. Request a new link from the forgot-password page."
+                  />
                 </AlertDescription>
               </Alert>
             )}

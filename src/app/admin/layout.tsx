@@ -16,21 +16,22 @@ import { DASHBOARD_ICONS } from "@/components/layout/site-chrome";
 const SECTIONS: NavSection[] = [
   {
     title: "Console",
+    titleKey: "nav.console",
     items: [
-      { label: "Overview", href: "/admin", icon: DASHBOARD_ICONS.home, exact: true },
-      { label: "Users", href: "/admin/users", icon: DASHBOARD_ICONS.users },
-      { label: "Properties", href: "/admin/properties", icon: DASHBOARD_ICONS.building },
-      { label: "Bookings", href: "/admin/bookings", icon: DASHBOARD_ICONS.bookings },
-      { label: "Payments", href: "/admin/payments", icon: DASHBOARD_ICONS.payments },
-      { label: "Amenities", href: "/admin/amenities", icon: DASHBOARD_ICONS.add },
-      { label: "Audit logs", href: "/admin/audit-logs", icon: DASHBOARD_ICONS.audit },
+      { label: "Overview", labelKey: "dash.overview", href: "/admin", icon: DASHBOARD_ICONS.home, exact: true },
+      { label: "Users", labelKey: "dash.users", href: "/admin/users", icon: DASHBOARD_ICONS.users },
+      { label: "Properties", labelKey: "dash.properties", href: "/admin/properties", icon: DASHBOARD_ICONS.building },
+      { label: "Bookings", labelKey: "dash.bookings", href: "/admin/bookings", icon: DASHBOARD_ICONS.bookings },
+      { label: "Payments", labelKey: "dash.payments", href: "/admin/payments", icon: DASHBOARD_ICONS.payments },
+      { label: "Amenities", labelKey: "dash.amenities", href: "/admin/amenities", icon: DASHBOARD_ICONS.add },
+      { label: "Audit logs", labelKey: "dash.auditLogs", href: "/admin/audit-logs", icon: DASHBOARD_ICONS.audit },
     ],
   },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <DashboardShell sections={SECTIONS} areaLabel="Admin console">
+    <DashboardShell sections={SECTIONS} areaLabel="Admin console" areaLabelKey="area.admin">
       {children}
     </DashboardShell>
   );

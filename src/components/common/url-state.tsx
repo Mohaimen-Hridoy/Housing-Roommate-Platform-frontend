@@ -182,13 +182,15 @@ export function FilterSelect({
 
   return (
     <div className={cn("min-w-[9.5rem]", className)} data-pending={isPending || undefined}>
-      <span className="sr-only">{label}</span>
-      <Select value={current || "ALL"} onValueChange={(next) => setParams({ [paramKey]: next })}>
+      <span className="sr-only">{label}</span>{/* Empty string means "nothing chosen", which is what
+        makes Radix render the placeholder. Passing "ALL" instead left the trigger blank, because no
+        mounted item carried that value while the dropdown was closed. */}
+      <Select value={current || ""} onValueChange={(next) => setParams({ [paramKey]: next || undefined })}>
         <SelectTrigger aria-label={label} className={cn(isPending && "opacity-70")}>
           <SelectValue placeholder={allLabel} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="ALL">{allLabel}</SelectItem>
+          <SelectItem value="__ALL__">{allLabel}</SelectItem>
           {options.map((option) => (
             <SelectItem key={option.value} value={option.value}>
               {option.label}

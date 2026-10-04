@@ -7,6 +7,7 @@ import type { ActionState } from "@/app/(auth)/actions";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "@/components/providers/locale-provider";
 import { DEMO_ACCOUNTS } from "@/lib/constants";
 import type { Role } from "@/lib/types/api";
 
@@ -26,6 +27,7 @@ interface DemoLoginPanelProps {
  * typing credentials.
  */
 export function DemoLoginPanel({ action }: DemoLoginPanelProps) {
+  const t = useTranslation();
   const [state, formAction, isPending] = useActionState(action, { status: "idle" });
   const [loadingRole, setLoadingRole] = useState<Role | null>(null);
 
@@ -39,12 +41,9 @@ export function DemoLoginPanel({ action }: DemoLoginPanelProps) {
   return (
     <div id="demo" className="space-y-5 rounded-xl border border-border bg-card p-6 shadow-sm sm:p-8">
       <div className="space-y-2 text-center">
-        <Badge variant="accent">Quick demo access</Badge>
-        <h2 className="text-xl font-semibold tracking-tight">One-click demo login</h2>
-        <p className="text-sm text-muted-foreground">
-          Pick a role to sign in instantly with a seeded account and land straight on that role&rsquo;s
-          dashboard.
-        </p>
+        <Badge variant="accent">{t("auth.demoBadge")}</Badge>
+        <h2 className="text-xl font-semibold tracking-tight">{t("auth.demoTitle2")}</h2>
+        <p className="text-sm text-muted-foreground">{t("auth.demoBody")}</p>
       </div>
 
       {state.status === "error" && state.message ? (
@@ -57,6 +56,7 @@ export function DemoLoginPanel({ action }: DemoLoginPanelProps) {
         {DEMO_ACCOUNTS.map((account) => {
           const Icon = ROLE_ICON[account.role];
           const busy = isPending && loadingRole === account.role;
+          const roleLabel = t(`auth.role.${account.role.toLowerCase()}`);
           return (
             <div
               key={account.role}
@@ -67,12 +67,14 @@ export function DemoLoginPanel({ action }: DemoLoginPanelProps) {
                   <Icon className="size-4" aria-hidden="true" />
                 </span>
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold">{account.label}</p>
+                  <p className="text-sm font-semibold">{roleLabel}</p>
                   <p className="truncate text-xs text-muted-foreground">{account.email}</p>
                 </div>
               </div>
 
-              <p className="text-xs leading-relaxed text-muted-foreground">{account.description}</p>
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                {t(`auth.demoDesc.${account.role.toLowerCase()}`)}
+              </p>
 
               <Button
                 type="button"
@@ -82,7 +84,7 @@ export function DemoLoginPanel({ action }: DemoLoginPanelProps) {
                 disabled={isPending}
                 onClick={() => handleDemoClick(account.role)}
               >
-                Demo Login · {account.label}
+                {t("auth.demoLoginAs", { role: roleLabel })}
               </Button>
             </div>
           );
@@ -90,8 +92,10 @@ export function DemoLoginPanel({ action }: DemoLoginPanelProps) {
       </div>
 
       <p className="text-center text-xs text-muted-foreground">
-        Demo accounts come from the backend seed (<code className="rounded bg-muted px-1 py-0.5">npm run db:seed</code>).
-        Passwords follow the <code className="rounded bg-muted px-1 py-0.5">Role1234!</code> pattern.
+        {t("auth.demoSeed")}{" "}
+        <code className="rounded bg-muted px-1 py-0.5">npm run db:seed</code>.{" "}
+        {t("auth.demoPattern")}{" "}
+        <code className="rounded bg-muted px-1 py-0.5">Role1234!</code>.
       </p>
     </div>
   );

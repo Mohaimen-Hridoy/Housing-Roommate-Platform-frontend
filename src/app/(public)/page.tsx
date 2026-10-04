@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SmartImage } from "@/components/common/smart-image";
 import { RoomStatusBadge } from "@/components/common/status-badge";
+import { T } from "@/components/common/localized-text";
 import { HeroArt } from "@/components/brand/hero-art";
 import { Reveal } from "@/components/brand/reveal";
 import { formatCurrency } from "@/lib/format";
@@ -134,39 +135,48 @@ export default async function HomePage() {
           <div className="space-y-7">
             <Badge variant="accent" className="gap-1.5">
               <Sparkles className="size-3" aria-hidden="true" />
-              Housing &amp; roommate platform
+              <T k="home.eyebrow" fallback="Housing & roommate platform" />
             </Badge>
 
             <h1 className="text-4xl font-semibold leading-[1.05] tracking-[-0.02em] sm:text-5xl lg:text-[3.4rem]">
-              <span className="text-gradient-brand">Find a room</span> you will actually want to live in
+              <span className="text-gradient-brand">
+                <T k="home.titleAccent" fallback="Find a room" />
+              </span>{" "}
+              <T k="home.titleRest" fallback="you will actually want to live in" />
             </h1>
 
             <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              {APP_NAME} connects tenants with property owners. Browse verified rooms, request a booking,
-              pay through Stripe and manage everything from a single dashboard — with occupancy, revenue and
-              approval analytics for the people who own the buildings.
+              <T
+                k="home.subtitle"
+                vars={{ app: APP_NAME }}
+                fallback={`${APP_NAME} connects tenants with property owners. Browse verified rooms, request a booking, pay through Stripe and manage everything from a single dashboard — with occupancy, revenue and approval analytics for the people who own the buildings.`}
+              />
             </p>
 
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button asChild size="lg">
                 <Link href="/properties">
-                  Browse available rooms
+                  <T k="home.ctaBrowse" fallback="Browse available rooms" />
                   <ArrowRight />
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline">
-                <Link href="/register">List your property</Link>
+                <Link href="/register">
+                  <T k="home.ctaList" fallback="List your property" />
+                </Link>
               </Button>
             </div>
 
             <dl className="grid max-w-lg grid-cols-3 gap-4 border-t border-border/70 pt-6">
               {[
-                { label: "Roles", value: "3" },
-                { label: "API endpoints", value: "79" },
-                { label: "Payments", value: "Stripe" },
+                { label: "home.statRoles", value: "3", fallback: "Roles" },
+                { label: "home.statEndpoints", value: "79", fallback: "API endpoints" },
+                { label: "home.statPayments", value: "Stripe", fallback: "Payments" },
               ].map((item) => (
                 <div key={item.label}>
-                  <dt className="text-xs uppercase tracking-wide text-muted-foreground">{item.label}</dt>
+                  <dt className="text-xs uppercase tracking-wide text-muted-foreground">
+                    <T k={item.label} fallback={item.fallback} />
+                  </dt>
                   <dd className="tabular mt-1 text-2xl font-semibold">{item.value}</dd>
                 </div>
               ))}

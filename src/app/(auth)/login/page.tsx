@@ -7,6 +7,7 @@ import { demoLoginAction, loginAction } from "@/app/(auth)/actions";
 import { DemoLoginPanel } from "@/components/auth/demo-login-panel";
 import { LoginForm } from "@/components/auth/login-form";
 import { LanguageToggle } from "@/components/brand/language-toggle";
+import { T } from "@/components/common/localized-text";
 
 export const metadata: Metadata = {
   title: "Sign in",
@@ -27,11 +28,17 @@ export default function LoginPage() {
           <Card className="surface-raised edge-light">
             <CardContent className="p-6 sm:p-8">
               <div className="mb-6 space-y-1.5">
-                <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
+                <h1 className="text-2xl font-semibold tracking-tight">
+                  <T k="auth.signInTitle" fallback="Welcome back" />
+                </h1>
                 <p className="text-sm text-muted-foreground">
-                  Sign in to continue to your dashboard. New here?{" "}
-                  <Link href="/register" className="font-medium text-primary underline-offset-4 hover:underline">
-                    Create an account
+                  <T k="auth.signInSubtitle" fallback="Sign in to continue to your dashboard." />{" "}
+                  <T k="auth.noAccount" fallback="New here?" />{" "}
+                  <Link
+                    href="/register"
+                    className="font-medium text-primary underline-offset-4 hover:underline"
+                  >
+                    <T k="action.createAccount" fallback="Create an account" />
                   </Link>
                 </p>
               </div>
@@ -40,7 +47,7 @@ export default function LoginPage() {
 
               <p className="mt-6 border-t border-border pt-4 text-center text-sm text-muted-foreground">
                 <Link href="/forgot-password" className="underline underline-offset-4 hover:text-foreground">
-                  Forgot your password?
+                  <T k="auth.forgotPassword" fallback="Forgot your password?" />
                 </Link>
               </p>
             </CardContent>

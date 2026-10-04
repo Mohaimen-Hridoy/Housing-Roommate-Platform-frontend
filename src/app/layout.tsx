@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { AppProviders } from "@/components/providers/app-providers";
 import { LocaleProvider } from "@/components/providers/locale-provider";
 import { LOCALE_COOKIE, localeFromCookie } from "@/lib/i18n/locale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getSessionUser } from "@/lib/auth/session";
 import { APP_NAME, APP_TAGLINE } from "@/lib/constants";
 import { SITE_URL } from "@/lib/config";
@@ -74,6 +75,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   // language and the client never has to correct itself.
   const cookieStore = await cookies();
   const locale = localeFromCookie(cookieStore.get(LOCALE_COOKIE)?.value);
+  const dictionary = getDictionary(locale);
 
   return (
     <html lang={locale} className={`${inter.variable} ${mono.variable}`} suppressHydrationWarning>
@@ -84,8 +86,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               href="#main-content"
               className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:text-primary-foreground"
             >
-              Skip to content
-            </a>
+{dictionary["nav.skipToContent"]}
+              </a>
+              <a
+                href="#site-footer"
+                className="sr-only focus:not-sr-only focus:absolute focus:left-44 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:text-primary-foreground"
+              >
+                {dictionary["nav.skipToFooter"]}
+              </a>
             {children}
           </LocaleProvider>
         </AppProviders>

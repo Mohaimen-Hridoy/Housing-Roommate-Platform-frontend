@@ -41,6 +41,25 @@ const en = {
   "nav.skipToContent": "Skip to content",
   "nav.language": "Language",
   "nav.menu": "Menu",
+  "nav.main": "Main",
+  "nav.mobile": "Mobile",
+  "nav.account": "Account",
+  "nav.accountMenu": "Account menu",
+  "nav.profileSettings": "Profile & settings",
+  "nav.goToDashboard": "Go to dashboard",
+  "nav.skipToFooter": "Skip to footer",
+  "nav.primary": "Primary",
+  "nav.housing": "Housing",
+  "nav.operations": "Operations",
+  "nav.accountSection": "Account",
+  "nav.console": "Console",
+  "nav.bookingRequests": "Booking requests",
+  "nav.dashboardNav": "{{area}} navigation",
+
+  /* dashboard area labels */
+  "area.tenant": "Tenant dashboard",
+  "area.owner": "Owner dashboard",
+  "area.admin": "Admin console",
 
   /* generic actions */
   "action.save": "Save changes",
@@ -63,6 +82,7 @@ const en = {
   "action.search": "Search",
   "action.filter": "Filter",
   "action.sort": "Sort",
+  "action.sortBy": "Sort by",
   "action.apply": "Apply",
   "action.loading": "Loading",
   "action.signIn": "Sign in",
@@ -77,6 +97,14 @@ const en = {
   "state.retry": "Try again",
   "state.noResults": "No matches",
   "state.offline": "Cannot reach the server",
+  "state.offlineTitle": "You appear to be offline",
+
+  /* pagination */
+  "pagination.label": "Pagination",
+  "pagination.page": "page",
+  "pagination.perPage": "Results per page",
+  "pagination.pageNumber": "Page {{page}}",
+  "pagination.summary": "Page {{page}} of {{total}} · {{count}} results",
 
   /* auth */
   "auth.email": "Email",
@@ -98,6 +126,53 @@ const en = {
   "auth.noAccount": "New here?",
   "auth.haveAccount": "Already have an account?",
   "auth.oneClick": "One click",
+  "auth.demoBadge": "Quick demo access",
+  "auth.demoTitle2": "One-click demo login",
+  "auth.demoBody":
+    "Pick a role to sign in instantly with a seeded account and land straight on that role’s dashboard.",
+  "auth.demoLoginAs": "Demo login · {{role}}",
+  "auth.demoSeed": "Demo accounts come from the backend seed (",
+  "auth.demoPattern": "). Passwords follow the",
+  "auth.demoDesc.tenant": "Search rooms, request a booking, pay through Stripe and leave reviews.",
+  "auth.demoDesc.owner": "Publish listings, approve booking requests and track occupancy and earnings.",
+  "auth.demoDesc.admin": "Full platform access: users, analytics, refunds and the audit trail.",
+
+  /* auth validation messages */
+  "auth.err.emailRequired": "Email is required",
+  "auth.err.emailInvalid": "Enter a valid email address",
+  "auth.err.passwordRequired": "Password is required",
+  "auth.err.nameMin": "Name must be at least 2 characters",
+  "auth.err.nameMax": "Name is too long",
+  "auth.err.phoneInvalid": "Enter a valid phone number",
+  "auth.err.passwordMin": "Password must be at least 8 characters",
+  "auth.err.passwordLetter": "Include at least one letter",
+  "auth.err.passwordDigit": "Include at least one number",
+  "auth.err.confirmRequired": "Please confirm your password",
+  "auth.err.passwordMismatch": "Passwords do not match",
+
+  /* register */
+  "register.accountType": "Account type",
+  "register.roleTenant": "I am looking for a room",
+  "register.roleTenantBody": "Search listings, request a booking and pay securely.",
+  "register.roleOwner": "I want to list a property",
+  "register.roleOwnerBody": "Publish listings, manage rooms and approve bookings.",
+  "register.confirmPassword": "Confirm password",
+  "register.passwordPlaceholder": "At least 8 characters",
+  "register.confirmPlaceholder": "Repeat your password",
+  "register.terms":
+    "By creating an account you agree to the platform terms. Passwords are hashed with bcrypt on the server and never stored in plain text.",
+
+  /* account recovery */
+  "auth.forgotBody": "Enter the email address on your account and we’ll send a reset link.",
+  "auth.resetTitle": "Set a new password",
+  "auth.resetBody": "Choose a strong password you have not used on this account before.",
+  "auth.resetMissingToken":
+    "This reset link is missing its token. Request a new link from the forgot-password page.",
+  "auth.recoveryTitle": "Account recovery",
+  "auth.recoveryBody": "Reset your password or confirm your email address.",
+  "auth.backToSignIn": "Back to sign in",
+  "auth.verifyEmail": "Verify email",
+  "auth.noVerificationEmail": "Verification email never arrived?",
 
   /* property & browse */
   "property.bedrooms": "Bedrooms",
@@ -156,6 +231,7 @@ const en = {
   "status.EXPIRED": "Expired",
   "status.AVAILABLE": "Available",
   "status.OCCUPIED": "Occupied",
+  "status.RESERVED": "Reserved",
   "status.MAINTENANCE": "Maintenance",
   "status.PUBLISHED": "Published",
   "status.DRAFT": "Draft",
@@ -165,6 +241,13 @@ const en = {
   "status.REFUNDED": "Refunded",
   "status.PARTIALLY_REFUNDED": "Partly refunded",
   "status.PROCESSING": "Processing",
+  "status.CANCELED": "Canceled",
+
+  /* room facing */
+  "facing.NORTH": "North",
+  "facing.SOUTH": "South",
+  "facing.EAST": "East",
+  "facing.WEST": "West",
 
   /* dashboard nav */
   "dash.overview": "Overview",
@@ -184,10 +267,16 @@ const en = {
 
   /* footer */
   "footer.rights": "Academic project — B7A7 assignment.",
-  "footer.product": "Product",
+  "footer.product": "Platform",
   "footer.company": "Company",
   "footer.support": "Support",
   "footer.legal": "Legal",
+  "footer.accounts": "Accounts",
+  "footer.aboutUs": "About us",
+  "footer.pricingFees": "Pricing & fees",
+  "footer.blurb":
+    "A housing and roommate platform where tenants book verified rooms and owners manage listings, bookings and payouts in one place.",
+  "footer.stripeNote": "Payments processed securely by Stripe (test mode).",
 
   /* misc */
   "misc.perMonth": "per month",
@@ -218,6 +307,8 @@ const en = {
   /* landing page */
   "home.eyebrow": "Housing & roommate platform",
   "home.title": "Find a room you will actually want to live in",
+  "home.titleAccent": "Find a room",
+  "home.titleRest": "you will actually want to live in",
   "home.subtitle":
     "{{app}} connects tenants with property owners. Browse verified rooms, request a booking, pay through Stripe and manage everything from a single dashboard — with occupancy, revenue and approval analytics for the people who own the buildings.",
   "home.ctaBrowse": "Browse available rooms",
@@ -282,6 +373,9 @@ const en = {
   "browse.searchRooms": "Search rooms",
   "browse.rentLabel": "Monthly rent",
   "browse.bedroomsPlus": "{{count}}+ bedrooms",
+  "browse.beds.1": "1+ bedroom",
+  "browse.beds.2": "2+ bedrooms",
+  "browse.beds.3": "3+ bedrooms",
   "browse.price.upTo400": "Up to 400",
   "browse.price.400to800": "400 – 800",
   "browse.price.800to1200": "800 – 1,200",
@@ -653,6 +747,25 @@ const bn: Partial<Record<TranslationKey, string>> = {
   "nav.skipToContent": "মূল অংশে যান",
   "nav.language": "ভাষা",
   "nav.menu": "মেনু",
+  "nav.main": "প্রধান",
+  "nav.mobile": "মোবাইল",
+  "nav.account": "অ্যাকাউন্ট",
+  "nav.accountMenu": "অ্যাকাউন্ট মেনু",
+  "nav.profileSettings": "প্রোফাইল ও সেটিংস",
+  "nav.goToDashboard": "ড্যাশবোর্ডে যান",
+  "nav.skipToFooter": "ফুটারে যান",
+  "nav.primary": "প্রধান",
+  "nav.housing": "হাউসিং",
+  "nav.operations": "কার্যক্রম",
+  "nav.accountSection": "অ্যাকাউন্ট",
+  "nav.console": "কনসোল",
+  "nav.bookingRequests": "বুকিং অনুরোধ",
+  "nav.dashboardNav": "{{area}} নেভিগেশন",
+
+  /* dashboard area labels */
+  "area.tenant": "ভাড়াটিয়া ড্যাশবোর্ড",
+  "area.owner": "মালিক ড্যাশবোর্ড",
+  "area.admin": "অ্যাডমিন কনসোল",
 
   "action.save": "সংরক্ষণ করুন",
   "action.saveChanges": "পরিবর্তন সংরক্ষণ করুন",
@@ -687,6 +800,14 @@ const bn: Partial<Record<TranslationKey, string>> = {
   "state.retry": "আবার চেষ্টা করুন",
   "state.noResults": "কিছু মেলেনি",
   "state.offline": "সার্ভারে পৌঁছানো যাচ্ছে না",
+  "state.offlineTitle": "আপনি ইন্টারনেটহীন মনে হচ্ছে",
+
+  /* pagination */
+  "pagination.label": "পেজিনেশন",
+  "pagination.page": "পেজ",
+  "pagination.perPage": "প্রতি পেজে ফলাফল",
+  "pagination.pageNumber": "{{page}} নম্বর পেজ",
+  "pagination.summary": "{{total}}টি পেজের মধ্যে {{page}} নম্বর · {{count}}টি ফলাফল",
 
   "auth.email": "ইমেইল",
   "auth.password": "পাসওয়ার্ড",
@@ -707,6 +828,53 @@ const bn: Partial<Record<TranslationKey, string>> = {
   "auth.noAccount": "নতুন এসেছেন?",
   "auth.haveAccount": "আগে থেকেই অ্যাকাউন্ট আছে?",
   "auth.oneClick": "এক ক্লিকে",
+  "auth.demoBadge": "দ্রুত ডেমো প্রবেশাধিকার",
+  "auth.demoTitle2": "এক ক্লিকে ডেমো লগ ইন",
+  "auth.demoBody":
+    "একটি ভূমিকা বেছে নিন — সাথে সাথে প্রসিড করা অ্যাকাউন্টে সাইন ইন করে সরাসরি সেই ভূমিকার ড্যাশবোর্ডে পৌঁছে যাবেন।",
+  "auth.demoLoginAs": "ডেমো লগ ইন · {{role}}",
+  "auth.demoSeed": "ডেমো অ্যাকাউন্টগুলো ব্যাকএন্ড সিড থেকে আসে (",
+  "auth.demoPattern": ")। পাসওয়ার্ডের ধরন হলো",
+  "auth.demoDesc.tenant": "ঘর খুঁজুন, বুকিংয়ের অনুরোধ করুন, Stripe দিয়ে পেমেন্ট করুন এবং রিভিউ লিখুন।",
+  "auth.demoDesc.owner": "লিস্টিং প্রকাশ করুন, বুকিং অনুরোধ অনুমোদন করুন এবং খালি থাকার হার ও আয় দেখুন।",
+  "auth.demoDesc.admin": "পূর্ণ প্ল্যাটফর্ম প্রবেশাধিকার: ব্যবহারকারী, বিশ্লেষণ, রিফান্ড ও অডিট ট্রেইল।",
+
+  /* auth validation messages */
+  "auth.err.emailRequired": "ইমেইল দিন",
+  "auth.err.emailInvalid": "সঠিক একটি ইমেইল ঠিকানা দিন",
+  "auth.err.passwordRequired": "পাসওয়ার্ড দিন",
+  "auth.err.nameMin": "নাম অন্তত ২ অক্ষরের হতে হবে",
+  "auth.err.nameMax": "নাম অনেক লম্বা",
+  "auth.err.phoneInvalid": "সঠিক একটি মোবাইল নম্বর দিন",
+  "auth.err.passwordMin": "পাসওয়ার্ড অন্তত ৮ অক্ষরের হতে হবে",
+  "auth.err.passwordLetter": "অন্তত একটি অক্ষর রাখুন",
+  "auth.err.passwordDigit": "অন্তত একটি সংখ্যা রাখুন",
+  "auth.err.confirmRequired": "পাসওয়ার্ডটি নিশ্চিত করুন",
+  "auth.err.passwordMismatch": "পাসওয়ার্ড দুটি মিলছে না",
+
+  /* register */
+  "register.accountType": "অ্যাকাউন্টের ধরন",
+  "register.roleTenant": "আমি একটি ঘর খুঁজছি",
+  "register.roleTenantBody": "লিস্টিং খুঁজুন, বুকিংয়ের অনুরোধ করুন এবং নিরাপদে পেমেন্ট করুন।",
+  "register.roleOwner": "আমি একটি সম্পত্তি তালিকাভুক্ত করতে চাই",
+  "register.roleOwnerBody": "লিস্টিং প্রকাশ করুন, ঘর সামলান এবং বুকিং অনুমোদন করুন।",
+  "register.confirmPassword": "পাসওয়ার্ড নিশ্চিত করুন",
+  "register.passwordPlaceholder": "অন্তত ৮ অক্ষর",
+  "register.confirmPlaceholder": "পাসওয়ার্ডটি আবার লিখুন",
+  "register.terms":
+    "অ্যাকাউন্ট তৈরি করে আপনি প্ল্যাটফর্মের শর্তাবলিতে সম্মত হচ্ছেন। পাসওয়ার্ড সার্ভারে bcrypt দিয়ে হ্যাশ করা হয় এবং কখনো সরাসরি সংরক্ষণ করা হয় না।",
+
+  /* account recovery */
+  "auth.forgotBody": "আপনার অ্যাকাউন্টের ইমেইল ঠিকানা দিন, আমরা একটি রিসেট লিংক পাঠাব।",
+  "auth.resetTitle": "নতুন পাসওয়ার্ড নির্ধারণ করুন",
+  "auth.resetBody": "এমন একটি শক্তিশালী পাসওয়ার্ড বেছে নিন যা এই অ্যাকাউন্টে আগে ব্যবহার করেননি।",
+  "auth.resetMissingToken":
+    "এই রিসেট লিংকে টোকেন নেই। পাসওয়ার্ড ভুলে যাওয়ার পাতা থেকে নতুন লিংক নিন।",
+  "auth.recoveryTitle": "অ্যাকাউন্ট পুনরুদ্ধার",
+  "auth.recoveryBody": "আপনার পাসওয়ার্ড রিসেট করুন অথবা ইমেইল ঠিকানা নিশ্চিত করুন।",
+  "auth.backToSignIn": "লগ ইন-এ ফিরে যান",
+  "auth.verifyEmail": "ইমেইল যাচাই করুন",
+  "auth.noVerificationEmail": "যাচাইকরণ ইমেইল কখনো আসেনি?",
 
   "property.bedrooms": "বেডরুম",
   "property.bathrooms": "বাথরুম",
@@ -761,6 +929,7 @@ const bn: Partial<Record<TranslationKey, string>> = {
   "status.EXPIRED": "মেয়াদোত্তীর্ণ",
   "status.AVAILABLE": "খালি",
   "status.OCCUPIED": "ব্যবহৃত",
+  "status.RESERVED": "সংরক্ষিত",
   "status.MAINTENANCE": "মেরামত",
   "status.PUBLISHED": "প্রকাশিত",
   "status.DRAFT": "খসড়া",
@@ -770,6 +939,13 @@ const bn: Partial<Record<TranslationKey, string>> = {
   "status.REFUNDED": "ফেরত দেওয়া হয়েছে",
   "status.PARTIALLY_REFUNDED": "আংশিক ফেরত",
   "status.PROCESSING": "প্রক্রিয়াধীন",
+  "status.CANCELED": "বাতিল",
+
+  /* room facing */
+  "facing.NORTH": "উত্তর",
+  "facing.SOUTH": "দক্ষিণ",
+  "facing.EAST": "পূর্ব",
+  "facing.WEST": "পশ্চিম",
 
   "dash.overview": "সারসংক্ষেপ",
   "dash.bookings": "বুকিং",
@@ -786,11 +962,17 @@ const bn: Partial<Record<TranslationKey, string>> = {
   "dash.auditLogs": "অডিট লগ",
   "dash.properties": "সম্পত্তি",
 
-  "footer.rights": "অ্যাকাডেমিক প্রকল্প — বি৭এ৭ অ্যাসাইনমেন্ট।",
-  "footer.product": "প্রোডাক্ট",
+"footer.rights": "অ্যাকাডেমিক প্রকল্প — বি৭এ৭ অ্যাসাইনমেন্ট।",
+  "footer.product": "প্ল্যাটফর্ম",
   "footer.company": "কোম্পানি",
   "footer.support": "সহায়তা",
   "footer.legal": "আইনি",
+  "footer.accounts": "অ্যাকাউন্ট",
+  "footer.aboutUs": "আমাদের সম্পর্কে",
+  "footer.pricingFees": "মূল্য ও ফি",
+  "footer.blurb":
+    "এমন একটি হাউসিং ও রুমমেট প্ল্যাটফর্ম যেখানে ভাড়াটিয়ারা যাচাই করা ঘর বুক করেন এবং মালিকরা এক জায়গায় লিস্টিং, বুকিং ও পেমেন্ট সামলান।",
+  "footer.stripeNote": "পেমেন্ট নিরাপদভাবে প্রক্রিয়া করে Stripe (টেস্ট মোড)।",
 
   "misc.perMonth": "প্রতি মাসে",
   "misc.required": "আবশ্যক",
@@ -798,6 +980,50 @@ const bn: Partial<Record<TranslationKey, string>> = {
   "misc.showMore": "আরও দেখুন",
   "misc.showLess": "কম দেখুন",
   "misc.resultsFor": "ফলাফল",
+
+  /* landing page */
+  "home.eyebrow": "হাউসিং ও রুমমেট প্ল্যাটফর্ম",
+  "home.title": "এমন একটি ঘর খুঁজুন যেখানে বাস করতে সত্যিই ইচ্ছে হবে",
+  "home.titleAccent": "এমন একটি ঘর",
+  "home.titleRest": "যেখানে বাস করতে সত্যিই ইচ্ছে হবে",
+  "home.subtitle":
+    "{{app}} ভাড়াটিয়াদের সঙ্গে সম্পত্তির মালিকদের যুক্ত করে। যাচাই করা ঘর দেখুন, বুকিংয়ের অনুরোধ করুন, Stripe দিয়ে পেমেন্ট করুন এবং একটি ড্যাশবোর্ড থেকেই সবকিছু সামলান — সঙ্গে খালি থাকার হার, আয় ও অনুমোদনের বিশ্লেষণ।",
+  "home.ctaBrowse": "খালি ঘর দেখুন",
+  "home.ctaList": "আপনার সম্পত্তি তালিকাভুক্ত করুন",
+  "home.statRoles": "ভূমিকা",
+  "home.statEndpoints": "API এন্ডপয়েন্ট",
+  "home.statPayments": "পেমেন্ট",
+"action.sortBy": "সাজানোর নিয়ম",
+
+  /* browse / marketplace */
+  "browse.eyebrow": "মার্কেটপ্লেস",
+  "browse.title": "আপনার পরবর্তী ঠিকানা খুঁজুন",
+  "browse.subtitle":
+    "নিচের প্রতিটি লিস্টিং সরাসরি প্ল্যাটফর্ম API থেকে এসেছে — শহর, ভাড়া বা আকার দিয়ে ফিল্টার করুন এবং পছন্দের দৃশ্যটি সংরক্ষণ করুন।",
+  "browse.tablist": "ফিল্টার করুন",
+  "browse.tabProperties": "সম্পত্তি",
+  "browse.tabRooms": "ঘর",
+  "browse.searchProperties": "সম্পত্তি খুঁজুন",
+  "browse.searchRooms": "ঘর খুঁজুন",
+  "browse.rentLabel": "মাসিক ভাড়া",
+  "browse.bedroomsPlus": "{{count}}+ বেডরুম",
+  "browse.beds.1": "১+ বেডরুম",
+  "browse.beds.2": "২+ বেডরুম",
+  "browse.beds.3": "৩+ বেডরুম",
+  "browse.price.upTo400": "৪০০ পর্যন্ত",
+  "browse.price.400to800": "৪০০ – ৮০০",
+  "browse.price.800to1200": "৮০০ – ১,২০০",
+  "browse.price.1200plus": "১,২০০ এবং তার বেশি",
+  "browse.toolbarNote": "ফিল্টারগুলো URL-এ সংরক্ষিত — এই দৃশ্যটি বুকমার্ক করুন বা শেয়ার করুন।",
+  "browse.clearSearch": "অনুসন্ধান মুছুন",
+  "browse.removeFilter": "ফিল্টার সরান",
+  "browse.pageOf": "{{total}}টি পেজের মধ্যে {{page}} নম্বর",
+  "browse.empty.properties.title": "এই ফিল্টারে কোনো সম্পত্তি মেলেনি",
+  "browse.empty.properties.body":
+    "একটি ফিল্টার সরান, ভাড়ার সীমা বাড়ান, বা অন্য শহরে খুঁজুন।",
+  "browse.empty.rooms.title": "এই ফিল্টারে কোনো খালি ঘর মেলেনি",
+  "browse.empty.rooms.body":
+    "মালিকরা ঘর প্রস্তুত হলে তা খালি হিসেবে চিহ্নিত করেন। আরও দেখতে ভাড়ার সীমা বাড়ান বা তারিখের ফিল্টার সরান।",
 };
 
 export type Dictionary = Record<string, string>;

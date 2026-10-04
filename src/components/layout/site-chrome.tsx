@@ -41,22 +41,29 @@ import {
 import { RoleBadge } from "@/components/common/status-badge";
 import { LogoMark } from "@/components/brand/logo";
 import { LanguageToggle } from "@/components/brand/language-toggle";
+import { useTranslation } from "@/components/providers/locale-provider";
 import { APP_NAME, ROLE_HOME } from "@/lib/constants";
 import { cn, initialsOf } from "@/lib/utils";
 
+/**
+ * Public navigation. Labels are dictionary keys rather than literals so the
+ * whole chrome re-renders in Bangla the moment the visitor switches language.
+ */
 export const PUBLIC_NAV = [
-  { label: "Browse rooms", href: "/properties" },
-  { label: "How it works", href: "/how-it-works" },
-  { label: "About", href: "/about" },
-  { label: "FAQ", href: "/faq" },
-  { label: "Contact", href: "/contact" },
+  { labelKey: "nav.browse", href: "/properties" },
+  { labelKey: "nav.howItWorks", href: "/how-it-works" },
+  { labelKey: "nav.about", href: "/about" },
+  { labelKey: "nav.faq", href: "/faq" },
+  { labelKey: "nav.contact", href: "/contact" },
 ] as const;
 
 export function BrandMark({ className }: { className?: string }) {
+  const t = useTranslation();
+
   return (
     <Link
       href="/"
-      aria-label={`${APP_NAME} home`}
+      aria-label={`${APP_NAME} ${t("common.home")}`}
       className={cn(
         "flex items-center gap-2.5 transition-opacity duration-200 hover:opacity-90",
         className,
@@ -68,7 +75,7 @@ export function BrandMark({ className }: { className?: string }) {
           Nest<span className="text-primary">Space</span>
         </span>
         <span className="mt-1 text-[0.5625rem] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-          Homes&nbsp;&amp;&nbsp;rooms
+          {t("brand.tagline")}
         </span>
       </span>
     </Link>
@@ -77,6 +84,7 @@ export function BrandMark({ className }: { className?: string }) {
 
 export function UserMenu() {
   const { user, signOut } = useAuthContext();
+  const t = useTranslation();
   if (!user) return null;
 
   return (
@@ -85,7 +93,7 @@ export function UserMenu() {
         <button
           type="button"
           className="flex items-center gap-2 rounded-full border border-border py-1 pl-1 pr-3 transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          aria-label="Account menu"
+          aria-label={t("nav.accountMenu")}
         >
           <Avatar className="size-7">
             <AvatarFallback>{initialsOf(user.name, user.email)}</AvatarFallback>
@@ -97,7 +105,9 @@ export function UserMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-60">
         <DropdownMenuLabel className="space-y-1.5">
-          <p className="truncate text-sm font-semibold text-foreground">{user.name ?? "Account"}</p>
+          <p className="truncate text-sm font-semibold text-foreground">
+            {user.name ?? t("nav.account")}
+          </p>
           <p className="truncate text-xs font-normal text-muted-foreground">{user.email}</p>
           <RoleBadge role={user.role} className="mt-1" />
         </DropdownMenuLabel>
@@ -105,19 +115,19 @@ export function UserMenu() {
         <DropdownMenuItem asChild>
           <Link href={ROLE_HOME[user.role]}>
             <LayoutDashboard />
-            Dashboard
+            {t("nav.dashboard")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/dashboard/settings">
             <Settings />
-            Profile & settings
+            {t("nav.profileSettings")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem destructive onSelect={() => void signOut()}>
           <LogOut />
-          Sign out
+          {t("nav.signOut")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -127,6 +137,7 @@ export function UserMenu() {
 export function SiteHeader() {
   const pathname = usePathname();
   const { user } = useAuthContext();
+  const t = useTranslation();
   const [open, setOpen] = useState(false);
 
   return (
@@ -134,7 +145,7 @@ export function SiteHeader() {
       <div className="container-page flex h-16 items-center justify-between gap-4">
         <BrandMark />
 
-        <nav aria-label="Main" className="hidden items-center gap-1 md:flex">
+        <nav aria-label={t("nav.main")} className="hidden items-center gap-1 md:flex">
           {PUBLIC_NAV.map((item) => {
             const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
             return (
@@ -147,7 +158,7 @@ export function SiteHeader() {
                   active ? "bg-secondary text-foreground" : "text-muted-foreground hover:text-foreground",
                 )}
               >
-                {item.label}
+                {t(item.labelKey)}
               </Link>
             );
           })}
@@ -156,15 +167,15 @@ export function SiteHeader() {
         <div className="hidden items-center gap-2 md:flex">
           {user ? (
             <Button asChild size="sm">
-              <Link href={ROLE_HOME[user.role]}>Dashboard</Link>
+              <Link href={ROLE_HOME[user.role]}>{t("nav.dashboard")}</Link>
             </Button>
           ) : (
             <>
               <Button asChild variant="ghost" size="sm">
-                <Link href="/login">Sign in</Link>
+                <Link href="/login">{t("nav.login")}</Link>
               </Button>
               <Button asChild size="sm">
-                <Link href="/register">Get started</Link>
+                <Link href="/register">{t("nav.register")}</Link>
               </Button>
             </>
           )}
@@ -177,7 +188,7 @@ export function SiteHeader() {
           variant="ghost"
           size="icon"
           className="md:hidden"
-          aria-label={open ? "Close menu" : "Open menu"}
+          aria-label={open ? t("action.close") : t("nav.menu")}
           aria-expanded={open}
           onClick={() => setOpen((value) => !value)}
         >
@@ -187,7 +198,7 @@ export function SiteHeader() {
 
       {open ? (
         <div className="border-t border-border bg-background md:hidden">
-          <nav aria-label="Mobile" className="container-page flex flex-col gap-1 py-4">
+          <nav aria-label={t("nav.mobile")} className="container-page flex flex-col gap-1 py-4">
             {PUBLIC_NAV.map((item) => (
               <Link
                 key={item.href}
@@ -195,24 +206,24 @@ export function SiteHeader() {
                 onClick={() => setOpen(false)}
                 className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary hover:text-foreground"
               >
-                {item.label}
+                {t(item.labelKey)}
               </Link>
             ))}
             <div className="mt-2 flex flex-col gap-2 border-t border-border pt-4">
               {user ? (
                 <>
                   <Button asChild>
-                    <Link href={ROLE_HOME[user.role]}>Go to dashboard</Link>
+                    <Link href={ROLE_HOME[user.role]}>{t("nav.goToDashboard")}</Link>
                   </Button>
                   <UserMenu />
                 </>
               ) : (
                 <>
                   <Button asChild variant="outline">
-                    <Link href="/login">Sign in</Link>
+                    <Link href="/login">{t("nav.login")}</Link>
                   </Button>
                   <Button asChild>
-                    <Link href="/register">Get started</Link>
+                    <Link href="/register">{t("nav.register")}</Link>
                   </Button>
                 </>
               )}
@@ -226,49 +237,51 @@ export function SiteHeader() {
 
 export const SITE_FOOTER_SECTIONS = [
   {
-    title: "Platform",
+    titleKey: "footer.product",
     links: [
-      { label: "Browse rooms", href: "/properties" },
-      { label: "How it works", href: "/how-it-works" },
-      { label: "Pricing & fees", href: "/faq#pricing" },
+      { labelKey: "nav.browse", href: "/properties" },
+      { labelKey: "nav.howItWorks", href: "/how-it-works" },
+      { labelKey: "footer.pricingFees", href: "/faq#pricing" },
     ],
   },
   {
-    title: "Company",
+    titleKey: "footer.company",
     links: [
-      { label: "About us", href: "/about" },
-      { label: "Contact", href: "/contact" },
-      { label: "FAQ", href: "/faq" },
+      { labelKey: "footer.aboutUs", href: "/about" },
+      { labelKey: "nav.contact", href: "/contact" },
+      { labelKey: "nav.faq", href: "/faq" },
     ],
   },
   {
-    title: "Accounts",
+    titleKey: "footer.accounts",
     links: [
-      { label: "Sign in", href: "/login" },
-      { label: "Create account", href: "/register" },
+      { labelKey: "nav.login", href: "/login" },
+      { labelKey: "action.createAccount", href: "/register" },
     ],
   },
 ] as const;
 
 export function SiteFooter() {
+  const t = useTranslation();
+
   return (
-    <footer className="mt-auto border-t border-border bg-muted/30">
+    <footer id="site-footer" className="mt-auto border-t border-border bg-muted/30">
       <div className="container-page grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4">
         <div className="space-y-3">
           <BrandMark />
-          <p className="max-w-xs text-sm text-muted-foreground">
-            A housing and roommate platform where tenants book verified rooms and owners manage
-            listings, bookings and payouts in one place.
-          </p>
+          <p className="max-w-xs text-sm text-muted-foreground">{t("footer.blurb")}</p>
         </div>
         {SITE_FOOTER_SECTIONS.map((section) => (
-          <div key={section.title} className="space-y-3">
-            <h3 className="text-sm font-semibold">{section.title}</h3>
+          <div key={section.titleKey} className="space-y-3">
+            <h3 className="text-sm font-semibold">{t(section.titleKey)}</h3>
             <ul className="space-y-2">
               {section.links.map((link) => (
-                <li key={link.href + link.label}>
-                  <Link href={link.href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-                    {link.label}
+                <li key={link.href + link.labelKey}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    {t(link.labelKey)}
                   </Link>
                 </li>
               ))}
@@ -278,8 +291,10 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-border">
         <div className="container-page flex flex-col items-center justify-between gap-3 py-5 text-xs text-muted-foreground sm:flex-row">
-          <p>© {new Date().getFullYear()} {APP_NAME}. Academic project — B7A7 assignment.</p>
-          <p>Payments processed securely by Stripe (test mode).</p>
+          <p>
+            © {new Date().getFullYear()} {APP_NAME}. {t("footer.rights")}
+          </p>
+          <p>{t("footer.stripeNote")}</p>
         </div>
       </div>
     </footer>

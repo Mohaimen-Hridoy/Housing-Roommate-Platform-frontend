@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useQueryParam, useUrlState } from "@/components/common/url-state";
+import { useLocale, useTranslation } from "@/components/providers/locale-provider";
 import { cn } from "@/lib/utils";
 import type { PaginationMeta } from "@/lib/types/api";
 
@@ -28,6 +29,8 @@ interface PaginationProps {
  * current view can be bookmarked or shared.
  */
 export function Pagination({ meta, className, showPageSize = true }: PaginationProps) {
+  const t = useTranslation();
+  const { locale } = useLocale();
   const currentPageSize = useQueryParam("pageSize");
   const { setPage, isPending } = useUrlState();
 
@@ -36,10 +39,13 @@ export function Pagination({ meta, className, showPageSize = true }: PaginationP
   if (meta.totalItems === 0) return null;
 
   return (
-    <nav aria-label="Pagination" className={cn("flex flex-col items-center justify-between gap-3 sm:flex-row", className)}>
+    <nav aria-label={t("pagination.label")} className={cn("flex flex-col items-center justify-between gap-3 sm:flex-row", className)}>
       <p className="text-sm text-muted-foreground">
-        Page <span className="font-medium text-foreground">{meta.page}</span> of {meta.totalPages} ·{" "}
-        {meta.totalItems.toLocaleString()} result{meta.totalItems === 1 ? "" : "s"}
+        {t("pagination.summary", {
+          page: meta.page,
+          total: meta.totalPages,
+          count: meta.totalItems.toLocaleString(locale === "bn" ? "bn-BD" : "en-GB"),
+        })}
       </p>
 
       <div className="flex items-center gap-2" data-pending={isPending || undefined}>
@@ -48,13 +54,13 @@ export function Pagination({ meta, className, showPageSize = true }: PaginationP
             value={currentPageSize || String(meta.pageSize || DEFAULT_PAGE_SIZE)}
             onValueChange={(value) => setPage(1, Number(value))}
           >
-            <SelectTrigger className="h-9 w-[7.5rem]" aria-label="Results per page">
+            <SelectTrigger className="h-9 w-[7.5rem]" aria-label={t("pagination.perPage")}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               {PAGE_SIZES.map((size) => (
                 <SelectItem key={size} value={String(size)}>
-                  {size} / page
+                  {size} / {t("pagination.page")}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -66,7 +72,7 @@ export function Pagination({ meta, className, showPageSize = true }: PaginationP
             type="button"
             variant="outline"
             size="icon-sm"
-            aria-label="Previous page"
+            aria-label={t("action.previous")}
             disabled={!meta.hasPrevPage}
             onClick={() => setPage(meta.page - 1)}
           >
@@ -83,7 +89,7 @@ export function Pagination({ meta, className, showPageSize = true }: PaginationP
                   type="button"
                   variant={page === meta.page ? "default" : "outline"}
                   size="icon-sm"
-                  aria-label={`Page ${page}`}
+                  aria-label={t("pagination.pageNumber", { page })}
                   aria-current={page === meta.page ? "page" : undefined}
                   onClick={() => setPage(page)}
                 >
@@ -97,7 +103,7 @@ export function Pagination({ meta, className, showPageSize = true }: PaginationP
             type="button"
             variant="outline"
             size="icon-sm"
-            aria-label="Next page"
+            aria-label={t("action.next")}
             disabled={!meta.hasNextPage}
             onClick={() => setPage(meta.page + 1)}
           >
