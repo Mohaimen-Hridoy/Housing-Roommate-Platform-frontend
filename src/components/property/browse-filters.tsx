@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { SearchX, SlidersHorizontal } from "lucide-react";
 

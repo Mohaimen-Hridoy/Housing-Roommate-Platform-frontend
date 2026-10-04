@@ -25,7 +25,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { apiDataSafe, apiListSafe } from "@/lib/api/server";
-import { favoriteApi } from "@/lib/api/endpoints";
 import { getSessionUser } from "@/lib/auth/session";
 import { formatArea, formatCurrency, formatDate } from "@/lib/format";
 import type { Favorite, PropertyDetail } from "@/lib/types/api";
