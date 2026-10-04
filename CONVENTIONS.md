@@ -5,7 +5,11 @@ Read this before writing any page. It documents every existing primitive so new 
 ## Stack
 
 Next.js 15 App Router · React 19 · TypeScript strict (`no any`) · Tailwind CSS · shadcn-style Radix
-primitives · TanStack Query · React Hook Form + Zod · Recharts · Sonner · Lucide icons.
+primitives · React Hook Form + Zod · Recharts · Sonner · Lucide icons.
+
+Data is fetched on the server (`@/lib/api/server`) and mutations go through `@/lib/api/client`,
+then revalidate with `router.refresh()`. There is no client-side query cache; do not add one
+without a reason.
 
 ## Rules
 

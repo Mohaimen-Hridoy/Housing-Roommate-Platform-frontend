@@ -48,7 +48,7 @@ the Bangla dictionary, and a coverage report).
 |---|---|
 | Framework | Next.js 15 (App Router, RSC by default), React 19, TypeScript strict |
 | Styling | Tailwind CSS with an HSL token theme and a working light/dark toggle, shadcn-style Radix primitives |
-| Server state | TanStack Query v5 (`QueryClientProvider` in `src/components/providers/app-providers.tsx`) |
+| Server state | Server-first — route components stream data through `@/lib/api/server`; mutations revalidate with `router.refresh()`, so there is no second client cache |
 | Forms | React Hook Form + Zod, bridged to server actions for auth/settings |
 | Auth | Custom JWT: httpOnly cookies + an internal proxy that attaches the bearer token |
 | Payments | Stripe (test mode) — hosted Checkout Session plus an in-app Payment Element |
@@ -208,7 +208,7 @@ cost for the whole system is under 1 kB per route.
 | Multi-step wizard | `/owner/listings/new` (4 steps) and the 3-step booking wizard on `/properties/[id]` |
 | File uploads with progress and preview | `/owner/listings/[id]` photo tab (6 files / 5 MB, MIME allow-list) |
 | Reusable components, no copy-paste UI | `src/components/ui/*` + `src/components/common/*` |
-| Custom hooks | `use-debounce` (URL search debounce), plus `use-pagination`, `use-auth` and `use-api` (`useApiQuery`/`useApiList`/`useApiMutation`) available for client-side data work |
+| Custom hooks | `use-debounce` (debounces the URL-synced search box) alongside `useAuthContext`, `useUrlState` and the `apiClient` / `apiListSafe` wrappers that every mutation shares |
 | Optimistic UI | favourite toggle, booking cancel, role change, room status |
 | Metadata + Open Graph | `generateMetadata` on dynamic routes, `metadata` on every page |
 | No `any` | `@typescript-eslint/no-explicit-any: "error"` in `eslint.config.mjs` |
@@ -269,8 +269,8 @@ src/
 │   ├── property/        # cards, filters, booking wizard, favourite + contact actions
 │   ├── payment/         # Stripe checkout button, return-page shell
 │   ├── dashboard/       # per-role sections and chart wrappers
-│   └── providers/       # TanStack Query + session + locale context, Sonner
-├── hooks/               # use-debounce, use-pagination, use-auth, use-api
+│   └── providers/       # session + locale + theme context, Sonner
+├── hooks/               # use-debounce
 ├── lib/
 │   ├── api/             # server.ts (RSC), client.ts (browser), endpoints.ts (typed)
 │   ├── auth/            # session.ts (cookies), tokens.ts (JWT decode + cookie names)
