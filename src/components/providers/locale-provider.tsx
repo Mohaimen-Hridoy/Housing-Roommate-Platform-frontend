@@ -3,6 +3,7 @@
 import * as React from "react";
 
 import {
+  DEFAULT_LOCALE,
   LOCALE_HTML_LANG,
   getDictionary,
   type Dictionary,
@@ -36,7 +37,7 @@ function interpolate(template: string, vars?: Record<string, string | number>): 
 
 export function LocaleProvider({
   children,
-  initialLocale = "en",
+  initialLocale = DEFAULT_LOCALE,
 }: {
   children: React.ReactNode;
   initialLocale?: Locale;
@@ -79,16 +80,17 @@ export function LocaleProvider({
 
 /**
  * Reads the active locale. Safe to call outside the provider — it then behaves
- * as English-only, so a component is never forced to sit inside the tree.
+ * as default-locale-only, so a component is never forced to sit inside the tree.
  */
 export function useLocale(): LocaleContextValue {
   const context = React.useContext(LocaleContext);
   const fallback = React.useMemo<LocaleContextValue>(
     () => ({
-      locale: "en",
+      locale: DEFAULT_LOCALE,
       setLocale: () => {},
-      t: (key, vars) => interpolate(getDictionary("en")[key] ?? key, vars),
-      formatDate: (value) => (value ? new Date(value).toLocaleDateString("en-GB") : "—"),
+      t: (key, vars) => interpolate(getDictionary(DEFAULT_LOCALE)[key] ?? key, vars),
+      formatDate: (value) =>
+        value ? new Date(value).toLocaleDateString("bn-BD") : "—",
     }),
     [],
   );

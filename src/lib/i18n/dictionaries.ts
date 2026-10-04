@@ -10,6 +10,15 @@
 export const LOCALES = ["en", "bn"] as const;
 export type Locale = (typeof LOCALES)[number];
 
+/**
+ * Locale used when the visitor has not chosen one.
+ *
+ * Bangla is the default: the product targets Bangladesh (BDT pricing, seeded
+ * Bangla-first content), so a first-time visitor should land on Bangla and be
+ * able to switch to English rather than the other way round.
+ */
+export const DEFAULT_LOCALE: Locale = "bn";
+
 export const LOCALE_LABEL: Record<Locale, string> = {
   en: "EN",
   bn: "বাংলা",
@@ -330,7 +339,7 @@ const en = {
   "home.valueTitle": "Best value right now",
   "home.valueSubtitle": "The lowest-rent rooms currently marked available on the platform.",
   "home.valueCta": "See all available rooms",
-  "home.ctaBadge": "Evaluator friendly",
+  "home.ctaBadge": "Make your next move",
   "home.ctaTitle": "Ready to find your next room?",
   "home.ctaBody": "Create an account to browse rooms, manage listings and keep your housing journey organised.",
   "home.ctaAction": "Sign in",
@@ -1028,7 +1037,7 @@ const bn: Partial<Record<TranslationKey, string>> = {
   "home.valueTitle": "এখন সবচেয়ে ভালো দাম",
   "home.valueSubtitle": "প্ল্যাটফর্মে বর্তমানে খালি হিসেবে চিহ্নিত সবচেয়ে কম ভাড়ার ঘরগুলো।",
   "home.valueCta": "সব খালি ঘর দেখুন",
-  "home.ctaBadge": "মূল্যায়নের জন্য উপযোগী",
+  "home.ctaBadge": "আপনার পরবর্তী পদক্ষেপ নিন",
   "home.feature.search.title": "সত্যিকারের ফিল্টারযুক্ত সার্চ",
   "home.feature.search.body":
     "শহর, ভাড়ার সীমা, বেডরুম, দিক আর উপলব্ধতা দিয়ে ফিল্টার করুন। প্রতিটি ফিল্টার URL-এ থাকে, তাই আপনি যা খুঁজছেন তা ঠিক বুকমার্ক বা শেয়ার করতে পারবেন।",
