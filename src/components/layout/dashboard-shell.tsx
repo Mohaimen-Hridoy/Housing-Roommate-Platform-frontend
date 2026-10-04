@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 import { BrandMark, UserMenu } from "@/components/layout/site-chrome";
+import { LanguageToggle } from "@/components/brand/language-toggle";
+import { ThemeToggle } from "@/components/brand/theme-toggle";
 import { useAuthContext } from "@/components/providers/app-providers";
 import { useTranslation } from "@/components/providers/locale-provider";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -109,6 +111,10 @@ export function DashboardShell({ sections, areaLabel, areaLabelKey, children }: 
           </div>
         ) : null}
         <UserMenu />
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+          <LanguageToggle />
+        </div>
       </div>
     </div>
   );

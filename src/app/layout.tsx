@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 
 import { AppProviders } from "@/components/providers/app-providers";
 import { LocaleProvider } from "@/components/providers/locale-provider";
+import { THEME_BOOTSTRAP_SCRIPT } from "@/components/providers/theme-provider";
 import { LOCALE_COOKIE, localeFromCookie } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getSessionUser } from "@/lib/auth/session";
@@ -82,6 +83,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang={locale} className={`${inter.variable} ${mono.variable}`} suppressHydrationWarning>
       <body className="min-h-dvh bg-background font-sans">
+        {/* Applies the stored theme before first paint so dark-mode visitors
+            never see a white flash while React hydrates. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }} />
         <AppProviders user={user}>
           <LocaleProvider initialLocale={locale}>
             <a

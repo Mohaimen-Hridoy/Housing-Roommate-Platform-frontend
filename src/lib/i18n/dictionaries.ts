@@ -695,6 +695,8 @@ const en = {
   /* contact page */
   "language.ariaLabel": "Language: {name}",
   "language.switchTo": "Switch language to {name}",
+  "theme.toDark": "Switch to dark theme",
+  "theme.toLight": "Switch to light theme",
   "meta.title": "{name} — Housing & Roommate Platform",
   "meta.titleTemplate": "%s · {name}",
   "meta.description":
@@ -1310,6 +1312,8 @@ const bn: Partial<Record<TranslationKey, string>> = {
   /* contact page */
   "language.ariaLabel": "ভাষা: {name}",
   "language.switchTo": "ভাষা {name}-এ পরিবর্তন করুন",
+  "theme.toDark": "ডার্ক থিমে পরিবর্তন করুন",
+  "theme.toLight": "লাইট থিমে পরিবর্তন করুন",
   "meta.title": "{name} — হাউসিং ও রুমমেট প্ল্যাটফর্ম",
   "meta.titleTemplate": "%s · {name}",
   "meta.description":

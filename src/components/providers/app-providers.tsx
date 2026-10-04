@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createContext, useContext, useMemo, useState } from "react";
 import { Toaster } from "sonner";
 
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import type { SessionUser } from "@/lib/types/api";
 
 export interface AuthContextValue {
@@ -24,7 +25,8 @@ export function useAuthContext(): AuthContextValue {
 
 /**
  * Single client-side provider: TanStack Query for server state, the session
- * mirror for role-aware rendering, and the global Sonner toaster.
+ * mirror for role-aware rendering, the theme controller, and the global Sonner
+ * toaster.
  */
 export function AppProviders({ children, user }: { children: React.ReactNode; user: SessionUser | null }) {
   const router = useRouter();
@@ -56,10 +58,12 @@ export function AppProviders({ children, user }: { children: React.ReactNode; us
 
   return (
     <QueryClientProvider client={client}>
-      <AuthContext.Provider value={value}>
-        {children}
-        <Toaster position="top-right" richColors closeButton />
-      </AuthContext.Provider>
+      <ThemeProvider>
+        <AuthContext.Provider value={value}>
+          {children}
+          <Toaster position="top-right" richColors closeButton />
+        </AuthContext.Provider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

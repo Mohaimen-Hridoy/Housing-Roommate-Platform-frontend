@@ -41,6 +41,7 @@ import {
 import { RoleBadge } from "@/components/common/status-badge";
 import { LogoMark } from "@/components/brand/logo";
 import { LanguageToggle } from "@/components/brand/language-toggle";
+import { ThemeToggle } from "@/components/brand/theme-toggle";
 import { useTranslation } from "@/components/providers/locale-provider";
 import { APP_NAME, ROLE_HOME } from "@/lib/constants";
 import { cn, initialsOf } from "@/lib/utils";
@@ -186,6 +187,7 @@ export function SiteHeader() {
             </>
           )}
           {user ? <UserMenu /> : null}
+          <ThemeToggle />
           <LanguageToggle />
         </div>
 

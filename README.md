@@ -47,7 +47,7 @@ the Bangla dictionary, and a coverage report).
 | Concern | Choice |
 |---|---|
 | Framework | Next.js 15 (App Router, RSC by default), React 19, TypeScript strict |
-| Styling | Tailwind CSS with an HSL token theme (light + dark), shadcn-style Radix primitives |
+| Styling | Tailwind CSS with an HSL token theme and a working light/dark toggle, shadcn-style Radix primitives |
 | Server state | TanStack Query v5 (`QueryClientProvider` in `src/components/providers/app-providers.tsx`) |
 | Forms | React Hook Form + Zod, bridged to server actions for auth/settings |
 | Auth | Custom JWT: httpOnly cookies + an internal proxy that attaches the bearer token |
@@ -93,7 +93,7 @@ the UI additionally hides actions the signed-in role cannot perform.
 | `/` | public | Landing: live listings, live cheapest rooms, features, workflow |
 | `/about` | public | Story, verified tech stack, the three roles |
 | `/how-it-works` | public | Full tenant + owner workflow, booking lifecycle, payments |
-| `/faq` | public | 20 questions across 6 categories, `#pricing` fee explainer |
+| `/faq` | public | 24 questions across 6 categories, `#pricing` fee explainer |
 | `/contact` | public | Validated contact form, support channels, demo CTA |
 | `/properties` | public | Browse with URL-synced search, filters, sort, pagination |
 | `/properties/[id]` | public | Gallery, amenities, available rooms, **3-step booking wizard**, reviews |
@@ -165,8 +165,12 @@ left untranslated inside the Bangla strings.
 ## Design system and motion
 
 The palette is defined once as HSL tokens in `src/app/globals.css` (deep forest `#004337`, mint
-`#aaf0dc`, terracotta `#a13e28`) and dark mode re-points the same tokens rather than restyling
-components. Radius, shadow and easing scales are tokens too, so spacing is never ad-hoc.
+`#aaf0dc`, terracotta `#a13e28`). Dark mode re-points those same tokens rather than restyling
+components, and it is reachable: `ThemeToggle` sits in both the public header and the dashboard
+sidebar, stores the choice in `localStorage` under `hsg_theme`, and falls back to
+`prefers-color-scheme` on a first visit. A small inline script in `<body>` applies the class before
+the first paint, so there is no white flash. Radius, shadow and easing scales are tokens too, so
+spacing is never ad-hoc.
 
 Motion is built from four small primitives plus a handful of CSS classes:
 
@@ -204,7 +208,7 @@ cost for the whole system is under 1 kB per route.
 | Multi-step wizard | `/owner/listings/new` (4 steps) and the 3-step booking wizard on `/properties/[id]` |
 | File uploads with progress and preview | `/owner/listings/[id]` photo tab (6 files / 5 MB, MIME allow-list) |
 | Reusable components, no copy-paste UI | `src/components/ui/*` + `src/components/common/*` |
-| Custom hooks | `use-debounce`, `use-pagination`, `use-auth`, `use-api` (`useApiQuery`/`useApiList`/`useApiMutation`) |
+| Custom hooks | `use-debounce` (URL search debounce), plus `use-pagination`, `use-auth` and `use-api` (`useApiQuery`/`useApiList`/`useApiMutation`) available for client-side data work |
 | Optimistic UI | favourite toggle, booking cancel, role change, room status |
 | Metadata + Open Graph | `generateMetadata` on dynamic routes, `metadata` on every page |
 | No `any` | `@typescript-eslint/no-explicit-any: "error"` in `eslint.config.mjs` |
@@ -272,7 +276,7 @@ src/
 │   ├── auth/            # session.ts (cookies), tokens.ts (JWT decode + cookie names)
 │   ├── i18n/            # dictionaries.ts, locale.ts, server.ts, metadata.ts
 │   ├── types/api.ts     # exact mirror of the backend domain types
-│   ├── constants.ts     # enum labels, tones, demo accounts, route map
+│   ├── constants.ts     # enum labels, tones, audit actions, demo accounts, role home
 │   ├── format.ts        # currency, dates, numbers, percentages
 │   └── config.ts        # env-derived config
 ├── scripts/
