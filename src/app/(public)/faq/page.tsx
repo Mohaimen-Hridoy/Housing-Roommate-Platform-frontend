@@ -1,4 +1,6 @@
 ﻿import type { Metadata } from "next";
+
+import { localizedMetadata } from "@/lib/i18n/metadata";
 import Link from "next/link";
 import { ArrowRight, MessageSquare } from "lucide-react";
 
@@ -17,11 +19,13 @@ import { T } from "@/components/common/localized-text";
 import { APP_NAME } from "@/lib/constants";
 import { formatCurrency } from "@/lib/format";
 
-export const metadata: Metadata = {
-  title: "Frequently Asked Questions",
-  description: `Answers to common questions about ${APP_NAME} — accounts, searching, bookings, payments, reviews and more.`,
-  alternates: { canonical: "/faq" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return localizedMetadata({
+    titleKey: "faq.title",
+    descriptionKey: "faq.subtitle",
+    canonical: "/faq",
+  });
+}
 
 type FaqItem = {
   /** Dictionary key for the question text. */

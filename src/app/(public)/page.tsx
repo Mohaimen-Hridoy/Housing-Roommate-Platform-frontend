@@ -1,4 +1,6 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+
+import { localizedMetadata } from "@/lib/i18n/metadata";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -26,11 +28,13 @@ import { formatCurrency } from "@/lib/format";
 import { APP_NAME } from "@/lib/constants";
 import type { ImageAsset, PropertyListItem, RoomListItem } from "@/lib/types/api";
 
-export const metadata: Metadata = {
-  title: "Rent a room, list your property",
-  description: `${APP_NAME} connects tenants with verified property owners. Search rooms by city, budget and features, request a booking and pay securely with Stripe.`,
-  alternates: { canonical: "/" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return localizedMetadata({
+    titleKey: "meta.home.title",
+    descriptionKey: "home.subtitle",
+    canonical: "/",
+  });
+}
 
 const FEATURES = [
   {
@@ -143,7 +147,7 @@ export default async function HomePage() {
               <T
                 k="home.subtitle"
                 vars={{ app: APP_NAME }}
-                fallback={`${APP_NAME} connects tenants with property owners. Browse verified rooms, request a booking, pay through Stripe and manage everything from a single dashboard — with occupancy, revenue and approval analytics for the people who own the buildings.`}
+                fallback={`${APP_NAME} connects tenants with property owners. Browse verified rooms, request a booking, pay through Stripe and manage everything from a single dashboard â€” with occupancy, revenue and approval analytics for the people who own the buildings.`}
               />
             </p>
 
@@ -222,7 +226,7 @@ export default async function HomePage() {
                           <p className="truncate text-sm font-medium">{property.title}</p>
                           <p className="truncate text-xs text-muted-foreground">
                             {property.city}
-                            {property.state ? `, ${property.state}` : ""} ·{" "}
+                            {property.state ? `, ${property.state}` : ""} Â·{" "}
                             <T
                               k="home.amenityCount"
                               vars={{ count: property.amenities.length }}
@@ -256,7 +260,7 @@ export default async function HomePage() {
           <p className="mt-3 text-muted-foreground">
             <T
               k="home.featuresSubtitle"
-              fallback="Not a static mockup — every feature below is wired to the live backend API."
+              fallback="Not a static mockup â€” every feature below is wired to the live backend API."
             />
           </p>
         </div>
@@ -364,7 +368,7 @@ export default async function HomePage() {
                     </p>
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    {room.property.title} · {room.property.city}
+                    {room.property.title} Â· {room.property.city}
                   </p>
                   <div className="flex flex-wrap gap-3 pt-1 text-xs text-muted-foreground">
                     {room.bedrooms !== null ? (
@@ -381,7 +385,7 @@ export default async function HomePage() {
                         />
                       </span>
                     ) : null}
-                    {room.area !== null ? <span>{room.area} m²</span> : null}
+                    {room.area !== null ? <span>{room.area} mÂ²</span> : null}
                   </div>
                 </div>
               </Link>
@@ -404,7 +408,7 @@ export default async function HomePage() {
               <p className="max-w-xl text-sm text-muted-foreground">
                 <T
                   k="contact.demo.body"
-                  fallback="The sign-in page has a one-click demo login for all three roles — admin, owner and tenant — using seeded accounts. You will land straight on that role’s dashboard."
+                  fallback="The sign-in page has a one-click demo login for all three roles â€” admin, owner and tenant â€” using seeded accounts. You will land straight on that roleâ€™s dashboard."
                 />
               </p>
               <div className="flex flex-wrap gap-2 pt-1">

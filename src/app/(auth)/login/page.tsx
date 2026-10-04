@@ -1,4 +1,6 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+
+import { localizedMetadata } from "@/lib/i18n/metadata";
 import Link from "next/link";
 
 import { BrandMark } from "@/components/layout/site-chrome";
@@ -9,11 +11,12 @@ import { LoginForm } from "@/components/auth/login-form";
 import { LanguageToggle } from "@/components/brand/language-toggle";
 import { T } from "@/components/common/localized-text";
 
-export const metadata: Metadata = {
-  title: "Sign in",
-  description:
-    "Sign in to NestSpace to book rooms, manage your listings or administer the platform. Demo accounts are available for all three roles.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return localizedMetadata({
+    titleKey: "meta.login.title",
+    descriptionKey: "auth.signInSubtitle",
+  });
+}
 
 export default function LoginPage() {
   return (

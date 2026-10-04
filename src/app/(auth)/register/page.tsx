@@ -2,17 +2,19 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { registerAction } from "@/app/(auth)/actions";
+import { localizedMetadata } from "@/lib/i18n/metadata";
 import { RegisterForm } from "@/components/auth/register-form";
 import { BrandMark } from "@/components/layout/site-chrome";
 import { LanguageToggle } from "@/components/brand/language-toggle";
 import { T } from "@/components/common/localized-text";
 import { Card, CardContent } from "@/components/ui/card";
 
-export const metadata: Metadata = {
-  title: "Create an account",
-  description:
-    "Join NestSpace as a tenant to book rooms, or as an owner to publish listings and manage bookings.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return localizedMetadata({
+    titleKey: "meta.register.title",
+    descriptionKey: "auth.registerTitle",
+  });
+}
 
 export default function RegisterPage() {
   return (

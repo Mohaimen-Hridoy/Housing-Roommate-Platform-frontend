@@ -1,4 +1,6 @@
 ﻿import type { Metadata } from "next";
+
+import { localizedMetadata } from "@/lib/i18n/metadata";
 import Link from "next/link";
 import { Building2, DoorOpen } from "lucide-react";
 
@@ -16,16 +18,13 @@ import { apiDataSafe, apiListSafe } from "@/lib/api/server";
 import { formatNumber } from "@/lib/format";
 import type { ImageAsset, PaginationMeta, PropertyListItem, RoomListItem } from "@/lib/types/api";
 
-export const metadata: Metadata = {
-  title: "Browse properties",
-  description:
-    "Search verified listings and available rooms by city, rent and bedrooms. Every listing is live from the platform API.",
-  openGraph: {
-    title: "Browse properties · NestSpace",
-    description: "Verified homes and shared rooms, filtered by city, rent and size.",
-    url: "/properties",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return localizedMetadata({
+    titleKey: "meta.browse.title",
+    descriptionKey: "browse.subtitle",
+    canonical: "/properties",
+  });
+}
 
 type SearchParams = Record<string, string | string[] | undefined>;
 

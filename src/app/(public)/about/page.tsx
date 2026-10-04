@@ -1,4 +1,6 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+
+import { localizedMetadata } from "@/lib/i18n/metadata";
 import Link from "next/link";
 import {
   CreditCard,
@@ -18,11 +20,13 @@ import { StatsBand } from "@/components/marketing/stats-band";
 import { RoleCard } from "@/components/marketing/role-card";
 import type { Role } from "@/lib/types/api";
 
-export const metadata: Metadata = {
-  title: "About NestSpace",
-  description: `${APP_NAME} is an open, role-based housing and roommate platform built with Next.js 15, TypeScript, Tailwind, and Express + Prisma + PostgreSQL.`,
-  alternates: { canonical: "/about" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return localizedMetadata({
+    titleKey: "about.title",
+    descriptionKey: "about.subtitle",
+    canonical: "/about",
+  });
+}
 
 const STATS = [
   { label: "Roles", labelKey: "about.stat.roles", value: "3" },
@@ -164,8 +168,8 @@ export default async function AboutPage() {
                   index === 1
                     ? `Finding a room or managing a rental portfolio is fragmented. Listings live on marketplaces, payments go through ad-hoc channels, and communication disappears the moment a tenancy ends. ${APP_NAME} brings all of that into one platform.`
                     : index === 2
-                      ? "For tenants, that means verified listings, real-time availability, a structured booking flow, and secure Stripe Checkout payments — no phone calls to confirm a room is still free. For owners, it means a self-service dashboard to publish properties, approve requests, and track occupancy and earnings with computed analytics."
-                      : "The platform is designed around three distinct roles — Tenant, Owner and Admin — so every user sees only what is relevant to them and every action is auditable."
+                      ? "For tenants, that means verified listings, real-time availability, a structured booking flow, and secure Stripe Checkout payments â€” no phone calls to confirm a room is still free. For owners, it means a self-service dashboard to publish properties, approve requests, and track occupancy and earnings with computed analytics."
+                      : "The platform is designed around three distinct roles â€” Tenant, Owner and Admin â€” so every user sees only what is relevant to them and every action is auditable."
                 }
               />
             </p>

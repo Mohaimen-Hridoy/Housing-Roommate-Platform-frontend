@@ -7,7 +7,7 @@ import { LocaleProvider } from "@/components/providers/locale-provider";
 import { LOCALE_COOKIE, localeFromCookie } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getSessionUser } from "@/lib/auth/session";
-import { APP_NAME, APP_TAGLINE } from "@/lib/constants";
+import { getServerTranslator } from "@/lib/i18n/server";
 import { SITE_URL } from "@/lib/config";
 
 import "./globals.css";
@@ -26,39 +26,41 @@ const mono = JetBrains_Mono({
   weight: ["400", "500", "600"],
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: `${APP_NAME} — ${APP_TAGLINE}`,
-    template: `%s · ${APP_NAME}`,
-  },
-  description:
-    "Rent a room, list your property and manage bookings in one place. NestSpace connects tenants with verified property owners through transparent booking and secure Stripe payments.",
-  keywords: [
-    "housing",
-    "roommate",
-    "rental platform",
-    "room booking",
-    "shared housing",
-    "property listing",
-    "Stripe payments",
-  ],
-  authors: [{ name: APP_NAME }],
-  openGraph: {
-    type: "website",
-    siteName: APP_NAME,
-    title: `${APP_NAME} — ${APP_TAGLINE}`,
-    description:
-      "Rent a room, list your property and manage bookings in one place. Transparent booking and secure Stripe payments.",
-    url: SITE_URL,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${APP_NAME} — ${APP_TAGLINE}`,
-    description: "Rent a room, list your property and manage bookings in one place.",
-  },
-  robots: { index: true, follow: true },
-};
+/**
+ * Built per request so the tab title, share cards and search snippets follow the
+ * visitor's language. A static export would pin English metadata for everyone.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getServerTranslator();
+  const name = t("brand.name");
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: t("meta.title", { name }),
+      template: t("meta.titleTemplate", { name }),
+    },
+    description: t("meta.description"),
+    keywords: t("meta.keywords")
+      .split(",")
+      .map((keyword) => keyword.trim())
+      .filter(Boolean),
+    authors: [{ name }],
+    openGraph: {
+      type: "website",
+      siteName: name,
+      title: t("meta.title", { name }),
+      description: t("meta.ogDescription"),
+      url: SITE_URL,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("meta.title", { name }),
+      description: t("meta.twitterDescription"),
+    },
+    robots: { index: true, follow: true },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: [

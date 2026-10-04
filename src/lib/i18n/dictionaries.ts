@@ -695,6 +695,20 @@ const en = {
   /* contact page */
   "language.ariaLabel": "Language: {name}",
   "language.switchTo": "Switch language to {name}",
+  "meta.title": "{name} — Housing & Roommate Platform",
+  "meta.titleTemplate": "%s · {name}",
+  "meta.description":
+    "Rent a room, list your property and manage bookings in one place. NestSpace connects tenants with verified property owners through transparent booking and secure Stripe payments.",
+  "meta.ogDescription":
+    "Rent a room, list your property and manage bookings in one place. Transparent booking and secure Stripe payments.",
+  "meta.twitterDescription": "Rent a room, list your property and manage bookings in one place.",
+  "meta.keywords":
+    "housing, roommate, rental platform, room booking, shared housing, property listing, Stripe payments",
+  "meta.home.title": "Rent a room, list your property",
+  "meta.browse.title": "Browse properties",
+  "meta.login.title": "Sign in",
+  "meta.register.title": "Create an account",
+  "meta.contact.title": "Contact us",
 
   "contact.eyebrow": "Get in touch",
   "contact.title": "Contact us",
@@ -1296,6 +1310,20 @@ const bn: Partial<Record<TranslationKey, string>> = {
   /* contact page */
   "language.ariaLabel": "ভাষা: {name}",
   "language.switchTo": "ভাষা {name}-এ পরিবর্তন করুন",
+  "meta.title": "{name} — হাউসিং ও রুমমেট প্ল্যাটফর্ম",
+  "meta.titleTemplate": "%s · {name}",
+  "meta.description":
+    "এক জায়গায় ঘর ভাড়া নিন, সম্পত্তি তালিকাভুক্ত করুন এবং বুকিং সামলান। NestSpace যাচাই করা মালিকদের সঙ্গে ভাড়াটিয়াদের যুক্ত করে — স্বচ্ছ বুকিং ও নিরাপদ Stripe পেমেন্ট সহ।",
+  "meta.ogDescription":
+    "এক জায়গায় ঘর ভাড়া নিন, সম্পত্তি তালিকাভুক্ত করুন এবং বুকিং সামলান। স্বচ্ছ বুকিং ও নিরাপদ Stripe পেমেন্ট।",
+  "meta.twitterDescription": "এক জায়গায় ঘর ভাড়া নিন, সম্পত্তি তালিকাভুক্ত করুন এবং বুকিং সামলান।",
+  "meta.keywords":
+    "বাড়ি ভাড়া, ঘর ভাড়া, রুমমেট, হাউসিং প্ল্যাটফর্ম, ভাড়ার প্ল্যাটফর্ম, শেয়ার্ড হাউসিং, সম্পত্তি তালিকা, Stripe পেমেন্ট",
+  "meta.home.title": "ঘর ভাড়া নিন, সম্পত্তি তালিকাভুক্ত করুন",
+  "meta.browse.title": "সম্পত্তি ঘুরে দেখুন",
+  "meta.login.title": "লগ ইন",
+  "meta.register.title": "অ্যাকাউন্ট তৈরি করুন",
+  "meta.contact.title": "যোগাযোগ করুন",
 
   "contact.eyebrow": "যোগাযোগ করুন",
   "contact.title": "যোগাযোগ করুন",
