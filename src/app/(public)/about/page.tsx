@@ -14,6 +14,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { PageHeader, SectionHeading } from "@/components/common/page-header";
+import { RevealGroup } from "@/components/brand/reveal-group";
 import { T } from "@/components/common/localized-text";
 import { APP_NAME } from "@/lib/constants";
 import { StatsBand } from "@/components/marketing/stats-band";
@@ -140,7 +141,7 @@ const STACK = [
 
 export default async function AboutPage() {
   return (
-    <div className="container-page space-y-16 py-12 lg:py-16">
+    <RevealGroup className="container-page space-y-16 py-12 lg:py-16" distance={18}>
       <PageHeader
         title="About NestSpace"
         titleKey="about.title"
@@ -268,6 +269,6 @@ export default async function AboutPage() {
         </h2>
         <StatsBand items={STATS} />
       </section>
-    </div>
+    </RevealGroup>
   );
 }

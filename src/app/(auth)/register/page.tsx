@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function RegisterPage() {
   return (
-    <div className="min-h-dvh bg-background">
+    <div className="aurora grain relative min-h-dvh bg-background">
       <div className="container-page py-10">
         <div className="mb-8 flex items-center justify-between">
           <BrandMark />

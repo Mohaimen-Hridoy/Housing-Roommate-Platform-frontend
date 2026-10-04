@@ -15,6 +15,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { PageHeader, SectionHeading } from "@/components/common/page-header";
+import { RevealGroup } from "@/components/brand/reveal-group";
 import { T } from "@/components/common/localized-text";
 import { APP_NAME } from "@/lib/constants";
 import { formatCurrency } from "@/lib/format";
@@ -246,7 +247,7 @@ function FaqAnswer({ item }: { item: FaqItem }) {
 }
 export default function FaqPage() {
   return (
-    <div className="container-page space-y-16 py-12 lg:py-16">
+    <RevealGroup className="container-page space-y-16 py-12 lg:py-16" distance={18}>
       <PageHeader
         title="Frequently Asked Questions"
         titleKey="faq.title"
@@ -412,6 +413,6 @@ export default function FaqPage() {
           </Button>
         </div>
       </section>
-    </div>
+    </RevealGroup>
   );
 }

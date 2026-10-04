@@ -141,7 +141,10 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/65">
+      {/* Hairline that only appears once the page has scrolled away from the
+          top, so the header sits flush on the hero and gains an edge after. */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/25 to-transparent" aria-hidden="true" />
       <div className="container-page flex h-16 items-center justify-between gap-4">
         <BrandMark />
 
@@ -154,8 +157,11 @@ export function SiteHeader() {
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                  active ? "bg-secondary text-foreground" : "text-muted-foreground hover:text-foreground",
+                  "relative rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                  "after:absolute after:inset-x-3 after:-bottom-px after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-primary after:transition-transform after:duration-300 after:ease-out-expo hover:after:scale-x-100",
+                  active
+                    ? "text-foreground after:scale-x-100"
+                    : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 {t(item.labelKey)}
