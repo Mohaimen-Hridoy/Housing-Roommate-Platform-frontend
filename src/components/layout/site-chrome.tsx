@@ -75,7 +75,7 @@ export function BrandMark({ className }: { className?: string }) {
         <span className="font-display text-[1.0625rem] font-semibold tracking-tight text-foreground">
           Nest<span className="text-primary">Space</span>
         </span>
-        <span className="mt-1 text-[0.5625rem] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+        <span className="mt-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           {t("brand.tagline")}
         </span>
       </span>
@@ -328,7 +328,7 @@ export function SiteFooter() {
           </p>
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center gap-2 rounded-full border border-border/80 bg-background/80 px-2.5 py-1 shadow-xs backdrop-blur-sm">
-              <span className="text-[0.6875rem] font-medium text-muted-foreground">Theme</span>
+              <span className="text-xs font-medium text-muted-foreground">Theme</span>
               <ThemeToggle />
             </div>
             <p>{t("footer.stripeNote")}</p>

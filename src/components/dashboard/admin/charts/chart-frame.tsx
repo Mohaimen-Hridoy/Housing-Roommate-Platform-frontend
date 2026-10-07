@@ -58,7 +58,7 @@ export function ChartFrame({
           <CardTitle className="text-base font-semibold leading-tight tracking-tight text-foreground">{title}</CardTitle>
           {description ? <CardDescription className="text-xs leading-relaxed text-muted-foreground">{description}</CardDescription> : null}
         </div>
-        <span className="flex items-center gap-1.5 rounded-full border border-border/60 bg-secondary/50 px-2 py-0.5 text-[0.625rem] font-medium text-muted-foreground">
+        <span className="flex items-center gap-1.5 rounded-full border border-border/80 bg-secondary px-2.5 py-0.5 text-xs font-semibold text-secondary-foreground">
           <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
           Live
         </span>

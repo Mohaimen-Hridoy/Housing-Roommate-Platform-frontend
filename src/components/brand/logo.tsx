@@ -56,7 +56,7 @@ export function LogoLockup({
         <span className="font-display text-lg font-semibold tracking-tight text-foreground">
           Nest<span className="text-primary">Space</span>
         </span>
-        <span className="mt-0.5 text-[0.625rem] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+        <span className="mt-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           Homes&nbsp;&amp;&nbsp;rooms
         </span>
       </span>

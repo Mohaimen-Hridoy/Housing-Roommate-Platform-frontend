@@ -89,21 +89,21 @@ export function NeighborhoodsSection() {
 
               {/* Top badge */}
               <div className="absolute left-3 top-3">
-                <span className="rounded-full border border-white/20 bg-black/40 px-2.5 py-0.5 text-[0.6875rem] font-medium text-white backdrop-blur-md">
+                <span className="rounded-full border border-white/20 bg-black/50 px-2.5 py-0.5 text-xs font-semibold text-white backdrop-blur-md drop-shadow-sm">
                   {item.featuredBadge}
                 </span>
               </div>
 
               {/* Bottom content */}
               <div className="absolute inset-x-4 bottom-4 text-white">
-                <p className="flex items-center gap-1 text-xs font-medium text-emerald-300">
+                <p className="flex items-center gap-1 text-xs font-semibold text-emerald-300 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                   <MapPin className="size-3" />
                   {item.city}
                 </p>
-                <h3 className="mt-1 text-lg font-bold tracking-tight text-white group-hover:text-emerald-200 transition-colors">
+                <h3 className="mt-1 text-lg font-bold tracking-tight text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] group-hover:text-emerald-200 transition-colors">
                   {item.name}
                 </h3>
-                <div className="mt-2 flex items-center justify-between text-xs text-white/80">
+                <div className="mt-2 flex items-center justify-between text-xs font-medium text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                   <span>{item.listingsCount}</span>
                   <span className="inline-flex items-center gap-1 font-semibold text-white group-hover:translate-x-0.5 transition-transform">
                     Explore

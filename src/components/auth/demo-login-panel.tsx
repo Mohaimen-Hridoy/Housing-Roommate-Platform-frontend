@@ -51,13 +51,13 @@ export function DemoLoginPanel({ action }: DemoLoginPanelProps) {
             <h3 className="text-sm font-semibold tracking-tight text-foreground">
               {t("auth.demoTitle2") || "1-Click Demo Login"}
             </h3>
-            <p className="text-[0.6875rem] text-muted-foreground">
+            <p className="text-xs font-medium text-muted-foreground">
               {t("auth.demoBadge") || "For Evaluator Review"} · No password required
             </p>
           </div>
         </div>
 
-        <Badge variant="accent" className="text-[0.625rem]">
+        <Badge variant="accent" className="text-xs font-semibold">
           Seeded Roles
         </Badge>
       </div>
@@ -86,7 +86,7 @@ export function DemoLoginPanel({ action }: DemoLoginPanelProps) {
                   </span>
                   <p className="text-xs font-semibold text-foreground">{roleLabel}</p>
                 </div>
-                <p className="truncate text-[0.6875rem] text-muted-foreground">{account.email}</p>
+                <p className="truncate text-xs font-medium text-muted-foreground">{account.email}</p>
               </div>
 
               <Button

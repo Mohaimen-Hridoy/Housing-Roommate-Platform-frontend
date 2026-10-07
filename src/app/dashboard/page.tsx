@@ -179,7 +179,7 @@ export default async function TenantOverviewPage() {
                               {formatDate(booking.endDate, "d MMM yyyy")}
                             </p>
                             <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                              <Badge variant="secondary" className="text-[0.625rem] font-medium px-1.5 py-0">
+                              <Badge variant="secondary" className="text-xs font-medium px-2 py-0.5">
                                 {nights} night{nights === 1 ? "" : "s"}
                               </Badge>
                               <span>·</span>
@@ -196,7 +196,7 @@ export default async function TenantOverviewPage() {
                             {booking.payment ? (
                               <PaymentStatusBadge status={booking.payment.status} />
                             ) : (
-                              <span className="flex items-center gap-1 rounded-md bg-secondary/60 px-2 py-0.5 text-[0.6875rem] font-medium text-muted-foreground">
+                              <span className="flex items-center gap-1 rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground">
                                 <CreditCard className="size-3" aria-hidden="true" />
                                 Unpaid
                               </span>

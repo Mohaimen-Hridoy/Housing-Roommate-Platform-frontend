@@ -13,11 +13,10 @@ export type Locale = (typeof LOCALES)[number];
 /**
  * Locale used when the visitor has not chosen one.
  *
- * Bangla is the default: the product targets Bangladesh (BDT pricing, seeded
- * Bangla-first content), so a first-time visitor should land on Bangla and be
- * able to switch to English rather than the other way round.
+ * English is the default: provides clean international presentation by
+ * default, while Bangla is instantly selectable via the language toggle.
  */
-export const DEFAULT_LOCALE: Locale = "bn";
+export const DEFAULT_LOCALE: Locale = "en";
 
 export const LOCALE_LABEL: Record<Locale, string> = {
   en: "EN",

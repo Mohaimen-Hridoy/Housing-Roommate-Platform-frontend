@@ -143,7 +143,7 @@ type-checked, and readable in one file.
 | Piece | Where | Why |
 |---|---|---|
 | Dictionaries | `src/lib/i18n/dictionaries.ts` | `en` is the source of truth; `bn` is typed as a full mirror of it |
-| Default locale | `DEFAULT_LOCALE` in the same file | `bn` — the product targets Bangladesh, so a first-time visitor lands on Bangla |
+| Default locale | `DEFAULT_LOCALE` in the same file | `en` by default with instant 1-click toggle to `bn` (Bangla) |
 | Cookie | `hsg_locale`, via `src/lib/i18n/locale.ts` | Readable by the server, so the **first paint** is already correct |
 | Server Components | `getServerTranslator()` in `src/lib/i18n/server.ts` | Correct copy for crawlers and no client-side flash |
 | Client Components | `useTranslation()` / `<T k="…">` | Reads the live locale from `LocaleProvider` |

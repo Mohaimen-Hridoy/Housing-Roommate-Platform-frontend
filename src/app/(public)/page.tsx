@@ -153,7 +153,7 @@ export default async function HomePage() {
             </Reveal>
 
             <Reveal distance={20} delay={0.12}>
-              <p className="max-w-xl text-base leading-relaxed text-muted-foreground/90 sm:text-lg">
+              <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
                 <T
                   k="home.subtitle"
                   vars={{ app: APP_NAME }}

@@ -59,7 +59,7 @@ export function DashboardShell({ sections, areaLabel, areaLabelKey, children }: 
           const sectionTitle = section.titleKey ? t(section.titleKey) : section.title;
           return (
           <div key={section.titleKey ?? section.title} className="space-y-1">
-            <p className="px-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            <p className="px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               {sectionTitle === section.titleKey ? section.title : sectionTitle}
             </p>
             {section.items.map((item) => {
@@ -84,7 +84,7 @@ export function DashboardShell({ sections, areaLabel, areaLabelKey, children }: 
                     {label === item.labelKey ? item.label : label}
                   </span>
                   {item.badge ? (
-                    <span className="rounded-full bg-primary/12 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
+                    <span className="rounded-full bg-primary/15 px-2 py-0.5 text-xs font-semibold text-primary">
                       {item.badge}
                     </span>
                   ) : null}

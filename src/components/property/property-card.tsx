@@ -65,13 +65,13 @@ export function PropertyCard({ property, image }: PropertyCardProps) {
 
         {/* Bottom image overlay with location & photo count indicator */}
         <div className="absolute inset-x-3 bottom-2.5 z-10 flex items-center justify-between text-white">
-          <p className="flex items-center gap-1 text-xs font-medium drop-shadow-sm">
+          <p className="flex items-center gap-1 text-xs font-semibold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
             <MapPin className="size-3 text-emerald-400" aria-hidden="true" />
             <span className="truncate max-w-[160px]">{property.city}</span>
           </p>
 
-          <span className="flex items-center gap-1 rounded-full bg-black/40 px-2 py-0.5 text-[0.625rem] font-medium backdrop-blur-md">
-            <Sparkles className="size-2.5 text-amber-400" />
+          <span className="flex items-center gap-1 rounded-full bg-black/50 px-2.5 py-0.5 text-xs font-semibold backdrop-blur-md drop-shadow-sm">
+            <Sparkles className="size-3 text-amber-400" />
             Verified
           </span>
         </div>
@@ -84,7 +84,7 @@ export function PropertyCard({ property, image }: PropertyCardProps) {
             {property.title}
           </h3>
 
-          <p className="mt-1 text-xs text-muted-foreground line-clamp-1">{location}</p>
+          <p className="mt-1 text-xs font-medium text-muted-foreground line-clamp-1">{location}</p>
         </div>
 
         {/* Price & availability */}
@@ -92,7 +92,7 @@ export function PropertyCard({ property, image }: PropertyCardProps) {
           <div>
             <p className="text-lg font-bold tabular-nums text-primary">
               From {formatCurrency(rentRoom.rent, rentRoom.currency)}
-              <span className="ml-0.5 text-xs font-normal text-muted-foreground">/mo</span>
+              <span className="ml-1 text-xs font-normal text-muted-foreground">/mo</span>
             </p>
           </div>
         ) : null}
@@ -101,12 +101,12 @@ export function PropertyCard({ property, image }: PropertyCardProps) {
         {amenities.length > 0 ? (
           <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
             {shownAmenities.map((amenity) => (
-              <Badge key={amenity.id} variant="secondary" className="text-[0.6875rem] font-medium px-2 py-0.5">
+              <Badge key={amenity.id} variant="secondary" className="text-xs font-medium px-2 py-0.5">
                 {amenity.name}
               </Badge>
             ))}
             {hiddenAmenityCount > 0 ? (
-              <span className="text-[0.6875rem] text-muted-foreground font-medium">
+              <span className="text-xs text-muted-foreground font-semibold">
                 +{hiddenAmenityCount}
               </span>
             ) : null}

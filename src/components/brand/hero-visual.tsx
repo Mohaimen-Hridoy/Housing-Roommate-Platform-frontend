@@ -43,18 +43,18 @@ export function HeroVisual({ className }: { className?: string }) {
           <div className="absolute inset-x-4 bottom-4 text-white">
             <div className="flex items-end justify-between">
               <div>
-                <p className="flex items-center gap-1.5 text-xs font-medium text-white/80">
+                <p className="flex items-center gap-1.5 text-xs font-semibold text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
                   <MapPin className="size-3.5 text-emerald-400" />
                   Gulshan 2, Dhaka
                 </p>
-                <h3 className="mt-0.5 text-lg font-bold tracking-tight text-white sm:text-xl">
+                <h3 className="mt-0.5 text-lg font-bold tracking-tight text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] sm:text-xl">
                   Skyline Terrace Suite
                 </h3>
               </div>
               <div className="text-right">
-                <p className="text-xl font-bold tracking-tight text-white tabular-nums sm:text-2xl">
+                <p className="text-xl font-bold tracking-tight text-white tabular-nums drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] sm:text-2xl">
                   ৳24,500
-                  <span className="text-xs font-normal text-white/80">/mo</span>
+                  <span className="ml-1 text-xs font-normal text-white/90">/mo</span>
                 </p>
               </div>
             </div>
@@ -62,13 +62,13 @@ export function HeroVisual({ className }: { className?: string }) {
         </div>
 
         {/* Card footer specs row */}
-        <div className="flex items-center justify-between px-3 py-3 text-xs text-muted-foreground">
+        <div className="flex items-center justify-between px-3 py-3 text-xs font-medium text-muted-foreground">
           <div className="flex items-center gap-4">
             <span>2 Bed · 2 Bath</span>
             <span>·</span>
             <span>1,150 sqft</span>
           </div>
-          <span className="flex items-center gap-1 font-medium text-primary">
+          <span className="flex items-center gap-1 font-semibold text-primary">
             <Zap className="size-3.5 text-amber-500" />
             Fast move-in
           </span>
@@ -83,9 +83,9 @@ export function HeroVisual({ className }: { className?: string }) {
         <div>
           <div className="flex items-center gap-1">
             <span className="text-sm font-bold text-foreground">4.9</span>
-            <span className="text-xs text-muted-foreground">(1,240+ reviews)</span>
+            <span className="text-xs font-medium text-muted-foreground">(1,240+ reviews)</span>
           </div>
-          <p className="text-[0.6875rem] font-medium text-primary">Superhost Approved</p>
+          <p className="text-xs font-semibold text-primary">Superhost Approved</p>
         </div>
       </div>
 
@@ -116,7 +116,7 @@ export function HeroVisual({ className }: { className?: string }) {
         </div>
         <div>
           <p className="text-xs font-semibold text-foreground">3,800+ Roommates</p>
-          <p className="text-[0.6875rem] text-muted-foreground">Connected this month</p>
+          <p className="text-xs font-medium text-muted-foreground">Connected this month</p>
         </div>
       </div>
     </div>

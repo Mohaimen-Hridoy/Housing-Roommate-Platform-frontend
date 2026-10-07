@@ -40,11 +40,11 @@ export function HeroSearch() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t("browse.searchPlaceholder") || "City, neighborhood or landmark..."}
-            className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground/70 focus:outline-none"
+            className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
             aria-label="Search destination"
           />
         </div>
-        <Button type="submit" size="sm" className="h-10 shrink-0 gap-1.5 rounded-xl px-4 font-medium shadow-md">
+        <Button type="submit" size="sm" className="h-10 shrink-0 gap-1.5 rounded-xl px-4 font-semibold shadow-md">
           <Search className="size-3.5" aria-hidden="true" />
           <span>{t("common.search") || "Search"}</span>
         </Button>
@@ -52,7 +52,7 @@ export function HeroSearch() {
 
       {/* Quick location chips */}
       <div className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
-        <span className="font-medium text-foreground/80">{t("common.popular") || "Popular"}:</span>
+        <span className="font-semibold text-foreground">{t("common.popular") || "Popular"}:</span>
         {POPULAR_LOCATIONS.map((loc) => (
           <button
             key={loc}

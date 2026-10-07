@@ -50,7 +50,7 @@ export function TrustBand() {
                     <h4 className="text-sm font-semibold tracking-tight text-foreground">
                       <T k={pillar.titleKey} fallback={pillar.title} />
                     </h4>
-                    <p className="text-xs leading-relaxed text-muted-foreground">
+                    <p className="text-xs sm:text-[0.8125rem] font-normal leading-relaxed text-muted-foreground">
                       <T k={pillar.descriptionKey} fallback={pillar.description} />
                     </p>
                   </div>

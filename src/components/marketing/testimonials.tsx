@@ -79,12 +79,12 @@ export function TestimonialsSection() {
                       <Star key={i} className="size-4 fill-amber-400 text-amber-400" aria-hidden="true" />
                     ))}
                   </div>
-                  <Badge variant="secondary" className="text-[0.6875rem] font-medium text-primary">
+                  <Badge variant="secondary" className="text-xs font-semibold text-primary">
                     {item.highlight}
                   </Badge>
                 </div>
 
-                <p className="text-sm leading-relaxed text-foreground/90">
+                <p className="text-sm leading-relaxed text-foreground">
                   &ldquo;{item.quote}&rdquo;
                 </p>
               </div>
@@ -98,7 +98,7 @@ export function TestimonialsSection() {
                     {item.name}
                     <CheckCircle2 className="size-3.5 shrink-0 text-success" aria-label="Verified user" />
                   </p>
-                  <p className="truncate text-xs text-muted-foreground">
+                  <p className="truncate text-xs font-medium text-muted-foreground">
                     {item.role} · {item.location}
                   </p>
                 </div>

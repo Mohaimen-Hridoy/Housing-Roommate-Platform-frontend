@@ -69,15 +69,15 @@ export function AuthVisualPanel({
               {authorName}
               <CheckCircle2 className="size-3.5 text-emerald-400" />
             </p>
-            <p className="text-xs text-white/70">{authorRole}</p>
+            <p className="text-xs font-medium text-white/95 drop-shadow-sm">{authorRole}</p>
           </div>
         </div>
 
         {/* Trust bullet pills */}
-        <div className="flex flex-wrap gap-2 pt-1 text-xs text-white/80">
-          <span className="rounded-md bg-white/10 px-2.5 py-1 backdrop-blur-sm">⚡ Instant Booking</span>
-          <span className="rounded-md bg-white/10 px-2.5 py-1 backdrop-blur-sm">🔒 Stripe Escrow</span>
-          <span className="rounded-md bg-white/10 px-2.5 py-1 backdrop-blur-sm">🚫 Zero Broker Markup</span>
+        <div className="flex flex-wrap gap-2 pt-1 text-xs font-medium text-white">
+          <span className="rounded-md border border-white/20 bg-black/40 px-2.5 py-1 backdrop-blur-md drop-shadow-sm">⚡ Instant Booking</span>
+          <span className="rounded-md border border-white/20 bg-black/40 px-2.5 py-1 backdrop-blur-md drop-shadow-sm">🔒 Stripe Escrow</span>
+          <span className="rounded-md border border-white/20 bg-black/40 px-2.5 py-1 backdrop-blur-md drop-shadow-sm">🚫 Zero Broker Markup</span>
         </div>
       </div>
     </div>

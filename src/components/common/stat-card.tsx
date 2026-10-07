@@ -70,10 +70,10 @@ export function StatCard({ label, value, icon: Icon, tone = "default", hint, tre
         {trend ? (
           <span
             className={cn(
-              "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[0.6875rem] font-semibold tabular-nums shrink-0",
+              "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold tabular-nums shrink-0",
               trend.positive !== false
-                ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                : "bg-rose-500/10 text-rose-600 dark:text-rose-400",
+                ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
+                : "bg-rose-500/15 text-rose-700 dark:text-rose-300",
             )}
           >
             {trend.positive !== false ? (
