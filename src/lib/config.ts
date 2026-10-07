@@ -1,12 +1,15 @@
 /** Server-only configuration for talking to the B7A6 backend. */
-const rawBase = process.env.API_BASE_URL ?? "http://localhost:4000";
+const rawBase =
+  process.env.API_BASE_URL ||
+  process.env.NEXT_PUBLIC_API_BASE_URL ||
+  "https://housing-roommate-platform-backend.vercel.app";
 
 export const API_BASE_URL = rawBase.replace(/\/+$/, "");
 
 export const API_PREFIX = "/api/v1";
 
-/** Absolute base of the versioned API, e.g. `http://localhost:4000/api/v1`. */
-export const API_URL = `${API_BASE_URL}${API_PREFIX}`;
+/** Absolute base of the versioned API, e.g. `https://housing-roommate-platform-backend.vercel.app/api/v1`. */
+export const API_URL = `${API_BASE_URL}${API_PREFIX}`.replace(/\/+$/, "");
 
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/+$/, "");
 

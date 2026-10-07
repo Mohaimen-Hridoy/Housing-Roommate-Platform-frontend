@@ -123,7 +123,8 @@ async function performRequest<T>(
   // Next.js data cache. Only anonymous reads may be revalidated/cached.
   const isCacheable = method === "GET" && !token && options.revalidate !== false;
 
-  const response = await fetch(`${API_URL}${path}${buildQuery(options.query)}`, {
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  const response = await fetch(`${API_URL}${normalizedPath}${buildQuery(options.query)}`, {
     method,
     headers,
     body,
@@ -203,10 +204,28 @@ export async function apiList<T>(
   path: string,
   options: ApiRequestOptions = {},
 ): Promise<Paginated<T>> {
-  const result = await apiRequest<T[]>(path, options);
+  const result = await apiRequest<unknown>(path, options);
+  let items: T[] = [];
+  let pagination: PaginationMeta = result.meta?.pagination ?? EMPTY_PAGINATION;
+
+  if (Array.isArray(result.data)) {
+    items = result.data as T[];
+  } else if (
+    result.data &&
+    typeof result.data === "object" &&
+    "items" in result.data &&
+    Array.isArray((result.data as { items: unknown }).items)
+  ) {
+    items = (result.data as { items: T[] }).items;
+    const candidatePagination = (result.data as { pagination?: PaginationMeta }).pagination;
+    if (candidatePagination) {
+      pagination = candidatePagination;
+    }
+  }
+
   return {
-    items: result.data ?? [],
-    pagination: result.meta?.pagination ?? EMPTY_PAGINATION,
+    items,
+    pagination,
   };
 }
 
