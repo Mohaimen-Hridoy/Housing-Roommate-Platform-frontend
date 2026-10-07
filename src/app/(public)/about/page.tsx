@@ -254,8 +254,8 @@ export default async function AboutPage() {
             </Link>
           </Button>
           <Button asChild variant="outline">
-            <Link href="/login#demo">
-              <T k="action.tryDemo" fallback="Try the demo" />
+            <Link href="/properties">
+              <T k="home.ctaBrowse" fallback="Browse properties" />
             </Link>
           </Button>
         </div>

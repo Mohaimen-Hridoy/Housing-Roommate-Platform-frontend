@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Bath, BedDouble, Maximize, MapPin } from "lucide-react";
+import { Bath, BedDouble, ChevronRight, Maximize, MapPin } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { SmartImage } from "@/components/common/smart-image";
@@ -14,8 +14,8 @@ interface RoomCardProps {
 
 function Spec({ icon: Icon, children }: { icon: typeof BedDouble; children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-      <Icon className="size-3.5 shrink-0" aria-hidden="true" />
+    <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary/70 px-2 py-1 text-xs font-medium text-secondary-foreground transition-colors group-hover:bg-secondary">
+      <Icon className="size-3.5 shrink-0 text-primary" aria-hidden="true" />
       {children}
     </span>
   );
@@ -33,9 +33,9 @@ export function RoomCard({ room, image }: RoomCardProps) {
     <Link
       href={`/properties/${room.propertyId}`}
       aria-label={`View ${property?.title ?? "property"} details for room ${room.title}`}
-      className="interactive-surface group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card text-card-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      className="interactive-surface glow-ring group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card text-card-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
     >
-      <div className="relative aspect-[16/10] w-full bg-muted">
+      <div className="image-zoom relative aspect-[16/10] w-full bg-muted">
         <SmartImage
           image={image}
           alt={room.title}
@@ -45,27 +45,35 @@ export function RoomCard({ room, image }: RoomCardProps) {
         <span className="absolute left-3 top-3 z-10">
           <RoomStatusBadge status={room.status} />
         </span>
+        <span
+          className="absolute inset-0 bg-gradient-to-t from-primary/25 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          aria-hidden="true"
+        />
       </div>
 
       <div className="flex flex-1 flex-col gap-3 p-5">
         {property ? (
           <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <MapPin className="size-3.5 shrink-0" aria-hidden="true" />
+            <MapPin className="size-3.5 shrink-0 text-primary" aria-hidden="true" />
             <span className="truncate">
               {property.title} · {property.city}
             </span>
           </p>
         ) : null}
 
-        <h3 className="text-base font-semibold group-hover:text-primary">{room.title}</h3>
+        <h3 className="text-base font-semibold transition-colors group-hover:text-primary">
+          {room.title}
+        </h3>
 
         {room.description ? (
-          <p className="line-clamp-2 text-sm text-muted-foreground">{room.description}</p>
+          <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+            {room.description}
+          </p>
         ) : null}
 
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
+        <div className="flex flex-wrap items-center gap-1.5 pt-1">
           {room.bedrooms !== null ? (
-            <Spec icon={BedDouble}>{room.bedrooms} bedroom{room.bedrooms === 1 ? "" : "s"}</Spec>
+            <Spec icon={BedDouble}>{room.bedrooms} bed{room.bedrooms === 1 ? "" : "s"}</Spec>
           ) : null}
           {room.bathrooms !== null ? <Spec icon={Bath}>{room.bathrooms} bath</Spec> : null}
           {room.area !== null ? (
@@ -79,15 +87,23 @@ export function RoomCard({ room, image }: RoomCardProps) {
           </Badge>
         ) : null}
 
-        <p className="mt-auto pt-2 text-base font-semibold tabular-nums text-primary">
-          {formatCurrency(room.rent, room.currency)}
-          <span className="text-xs font-normal text-muted-foreground">/mo</span>
-          {room.deposit ? (
-            <span className="ml-2 text-xs font-normal text-muted-foreground">
-              {formatCurrency(room.deposit, room.currency)} deposit
-            </span>
-          ) : null}
-        </p>
+        <div className="mt-auto flex items-center justify-between border-t border-border/60 pt-3">
+          <div>
+            <p className="text-lg font-bold tabular-nums text-primary">
+              {formatCurrency(room.rent, room.currency)}
+              <span className="ml-0.5 text-xs font-normal text-muted-foreground">/mo</span>
+            </p>
+            {room.deposit ? (
+              <p className="text-xs text-muted-foreground">
+                {formatCurrency(room.deposit, room.currency)} deposit
+              </p>
+            ) : null}
+          </div>
+          <span className="inline-flex items-center gap-1 text-xs font-medium text-primary transition-transform duration-200 group-hover:translate-x-0.5">
+            Details
+            <ChevronRight className="size-3.5" aria-hidden="true" />
+          </span>
+        </div>
       </div>
     </Link>
   );

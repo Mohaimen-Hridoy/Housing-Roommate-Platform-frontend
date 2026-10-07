@@ -19,30 +19,33 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function RegisterPage() {
   return (
     <div className="aurora grain relative min-h-dvh bg-background">
-      <div className="container-page py-10">
+      <div className="container-page py-8 lg:py-12">
         <div className="mb-8 flex items-center justify-between">
           <BrandMark />
           <LanguageToggle />
         </div>
 
-        <Card className="mx-auto w-full max-w-2xl">
-          <CardContent className="p-6 sm:p-8">
-            <div className="mb-6 space-y-1.5">
-              <h1 className="text-2xl font-semibold tracking-tight">
-                <T k="auth.registerTitle" fallback="Create your account" />
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                <T k="auth.haveAccount" fallback="Already registered?" />{" "}
-                <Link href="/login" className="font-medium text-primary underline-offset-4 hover:underline">
-                  <T k="action.signIn" fallback="Sign in instead" />
-                </Link>
-              </p>
-            </div>
+        <div className="mx-auto w-full max-w-2xl">
+          <Card className="surface-raised edge-light shadow-2xl">
+            <CardContent className="p-6 sm:p-10">
+              <div className="mb-6 space-y-1.5">
+                <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+                  <T k="auth.registerTitle" fallback="Create your account" />
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                  <T k="auth.haveAccount" fallback="Already registered?" />{" "}
+                  <Link href="/login" className="font-medium text-primary underline-offset-4 hover:underline">
+                    <T k="action.signIn" fallback="Sign in instead" />
+                  </Link>
+                </p>
+              </div>
 
-            <RegisterForm action={registerAction} />
-          </CardContent>
-        </Card>
+              <RegisterForm action={registerAction} />
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
 }
+

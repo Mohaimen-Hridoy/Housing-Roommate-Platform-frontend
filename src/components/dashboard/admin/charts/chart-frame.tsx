@@ -52,10 +52,16 @@ export function ChartFrame({
   children,
 }: ChartFrameProps) {
   return (
-    <Card className="flex h-full flex-col">
-      <CardHeader className="space-y-1 pb-3">
-        <CardTitle className="text-base leading-tight">{title}</CardTitle>
-        {description ? <CardDescription className="text-xs leading-relaxed">{description}</CardDescription> : null}
+    <Card className="surface-raised edge-light relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/80 bg-card shadow-xs transition-shadow duration-300 hover:shadow-md">
+      <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-3">
+        <div className="space-y-1">
+          <CardTitle className="text-base font-semibold leading-tight tracking-tight text-foreground">{title}</CardTitle>
+          {description ? <CardDescription className="text-xs leading-relaxed text-muted-foreground">{description}</CardDescription> : null}
+        </div>
+        <span className="flex items-center gap-1.5 rounded-full border border-border/60 bg-secondary/50 px-2 py-0.5 text-[0.625rem] font-medium text-muted-foreground">
+          <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          Live
+        </span>
       </CardHeader>
       <CardContent className="flex-1 pt-0">
         {isEmpty ? (

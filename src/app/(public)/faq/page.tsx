@@ -395,7 +395,7 @@ export default function FaqPage() {
           <p className="max-w-xl text-sm text-muted-foreground">
             <T
               k="faq.helpBody"
-              fallback="Browse the full FAQ above or get in touch. If you want to explore the platform first, the demo login gives you instant access to any role."
+              fallback="Browse the full FAQ above or get in touch. Browse available listings or create an account to get started."
             />
           </p>
         </div>
@@ -407,8 +407,8 @@ export default function FaqPage() {
             </Link>
           </Button>
           <Button asChild variant="outline">
-            <Link href="/login#demo">
-              <T k="auth.openDemoLogin" fallback="Open demo login" />
+            <Link href="/properties">
+              <T k="home.ctaBrowse" fallback="Browse properties" />
             </Link>
           </Button>
         </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { Rocket, ShieldCheck, UserRound } from "lucide-react";
+import { Building2, Rocket, ShieldCheck, Sparkles } from "lucide-react";
 
 import type { ActionState } from "@/app/(auth)/actions";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -13,7 +13,7 @@ import type { Role } from "@/lib/types/api";
 
 const ROLE_ICON: Record<Role, typeof ShieldCheck> = {
   ADMIN: ShieldCheck,
-  OWNER: UserRound,
+  OWNER: Building2,
   TENANT: Rocket,
 };
 
@@ -22,9 +22,8 @@ interface DemoLoginPanelProps {
 }
 
 /**
- * Mandatory one-click demo login. Each seeded role signs in immediately and is
- * redirected to its own dashboard, so evaluators can test role-based UI without
- * typing credentials.
+ * Mandatory assignment requirement: One-click demo login for all 3 roles
+ * (Admin, Owner, Tenant) allowing evaluators to immediately access role dashboards.
  */
 export function DemoLoginPanel({ action }: DemoLoginPanelProps) {
   const t = useTranslation();
@@ -39,64 +38,72 @@ export function DemoLoginPanel({ action }: DemoLoginPanelProps) {
   }
 
   return (
-    <div id="demo" className="space-y-5 rounded-xl border border-border bg-card p-6 shadow-sm sm:p-8">
-      <div className="space-y-2 text-center">
-        <Badge variant="accent">{t("auth.demoBadge")}</Badge>
-        <h2 className="text-xl font-semibold tracking-tight">{t("auth.demoTitle2")}</h2>
-        <p className="text-sm text-muted-foreground">{t("auth.demoBody")}</p>
+    <div
+      id="demo"
+      className="surface-raised edge-light relative overflow-hidden rounded-2xl border border-border/80 bg-card/90 p-5 shadow-lg backdrop-blur-sm sm:p-6"
+    >
+      <div className="mb-4 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="flex size-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <Sparkles className="size-4" />
+          </span>
+          <div>
+            <h3 className="text-sm font-semibold tracking-tight text-foreground">
+              {t("auth.demoTitle2") || "1-Click Demo Login"}
+            </h3>
+            <p className="text-[0.6875rem] text-muted-foreground">
+              {t("auth.demoBadge") || "For Evaluator Review"} · No password required
+            </p>
+          </div>
+        </div>
+
+        <Badge variant="accent" className="text-[0.625rem]">
+          Seeded Roles
+        </Badge>
       </div>
 
       {state.status === "error" && state.message ? (
-        <Alert variant="destructive">
+        <Alert variant="destructive" className="mb-4">
           <AlertDescription>{state.message}</AlertDescription>
         </Alert>
       ) : null}
 
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid gap-2.5 sm:grid-cols-3">
         {DEMO_ACCOUNTS.map((account) => {
           const Icon = ROLE_ICON[account.role];
           const busy = isPending && loadingRole === account.role;
-          const roleLabel = t(`auth.role.${account.role.toLowerCase()}`);
+          const roleLabel = t(`auth.role.${account.role.toLowerCase()}`) || account.label;
+
           return (
             <div
               key={account.role}
-              className="flex flex-col gap-3 rounded-lg border border-border bg-background p-4 transition-colors hover:border-primary/40"
+              className="group flex flex-col justify-between rounded-xl border border-border/70 bg-background/70 p-3 transition-all duration-200 hover:border-primary/50 hover:bg-background"
             >
-              <div className="flex items-center gap-2">
-                <span className="flex size-8 items-center justify-center rounded-md bg-primary/10 text-primary">
-                  <Icon className="size-4" aria-hidden="true" />
-                </span>
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold">{roleLabel}</p>
-                  <p className="truncate text-xs text-muted-foreground">{account.email}</p>
+              <div className="space-y-1">
+                <div className="flex items-center gap-1.5">
+                  <span className="flex size-6 items-center justify-center rounded-md bg-primary/10 text-primary">
+                    <Icon className="size-3.5" aria-hidden="true" />
+                  </span>
+                  <p className="text-xs font-semibold text-foreground">{roleLabel}</p>
                 </div>
+                <p className="truncate text-[0.6875rem] text-muted-foreground">{account.email}</p>
               </div>
-
-              <p className="text-xs leading-relaxed text-muted-foreground">
-                {t(`auth.demoDesc.${account.role.toLowerCase()}`)}
-              </p>
 
               <Button
                 type="button"
                 size="sm"
-                className="mt-auto w-full"
+                variant="outline"
+                className="mt-2.5 h-8 w-full text-xs font-medium shadow-2xs group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
                 loading={busy}
                 disabled={isPending}
                 onClick={() => handleDemoClick(account.role)}
               >
-                {t("auth.demoLoginAs", { role: roleLabel })}
+                Log in as {roleLabel}
               </Button>
             </div>
           );
         })}
       </div>
-
-      <p className="text-center text-xs text-muted-foreground">
-        {t("auth.demoSeed")}{" "}
-        <code className="rounded bg-muted px-1 py-0.5">npm run db:seed</code>.{" "}
-        {t("auth.demoPattern")}{" "}
-        <code className="rounded bg-muted px-1 py-0.5">Role1234!</code>.
-      </p>
     </div>
   );
 }

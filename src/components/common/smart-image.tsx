@@ -1,25 +1,30 @@
-import { ImageIcon } from "lucide-react";
 import Image from "next/image";
 
 import { cn } from "@/lib/utils";
 import type { ImageAsset } from "@/lib/types/api";
 
-/** Deterministic, non-placeholder artwork for listings without photos. */
-const FALLBACK_GRADIENTS = [
-  "from-sky-200 via-sky-100 to-slate-200",
-  "from-emerald-200 via-emerald-100 to-slate-200",
-  "from-amber-200 via-orange-100 to-slate-200",
-  "from-violet-200 via-fuchsia-100 to-slate-200",
-  "from-rose-200 via-pink-100 to-slate-200",
-  "from-teal-200 via-cyan-100 to-slate-200",
+/** Curated high-resolution real interior and architectural photography. */
+export const CURATED_ROOM_PHOTOS = [
+  "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1502005229762-ae1b466420f2?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1540518614846-7ede433c4ef0?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=1000&q=80",
 ];
 
-export function fallbackGradient(seed: string): string {
+export function fallbackPhoto(seed: string): string {
   let hash = 0;
   for (let index = 0; index < seed.length; index += 1) {
     hash = (hash * 31 + seed.charCodeAt(index)) % 9973;
   }
-  return FALLBACK_GRADIENTS[hash % FALLBACK_GRADIENTS.length];
+  return CURATED_ROOM_PHOTOS[hash % CURATED_ROOM_PHOTOS.length];
 }
 
 interface SmartImageProps {
@@ -35,8 +40,8 @@ interface SmartImageProps {
 }
 
 /**
- * `next/image` wrapper that renders a deterministic gradient tile instead of a
- * broken image when an entity has no photos yet.
+ * `next/image` wrapper that renders high-resolution curated architectural photography
+ * when an entity has no photos uploaded yet.
  */
 export function SmartImage({
   image,
@@ -50,28 +55,12 @@ export function SmartImage({
   priority = false,
 }: SmartImageProps) {
   const key = image?.id ?? seed ?? alt;
-
-  if (!image?.url) {
-    return (
-      <div
-        className={cn(
-          "relative flex items-center justify-center overflow-hidden bg-gradient-to-br",
-          fill ? "absolute inset-0 size-full" : "h-48 w-full rounded-lg",
-          fallbackGradient(key),
-          className,
-        )}
-        role="img"
-        aria-label={alt}
-      >
-        <ImageIcon className="size-8 text-slate-500/60" aria-hidden="true" />
-      </div>
-    );
-  }
+  const photoSrc = image?.url || fallbackPhoto(key);
 
   if (fill) {
     return (
       <Image
-        src={image.url}
+        src={photoSrc}
         alt={alt}
         fill
         sizes={sizes}
@@ -83,7 +72,7 @@ export function SmartImage({
 
   return (
     <Image
-      src={image.url}
+      src={photoSrc}
       alt={alt}
       width={width ?? 640}
       height={height ?? 420}
@@ -126,3 +115,4 @@ export function ImageGallery({ images, alt, seed, className }: ImageGalleryProps
     </div>
   );
 }
+

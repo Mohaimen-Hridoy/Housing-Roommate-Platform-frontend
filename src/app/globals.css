@@ -119,11 +119,17 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
-    background-image: linear-gradient(hsl(160 39% 95% / 0.72) 0%, transparent 280px);
+    background-image:
+      radial-gradient(ellipse 80% 50% at 15% -5%, hsl(var(--mint) / 0.22) 0%, transparent 100%),
+      radial-gradient(ellipse 50% 40% at 85% 0%, hsl(var(--primary) / 0.08) 0%, transparent 100%),
+      radial-gradient(ellipse 60% 30% at 50% 100%, hsl(var(--brand) / 0.05) 0%, transparent 100%);
   }
 
   .dark body {
-    background-image: linear-gradient(hsl(171 40% 10% / 0.6) 0%, transparent 320px);
+    background-image:
+      radial-gradient(ellipse 80% 50% at 15% -5%, hsl(var(--mint) / 0.10) 0%, transparent 100%),
+      radial-gradient(ellipse 50% 40% at 85% 0%, hsl(var(--primary) / 0.06) 0%, transparent 100%),
+      radial-gradient(ellipse 60% 30% at 50% 100%, hsl(var(--brand) / 0.04) 0%, transparent 100%);
   }
 
   h1,
@@ -190,10 +196,38 @@
   }
 
   .interactive-surface:hover {
-    @apply -translate-y-1 border-primary/35;
+    @apply -translate-y-1.5 border-primary/40;
     box-shadow:
-      0 2px 4px hsl(var(--shadow-color) / 0.08),
-      0 20px 44px -20px hsl(var(--shadow-color) / 0.32);
+      0 2px 4px hsl(var(--shadow-color) / 0.06),
+      0 12px 28px -8px hsl(var(--shadow-color) / 0.18),
+      0 28px 56px -20px hsl(var(--shadow-color) / 0.28),
+      0 0 0 1px hsl(var(--primary) / 0.06);
+  }
+
+  .dark .surface {
+    background-color: hsl(196 32% 9% / 0.9);
+    border-color: hsl(var(--border) / 0.85);
+    box-shadow:
+      0 1px 2px hsl(var(--shadow-color) / 0.4),
+      0 14px 32px -12px hsl(var(--shadow-color) / 0.6),
+      inset 0 1px 0 0 hsl(160 39% 95% / 0.05);
+  }
+
+  .dark .surface-raised {
+    background-color: hsl(196 32% 10% / 0.95);
+    border-color: hsl(var(--border) / 0.9);
+    box-shadow:
+      0 2px 4px hsl(var(--shadow-color) / 0.5),
+      0 26px 56px -18px hsl(var(--shadow-color) / 0.7),
+      inset 0 1px 0 0 hsl(160 39% 95% / 0.08);
+  }
+
+  .dark .interactive-surface:hover {
+    border-color: hsl(var(--primary) / 0.55);
+    box-shadow:
+      0 2px 4px hsl(var(--shadow-color) / 0.3),
+      0 18px 40px -10px hsl(var(--shadow-color) / 0.7),
+      0 0 24px -4px hsl(var(--primary) / 0.18);
   }
 
   .skeleton {
@@ -215,14 +249,17 @@
   }
 
   .text-gradient-brand {
-    background-image: linear-gradient(100deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.88) 40%, hsl(var(--brand)) 100%);
+    background-image: linear-gradient(100deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.88) 30%, hsl(var(--brand)) 65%, hsl(var(--primary)) 100%);
+    background-size: 200% 100%;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    animation: gradient-shift 8s ease-in-out infinite;
   }
 
   .dark .text-gradient-brand {
-    background-image: linear-gradient(100deg, hsl(var(--primary)) 0%, hsl(var(--mint)) 45%, hsl(var(--brand)) 100%);
+    background-image: linear-gradient(100deg, hsl(var(--primary)) 0%, hsl(var(--mint)) 35%, hsl(var(--brand)) 70%, hsl(var(--primary)) 100%);
+    background-size: 200% 100%;
   }
 
   /* Lit bevel along the top edge of an elevated card. */
@@ -301,14 +338,15 @@
     inset: 0;
     border-radius: inherit;
     background: radial-gradient(
-      22rem circle at var(--spot-x, 50%) var(--spot-y, 50%),
-      hsl(var(--mint) / 0.22),
-      transparent 62%
+      26rem circle at var(--spot-x, 50%) var(--spot-y, 50%),
+      hsl(var(--mint) / 0.28),
+      hsl(var(--primary) / 0.06) 40%,
+      transparent 65%
     );
     content: "";
     opacity: 0;
     pointer-events: none;
-    transition: opacity 320ms ease-out;
+    transition: opacity 400ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .spotlight:hover::after,
@@ -498,4 +536,197 @@
     stroke-dasharray: none;
     animation: none;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BEAUTIFICATION LAYER – premium polish added on top of the base system
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@layer components {
+  /* Glassmorphism surface for overlaying on gradients/images. */
+  .surface-glass {
+    @apply rounded-2xl border border-border/50 text-card-foreground;
+    background: hsl(var(--card) / 0.6);
+    backdrop-filter: blur(24px) saturate(1.6);
+    box-shadow:
+      0 4px 6px hsl(var(--shadow-color) / 0.04),
+      0 12px 32px -8px hsl(var(--shadow-color) / 0.14);
+  }
+
+  .dark .surface-glass {
+    background: hsl(var(--card) / 0.45);
+    border-color: hsl(var(--border) / 0.4);
+  }
+
+  /* Glowing horizontal divider between sections. */
+  .divider-glow {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--primary) / 0.25) 20%,
+      hsl(var(--mint) / 0.45) 50%,
+      hsl(var(--primary) / 0.25) 80%,
+      transparent
+    );
+  }
+
+  /* Image zoom container – child img zooms on group hover. */
+  .image-zoom {
+    overflow: hidden;
+  }
+
+  .image-zoom img,
+  .image-zoom [data-smart-image] {
+    transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .group:hover .image-zoom img,
+  .group:hover .image-zoom [data-smart-image] {
+    transform: scale(1.07);
+  }
+
+  /* Gradient border glow – wraps card in a soft prismatic halo on hover. */
+  .glow-ring {
+    position: relative;
+  }
+
+  .glow-ring::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--primary) / 0.35),
+      hsl(var(--mint) / 0.25) 50%,
+      hsl(var(--brand) / 0.30)
+    );
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 500ms cubic-bezier(0.16, 1, 0.3, 1);
+    filter: blur(4px);
+  }
+
+  .glow-ring:hover::before {
+    opacity: 1;
+  }
+
+  /* Stat card with a subtle left accent bar. */
+  .stat-accent {
+    position: relative;
+    padding-left: 1rem;
+  }
+
+  .stat-accent::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.25rem;
+    bottom: 0.25rem;
+    width: 3px;
+    border-radius: 9999px;
+    background: linear-gradient(180deg, hsl(var(--primary)), hsl(var(--brand)));
+  }
+
+  /* Floating orb decoration for section backgrounds. */
+  .orb {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(80px);
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  .orb-mint {
+    background: hsl(var(--mint) / 0.30);
+  }
+
+  .orb-brand {
+    background: hsl(var(--brand) / 0.15);
+  }
+
+  .orb-primary {
+    background: hsl(var(--primary) / 0.12);
+  }
+}
+
+@layer utilities {
+  @keyframes gradient-shift {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes float-gentle {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    33% {
+      transform: translateY(-5px) rotate(0.5deg);
+    }
+    66% {
+      transform: translateY(3px) rotate(-0.3deg);
+    }
+  }
+
+  .animate-float-gentle {
+    animation: float-gentle 10s ease-in-out infinite;
+  }
+
+  @keyframes shimmer-slow {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .animate-shimmer-slow {
+    background-size: 200% 100%;
+    animation: shimmer-slow 4s linear infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text-gradient-brand {
+    animation: none;
+    background-size: 100% 100%;
+  }
+
+  .animate-float-gentle {
+    animation: none;
+  }
+
+  .glow-ring::before {
+    transition: none;
+  }
+
+  .group:hover .image-zoom img,
+  .group:hover .image-zoom [data-smart-image] {
+    transform: none;
+  }
+}
+
+/* Sleek modern scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.45);
 }

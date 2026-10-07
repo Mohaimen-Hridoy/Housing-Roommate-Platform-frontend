@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 
 import { localizedMetadata } from "@/lib/i18n/metadata";
 import Link from "next/link";
@@ -11,7 +11,6 @@ import {
   Search,
   ShieldCheck,
   Sparkles,
-  Star,
   TrendingUp,
 } from "lucide-react";
 
@@ -22,10 +21,14 @@ import { Badge } from "@/components/ui/badge";
 import { SmartImage } from "@/components/common/smart-image";
 import { RoomStatusBadge } from "@/components/common/status-badge";
 import { T } from "@/components/common/localized-text";
-import { HeroArt } from "@/components/brand/hero-art";
+import { HeroVisual } from "@/components/brand/hero-visual";
 import { Reveal } from "@/components/brand/reveal";
 import { CountUp } from "@/components/brand/count-up";
 import { SpotlightCard } from "@/components/brand/spotlight-card";
+import { HeroSearch } from "@/components/property/hero-search";
+import { TestimonialsSection } from "@/components/marketing/testimonials";
+import { NeighborhoodsSection } from "@/components/marketing/neighborhoods";
+import { TrustBand } from "@/components/marketing/trust-band";
 import { formatCurrency } from "@/lib/format";
 import { APP_NAME } from "@/lib/constants";
 import type { ImageAsset, PropertyListItem, RoomListItem } from "@/lib/types/api";
@@ -141,7 +144,7 @@ export default async function HomePage() {
             </Reveal>
 
             <Reveal distance={22} delay={0.06}>
-              <h1 className="text-4xl font-semibold leading-[1.05] tracking-[-0.02em] sm:text-5xl lg:text-[3.4rem]">
+              <h1 className="text-4xl font-bold leading-[1.02] tracking-[-0.025em] sm:text-5xl lg:text-[3.6rem]">
                 <span className="text-gradient-brand">
                   <T k="home.titleAccent" fallback="Find a room" />
                 </span>{" "}
@@ -150,18 +153,22 @@ export default async function HomePage() {
             </Reveal>
 
             <Reveal distance={20} delay={0.12}>
-              <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+              <p className="max-w-xl text-base leading-relaxed text-muted-foreground/90 sm:text-lg">
                 <T
                   k="home.subtitle"
                   vars={{ app: APP_NAME }}
-                  fallback={`${APP_NAME} connects tenants with property owners. Browse verified rooms, request a booking, pay through Stripe and manage everything from a single dashboard — with occupancy, revenue and approval analytics for the people who own the buildings.`}
+                  fallback={`${APP_NAME} connects tenants and property owners. Browse verified rooms, book instantly, and pay securely via Stripe — all from a single intuitive dashboard.`}
                 />
               </p>
             </Reveal>
 
-            <Reveal distance={18} delay={0.18}>
+            <Reveal distance={18} delay={0.16}>
+              <HeroSearch />
+            </Reveal>
+
+            <Reveal distance={18} delay={0.20}>
               <div className="flex flex-col gap-3 sm:flex-row">
-                <Button asChild size="lg">
+                <Button asChild size="lg" className="shadow-md">
                   <Link href="/properties">
                     <T k="home.ctaBrowse" fallback="Browse available rooms" />
                     <ArrowRight />
@@ -176,7 +183,7 @@ export default async function HomePage() {
             </Reveal>
 
             <Reveal distance={18} delay={0.24}>
-              <dl className="grid max-w-lg grid-cols-3 gap-4 border-t border-border/70 pt-6">
+              <dl className="grid max-w-lg grid-cols-3 gap-6 border-t border-border/70 pt-7">
                 {[
                   {
                     label: "home.statRoles",
@@ -189,7 +196,7 @@ export default async function HomePage() {
                     fallback: "API endpoints",
                   },
                 ].map((item) => (
-                  <div key={item.label}>
+                  <div key={item.label} className="stat-accent">
                     <dt className="text-xs uppercase tracking-wide text-muted-foreground">
                       <T k={item.label} fallback={item.fallback} />
                     </dt>
@@ -198,7 +205,7 @@ export default async function HomePage() {
                     </dd>
                   </div>
                 ))}
-                <div>
+                <div className="stat-accent">
                   <dt className="text-xs uppercase tracking-wide text-muted-foreground">
                     <T k="home.statPayments" fallback="Payments" />
                   </dt>
@@ -209,7 +216,7 @@ export default async function HomePage() {
           </div>
 
           <Reveal distance={28} delay={0.1} className="order-first lg:order-none">
-            <HeroArt className="mx-auto w-full max-w-lg drop-shadow-[0_24px_48px_hsl(var(--shadow-color)/0.16)]" />
+            <HeroVisual />
           </Reveal>
         </div>
 
@@ -291,10 +298,16 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <TrustBand />
+
+      <div className="divider-glow" aria-hidden="true" />
+      <NeighborhoodsSection />
+
+      <div className="divider-glow" aria-hidden="true" />
       <section className="container-page py-16">
         <Reveal distance={20}>
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-semibold tracking-tight">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
               <T k="home.featuresTitle" fallback="Everything the workflow needs" />
             </h2>
             <p className="mt-3 text-muted-foreground">
@@ -334,11 +347,12 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="border-y border-border bg-muted/30">
+      <div className="divider-glow" aria-hidden="true" />
+      <section className="bg-muted/30">
         <div className="container-page py-16">
           <Reveal distance={20}>
             <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-3xl font-semibold tracking-tight">
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
                 <T k="home.stepsTitle" fallback="How it works" />
               </h2>
               <p className="mt-3 text-muted-foreground">
@@ -381,11 +395,13 @@ export default async function HomePage() {
       </section>
 
       {hasContent ? (
+        <>
+        <div className="divider-glow" aria-hidden="true" />
         <section className="container-page py-16">
           <Reveal distance={18}>
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
-                <h2 className="text-3xl font-semibold tracking-tight">
+                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
                   <T k="home.valueTitle" fallback="Best value right now" />
                 </h2>
                 <p className="mt-2 text-muted-foreground">
@@ -409,9 +425,9 @@ export default async function HomePage() {
               <Reveal key={room.id} as="article" distance={18} delay={index * 0.07}>
                 <Link
                   href={`/properties/${room.property.id}`}
-                  className="group surface spotlight relative isolate block h-full overflow-hidden transition-transform duration-300 ease-out-expo hover:-translate-y-1"
+                  className="group surface spotlight glow-ring relative isolate block h-full overflow-hidden transition-transform duration-300 ease-out-expo hover:-translate-y-1.5"
                 >
-                  <div className="relative aspect-[16/10] overflow-hidden bg-muted">
+                  <div className="image-zoom relative aspect-[16/10] bg-muted">
                     <SmartImage
                       image={roomImageById.get(room.id) ?? null}
                       seed={room.id}
@@ -464,24 +480,28 @@ export default async function HomePage() {
             ))}
           </div>
         </section>
+        </>
       ) : null}
+
+      <div className="divider-glow" aria-hidden="true" />
+      <TestimonialsSection />
 
       <section className="container-page pb-20">
         <Reveal distance={22}>
-          <Card className="aurora relative overflow-hidden border-primary/20 bg-primary/[0.04]">
+          <Card className="aurora grain relative overflow-hidden border-primary/20 bg-primary/[0.04]">
             <CardContent className="relative flex flex-col items-start gap-6 p-8 sm:p-10 lg:flex-row lg:items-center lg:justify-between">
               <div className="space-y-3">
-                <Badge variant="info" className="gap-1.5">
-                  <Star className="size-3" aria-hidden="true" />
-                  <T k="home.ctaBadge" fallback="Evaluator friendly" />
+                <Badge variant="accent" className="gap-1.5">
+                  <Sparkles className="size-3" aria-hidden="true" />
+                  <T k="home.eyebrow" fallback="Start your journey" />
                 </Badge>
-                <h2 className="text-2xl font-semibold tracking-tight">
-                  <T k="contact.demo.title" fallback="Try it without an account" />
+                <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+                  <T k="cta.readyTitle" fallback="Ready to find your next home?" />
                 </h2>
-                <p className="max-w-xl text-sm text-muted-foreground">
+                <p className="max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
                   <T
-                    k="contact.demo.body"
-                    fallback="The sign-in page has a one-click demo login for all three roles — admin, owner and tenant — using seeded accounts. You will land straight on that role’s dashboard."
+                    k="cta.readySubtitle"
+                    fallback="Join thousands of tenants and owners who manage rent, rooms, and payments seamlessly in one trusted platform."
                   />
                 </p>
                 <div className="flex flex-wrap gap-2 pt-1">
@@ -493,12 +513,19 @@ export default async function HomePage() {
                   ))}
                 </div>
               </div>
-              <Button asChild size="lg" className="shrink-0">
-                <Link href="/login#demo">
-                  <T k="auth.openDemoLogin" fallback="Open demo login" />
-                  <ArrowRight />
-                </Link>
-              </Button>
+              <div className="flex flex-col gap-3 sm:flex-row lg:shrink-0">
+                <Button asChild size="lg">
+                  <Link href="/register">
+                    <T k="action.createAccount" fallback="Get started" />
+                    <ArrowRight />
+                  </Link>
+                </Button>
+                <Button asChild size="lg" variant="outline">
+                  <Link href="/properties">
+                    <T k="home.ctaBrowse" fallback="Browse properties" />
+                  </Link>
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </Reveal>

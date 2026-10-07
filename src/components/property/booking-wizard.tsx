@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarDays, Check, ChevronLeft, ChevronRight, MessageSquare, PartyPopper } from "lucide-react";
@@ -114,7 +114,7 @@ export function BookingWizard({ rooms, isAuthenticated, isTenant, propertyId }: 
             account to send a booking request for this property.
           </p>
           <Button asChild variant="outline">
-            <Link href="/login#demo">Use the tenant demo account</Link>
+            <Link href="/login">Sign in with a tenant account</Link>
           </Button>
         </CardContent>
       </Card>
@@ -133,7 +133,7 @@ export function BookingWizard({ rooms, isAuthenticated, isTenant, propertyId }: 
             <p className="text-sm text-muted-foreground">
               Booking <span className="font-mono text-xs">{created.id}</span> is now{" "}
               <span className="font-medium text-foreground">pending</span>. The room is reserved while the
-              owner reviews it — once approved you can pay through Stripe.
+              owner reviews it â€” once approved you can pay through Stripe.
             </p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
@@ -265,7 +265,7 @@ export function BookingWizard({ rooms, isAuthenticated, isTenant, propertyId }: 
                       <span className="flex flex-wrap gap-3 text-xs text-muted-foreground">
                         {room.bedrooms !== null ? <span>{room.bedrooms} bedroom</span> : null}
                         {room.bathrooms !== null ? <span>{room.bathrooms} bathroom</span> : null}
-                        {room.area !== null ? <span>{room.area} m²</span> : null}
+                        {room.area !== null ? <span>{room.area} mÂ²</span> : null}
                       </span>
                     </span>
                   </span>
@@ -324,12 +324,12 @@ export function BookingWizard({ rooms, isAuthenticated, isTenant, propertyId }: 
               <dl className="space-y-2 rounded-lg border border-border bg-muted/30 p-4 text-sm">
                 <div className="flex justify-between gap-4">
                   <dt className="text-muted-foreground">Room</dt>
-                  <dd className="text-right font-medium">{selectedRoom?.title ?? "—"}</dd>
+                  <dd className="text-right font-medium">{selectedRoom?.title ?? "â€”"}</dd>
                 </div>
                 <div className="flex justify-between gap-4">
                   <dt className="text-muted-foreground">Dates</dt>
                   <dd className="text-right font-medium">
-                    {values.startDate} → {values.endDate}
+                    {values.startDate} â†’ {values.endDate}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4">
@@ -339,13 +339,13 @@ export function BookingWizard({ rooms, isAuthenticated, isTenant, propertyId }: 
                 <div className="flex justify-between gap-4">
                   <dt className="text-muted-foreground">Nightly rate</dt>
                   <dd className="text-right font-medium tabular-nums">
-                    {selectedRoom ? formatCurrency(selectedRoom.rent, selectedRoom.currency) : "—"}
+                    {selectedRoom ? formatCurrency(selectedRoom.rent, selectedRoom.currency) : "â€”"}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4 border-t border-border pt-2 text-base">
                   <dt className="font-medium">Estimated total</dt>
                   <dd className="text-right font-semibold tabular-nums">
-                    {selectedRoom ? formatCurrency(total, selectedRoom.currency) : "—"}
+                    {selectedRoom ? formatCurrency(total, selectedRoom.currency) : "â€”"}
                   </dd>
                 </div>
               </dl>

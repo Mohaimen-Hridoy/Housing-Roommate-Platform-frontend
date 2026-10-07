@@ -322,7 +322,7 @@ const en = {
   "home.titleAccent": "Find a room",
   "home.titleRest": "you will actually want to live in",
   "home.subtitle":
-    "{{app}} connects tenants with property owners. Browse verified rooms, request a booking, pay through Stripe and manage everything from a single dashboard — with occupancy, revenue and approval analytics for the people who own the buildings.",
+    "{{app}} connects tenants and property owners. Browse verified rooms, book instantly, and pay securely via Stripe — all from a single intuitive dashboard.",
   "home.ctaBrowse": "Browse available rooms",
   "home.ctaList": "List your property",
   "home.statRoles": "Roles",
@@ -737,7 +737,7 @@ const en = {
     "The sign-in page has one-click demo login for all three roles. No email, no password — just click and go.",
   "contact.quick.demo.q": "Are demo accounts available?",
   "contact.quick.demo.a":
-    "Yes. Visit /login#demo for one-click login as Admin, Owner or Tenant using seeded accounts.",
+    "Sign in with your account to access your dashboard and manage your housing journey.",
   "contact.success.title": "Message composed",
   "contact.success.body":
     "Your email client should have opened with a pre-filled message. Please send it to reach the team. If nothing happened, you can also email us directly.",
@@ -1034,7 +1034,7 @@ const bn: Partial<Record<TranslationKey, string>> = {
   "home.titleAccent": "এমন একটি ঘর",
   "home.titleRest": "যেখানে বাস করতে সত্যিই ইচ্ছে হবে",
   "home.subtitle":
-    "{{app}} ভাড়াটিয়াদের সঙ্গে সম্পত্তির মালিকদের যুক্ত করে। যাচাই করা ঘর দেখুন, বুকিংয়ের অনুরোধ করুন, Stripe দিয়ে পেমেন্ট করুন এবং একটি ড্যাশবোর্ড থেকেই সবকিছু সামলান — সঙ্গে খালি থাকার হার, আয় ও অনুমোদনের বিশ্লেষণ।",
+    "{{app}}-এ যাচাই করা রুম খুঁজুন, সহজে বুক করুন এবং নিরাপদ পেমেন্টে নির্ভাবনায় থাকুন — ভাড়াটিয়া ও বাড়িওয়ালা উভয়ের জন্যই সহজ সমাধান।",
   "home.ctaBrowse": "খালি ঘর দেখুন",
   "home.ctaList": "আপনার সম্পত্তি তালিকাভুক্ত করুন",
   "home.statRoles": "ভূমিকা",
@@ -1386,7 +1386,7 @@ const bn: Partial<Record<TranslationKey, string>> = {
     "মালিক হিসেবে নিবন্ধন করুন, তারপর মালিক ড্যাশবোর্ড থেকে একটি সম্পত্তি তৈরি করে ছবি ও সুবিধাসহ ঘর যোগ করুন।",
   "contact.quick.demo.q": "ডেমো অ্যাকাউন্ট কি আছে?",
   "contact.quick.demo.a":
-    "হ্যাঁ। প্রসিড করা অ্যাকাউন্ট ব্যবহার করে অ্যাডমিন, মালিক বা ভাড়াটিয়া হিসেবে এক ক্লিকে লগ ইন করতে /login#demo ভিজিট করুন।",
+    "আপনার অ্যাকাউন্টে লগ ইন করে ড্যাশবোর্ড থেকে আপনার হাউজিং কার্যক্রম পরিচালনা করুন।",
   "contact.quick.3.q": "ভাড়াটিয়াদের জন্য কি প্ল্যাটফর্ম ফি আছে?",
   "contact.quick.3.a":
     "না। ভাড়াটিয়ারা শুধু মালিক নির্ধারিত ভাড়া পরিশোধ করেন। প্ল্যাটফর্ম ফি (ডিফল্ট ৫%) মালিকের পরিশোধ থেকে বাদ যায়।",

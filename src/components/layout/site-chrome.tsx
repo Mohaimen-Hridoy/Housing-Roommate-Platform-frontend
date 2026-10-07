@@ -126,6 +126,11 @@ export function UserMenu() {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
+        <div className="flex items-center justify-between px-2.5 py-1.5 text-xs text-muted-foreground">
+          <span>Theme</span>
+          <ThemeToggle />
+        </div>
+        <DropdownMenuSeparator />
         <DropdownMenuItem destructive onSelect={() => void signOut()}>
           <LogOut />
           {t("nav.signOut")}
@@ -187,7 +192,6 @@ export function SiteHeader() {
             </>
           )}
           {user ? <UserMenu /> : null}
-          <ThemeToggle />
           <LanguageToggle />
         </div>
 
@@ -205,36 +209,54 @@ export function SiteHeader() {
       </div>
 
       {open ? (
-        <div className="border-t border-border bg-background md:hidden">
-          <nav aria-label={t("nav.mobile")} className="container-page flex flex-col gap-1 py-4">
-            {PUBLIC_NAV.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary hover:text-foreground"
-              >
-                {t(item.labelKey)}
-              </Link>
-            ))}
-            <div className="mt-2 flex flex-col gap-2 border-t border-border pt-4">
+        <div className="border-b border-border/80 bg-background/95 backdrop-blur-2xl shadow-2xl transition-all duration-300 md:hidden animate-accordion-down">
+          <nav aria-label={t("nav.mobile")} className="container-page flex flex-col gap-1.5 py-5">
+            {PUBLIC_NAV.map((item) => {
+              const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className={cn(
+                    "flex items-center justify-between rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200",
+                    active
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:bg-secondary hover:text-foreground",
+                  )}
+                >
+                  <span>{t(item.labelKey)}</span>
+                  {active ? (
+                    <span className="size-2 rounded-full bg-primary" />
+                  ) : null}
+                </Link>
+              );
+            })}
+
+            <div className="mt-3 flex flex-col gap-2.5 border-t border-border/70 pt-4">
               {user ? (
-                <>
-                  <Button asChild>
-                    <Link href={ROLE_HOME[user.role]}>{t("nav.goToDashboard")}</Link>
+                <div className="space-y-2">
+                  <Button asChild className="w-full h-11 justify-center rounded-xl shadow-xs">
+                    <Link href={ROLE_HOME[user.role]} onClick={() => setOpen(false)}>
+                      {t("nav.goToDashboard")}
+                    </Link>
                   </Button>
-                  <UserMenu />
-                </>
+                </div>
               ) : (
-                <>
-                  <Button asChild variant="outline">
-                    <Link href="/login">{t("nav.login")}</Link>
+                <div className="grid grid-cols-2 gap-2">
+                  <Button asChild variant="outline" className="h-11 rounded-xl">
+                    <Link href="/login" onClick={() => setOpen(false)}>{t("nav.login")}</Link>
                   </Button>
-                  <Button asChild>
-                    <Link href="/register">{t("nav.register")}</Link>
+                  <Button asChild className="h-11 rounded-xl shadow-xs">
+                    <Link href="/register" onClick={() => setOpen(false)}>{t("nav.register")}</Link>
                   </Button>
-                </>
+                </div>
               )}
+
+              <div className="flex items-center justify-between pt-2">
+                <span className="text-xs text-muted-foreground">Language / ভাষা</span>
+                <LanguageToggle />
+              </div>
             </div>
           </nav>
         </div>
@@ -273,7 +295,8 @@ export function SiteFooter() {
   const t = useTranslation();
 
   return (
-    <footer id="site-footer" className="mt-auto border-t border-border bg-muted/30">
+    <footer id="site-footer" className="mt-auto bg-muted/30">
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/25 to-transparent" aria-hidden="true" />
       <div className="container-page grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4">
         <div className="space-y-3">
           <BrandMark />
@@ -297,12 +320,19 @@ export function SiteFooter() {
           </div>
         ))}
       </div>
-      <div className="border-t border-border">
-        <div className="container-page flex flex-col items-center justify-between gap-3 py-5 text-xs text-muted-foreground sm:flex-row">
+      <div>
+        <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" aria-hidden="true" />
+        <div className="container-page flex flex-col items-center justify-between gap-4 py-6 text-xs text-muted-foreground sm:flex-row">
           <p>
             © {new Date().getFullYear()} {APP_NAME}. {t("footer.rights")}
           </p>
-          <p>{t("footer.stripeNote")}</p>
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center gap-2 rounded-full border border-border/80 bg-background/80 px-2.5 py-1 shadow-xs backdrop-blur-sm">
+              <span className="text-[0.6875rem] font-medium text-muted-foreground">Theme</span>
+              <ThemeToggle />
+            </div>
+            <p>{t("footer.stripeNote")}</p>
+          </div>
         </div>
       </div>
     </footer>

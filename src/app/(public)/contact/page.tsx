@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -212,7 +212,7 @@ export default function ContactPage() {
                   <p className="text-xs text-muted-foreground">
                     <T
                       k="contact.form.note"
-                      fallback="This form opens your default email client with a pre-filled message. There is no backend contact endpoint — all communication happens directly via email."
+                      fallback="This form opens your default email client with a pre-filled message. There is no backend contact endpoint â€” all communication happens directly via email."
                     />
                   </p>
                 </div>
@@ -267,16 +267,13 @@ export default function ContactPage() {
                   <User className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
                   <div>
                     <p className="text-sm font-medium">
-                      <T k="auth.demoTitle" fallback="Demo accounts" />
+                      <T k="contact.channels.supportTitle" fallback="General Support" />
                     </p>
                     <p className="text-xs text-muted-foreground">
                       <T
-                        k="contact.channels.demoBody"
-                        fallback="Seeded accounts for Admin, Owner and Tenant."
-                      />{" "}
-                      <Link href="/login#demo" className="text-primary hover:underline">
-                        /login#demo
-                      </Link>
+                        k="contact.channels.supportBody"
+                        fallback="Have queries or need help? Check our FAQ or message us."
+                      />
                     </p>
                   </div>
                 </div>
@@ -288,7 +285,7 @@ export default function ContactPage() {
                       <T k="contact.channels.hoursTitle" fallback="Response hours" />
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      <T k="contact.channels.hoursBody" fallback="Monday – Friday, 9 AM – 6 PM UTC" />
+                      <T k="contact.channels.hoursBody" fallback="Monday â€“ Friday, 9 AM â€“ 6 PM UTC" />
                     </p>
                   </div>
                 </div>
@@ -300,20 +297,20 @@ export default function ContactPage() {
             <CardContent className="space-y-3 p-6">
               <Badge variant="accent" className="gap-1.5">
                 <MessageSquare className="size-3" aria-hidden="true" />
-                <T k="contact.demo.badge" fallback="Evaluators" />
+                <T k="nav.faq" fallback="FAQs" />
               </Badge>
               <h3 className="text-sm font-semibold">
-                <T k="contact.demo.title" fallback="Try it without an account" />
+                <T k="faq.title" fallback="Frequently Asked Questions" />
               </h3>
               <p className="text-xs text-muted-foreground">
                 <T
                   k="contact.demo.body2"
-                  fallback="The sign-in page has one-click demo login for all three roles. No email, no password — just click and go."
+                  fallback="The sign-in page has one-click demo login for all three roles. No email, no password â€” just click and go."
                 />
               </p>
               <Button asChild size="sm" variant="outline" className="w-full">
-                <Link href="/login#demo">
-                  <T k="auth.openDemoLogin" fallback="Open demo login" />
+                <Link href="/faq">
+                  <T k="nav.faq" fallback="Visit FAQ" />
                   <ArrowRight />
                 </Link>
               </Button>
