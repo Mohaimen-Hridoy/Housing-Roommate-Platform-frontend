@@ -42,20 +42,22 @@ export async function generateMetadata({ params }: PropertyPageProps): Promise<M
   }
 
   const property = result.data;
-  const cheapest = [...property.rooms].sort((a, b) => a.rent - b.rent)[0];
+  const rooms = property.rooms ?? [];
+  const images = property.images ?? [];
+  const cheapest = [...rooms].sort((a, b) => a.rent - b.rent)[0];
 
   return {
     title: `${property.title} — ${property.city}`,
     description:
       property.description ??
-      `${property.title} in ${property.city}. ${property.rooms.length} available room${
-        property.rooms.length === 1 ? "" : "s"
+      `${property.title} in ${property.city}. ${rooms.length} available room${
+        rooms.length === 1 ? "" : "s"
       }${cheapest ? ` from ${formatCurrency(cheapest.rent, cheapest.currency)} per night` : ""}.`,
     alternates: { canonical: `/properties/${property.id}` },
     openGraph: {
       title: `${property.title} — ${property.city}`,
       description: property.description ?? `Available rooms at ${property.title} in ${property.city}.`,
-      images: property.images[0] ? [{ url: property.images[0].url }] : undefined,
+      images: images[0] ? [{ url: images[0].url }] : undefined,
     },
   };
 }
@@ -87,13 +89,16 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
 
   const property = result.data;
   const isOwner = session?.id === property.ownerId;
+  const rooms = property.rooms ?? [];
+  const images = property.images ?? [];
+  const amenities = property.amenities ?? [];
 
   const favourites = session
     ? await apiListSafe<Favorite>("/favorites", { query: { propertyId: property.id, pageSize: 1 } })
     : { items: [], error: null };
   const favourite = favourites.items[0] ?? null;
 
-  const cheapest = [...property.rooms].sort((a, b) => a.rent - b.rent)[0];
+  const cheapest = [...rooms].sort((a, b) => a.rent - b.rent)[0];
   const location = [property.city, property.state, property.postalCode, property.country]
     .filter(Boolean)
     .join(", ");
@@ -101,7 +106,7 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
   const facts = [
     { icon: Building2, label: "Type", value: "Apartment / shared home" },
     { icon: MapPin, label: "City", value: property.city },
-    { icon: BedDouble, label: "Rooms available", value: String(property.rooms.length) },
+    { icon: BedDouble, label: "Rooms available", value: String(rooms.length) },
     {
       icon: CalendarDays,
       label: "Listed",
@@ -153,7 +158,7 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
         </Card>
       ) : null}
 
-      <ImageGallery images={property.images} alt={property.title} seed={property.id} />
+      <ImageGallery images={images} alt={property.title} seed={property.id} />
 
       <div className="grid gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] lg:items-start">
         <div className="space-y-6">
@@ -209,9 +214,9 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
           <Card>
             <CardContent className="space-y-4 p-6">
               <h2 className="text-lg font-semibold">Amenities</h2>
-              {property.amenities.length > 0 ? (
+              {amenities.length > 0 ? (
                 <ul className="flex flex-wrap gap-2">
-                  {property.amenities.map((amenity) => (
+                  {amenities.map((amenity) => (
                     <li key={amenity.id}>
                       <Badge variant="secondary" className="gap-1.5">
                         <Sparkles className="size-3" aria-hidden="true" />
@@ -228,7 +233,7 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
             </CardContent>
           </Card>
 
-          {property.rooms.length > 0 ? (
+          {rooms.length > 0 ? (
             <Card>
               <CardContent className="space-y-4 p-6">
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -245,7 +250,7 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
                 </div>
 
                 <ul className="divide-y divide-border">
-                  {property.rooms.map((room) => (
+                  {rooms.map((room) => (
                     <li key={room.id} className="flex flex-wrap items-center justify-between gap-4 py-4 first:pt-0 last:pb-0">
                       <div className="space-y-1">
                         <p className="text-sm font-medium">{room.title}</p>
@@ -293,7 +298,7 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
 
           <SubjectReviews subject="PROPERTY" reviewableId={property.id} title={property.title} />
 
-          {property.rooms.slice(0, 3).map((room) => (
+          {rooms.slice(0, 3).map((room) => (
             <SubjectReviews
               key={room.id}
               subject="ROOM"
@@ -306,7 +311,7 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
 
         <div className="space-y-6 lg:sticky lg:top-24">
           <BookingWizard
-            rooms={property.rooms}
+            rooms={rooms}
             isAuthenticated={Boolean(session)}
             isTenant={session?.role === "TENANT"}
             propertyId={property.id}

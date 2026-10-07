@@ -54,25 +54,29 @@ export function FavoriteGrid({ initialFavorites }: { initialFavorites: Favorite[
               <Link href={`/properties/${favorite.propertyId}`} className="relative block aspect-[16/10] bg-muted">
                 <SmartImage
                   seed={favorite.propertyId}
-                  alt={favorite.property.title}
+                  alt={favorite.property?.title ?? "Saved Property"}
                   sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
                 />
-                <span className="absolute left-3 top-3">
-                  <PropertyStatusBadge status={favorite.property.status} />
-                </span>
+                {favorite.property?.status ? (
+                  <span className="absolute left-3 top-3">
+                    <PropertyStatusBadge status={favorite.property.status} />
+                  </span>
+                ) : null}
               </Link>
 
               <CardContent className="flex flex-1 flex-col gap-3 p-5">
                 <div className="space-y-1">
                   <h3 className="truncate font-semibold">
                     <Link href={`/properties/${favorite.propertyId}`} className="hover:text-primary">
-                      {favorite.property.title}
+                      {favorite.property?.title ?? "Saved Property"}
                     </Link>
                   </h3>
-                  <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                    <MapPin className="size-3.5" aria-hidden="true" />
-                    {favorite.property.city}
-                  </p>
+                  {favorite.property?.city ? (
+                    <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                      <MapPin className="size-3.5" aria-hidden="true" />
+                      {favorite.property.city}
+                    </p>
+                  ) : null}
                 </div>
 
                 <div className="mt-auto flex items-center justify-between gap-3 pt-2">

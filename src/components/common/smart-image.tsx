@@ -91,8 +91,9 @@ interface ImageGalleryProps {
 }
 
 /** Responsive photo grid: one hero shot plus a thumbnail strip. */
-export function ImageGallery({ images, alt, seed, className }: ImageGalleryProps) {
-  const ordered = [...images].sort((a, b) => Number(b.isPrimary) - Number(a.isPrimary) || a.position - b.position);
+export function ImageGallery({ images = [], alt, seed, className }: ImageGalleryProps) {
+  const safeImages = Array.isArray(images) ? images : [];
+  const ordered = [...safeImages].sort((a, b) => Number(b.isPrimary) - Number(a.isPrimary) || a.position - b.position);
   const [hero, ...rest] = ordered;
 
   return (

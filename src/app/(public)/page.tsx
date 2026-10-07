@@ -426,7 +426,7 @@ export default async function HomePage() {
             {affordableRooms.map((room, index) => (
               <Reveal key={room.id} as="article" distance={18} delay={index * 0.07}>
                 <Link
-                  href={`/properties/${room.property.id}`}
+                  href={room.property?.id ? `/properties/${room.property.id}` : `/properties/${room.propertyId}`}
                   className="group surface spotlight glow-ring relative isolate block h-full overflow-hidden transition-transform duration-300 ease-out-expo hover:-translate-y-1.5"
                 >
                   <div className="image-zoom relative aspect-[16/10] bg-muted">
@@ -456,9 +456,11 @@ export default async function HomePage() {
                         </span>
                       </p>
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                      {room.property.title} · {room.property.city}
-                    </p>
+                    {room.property ? (
+                      <p className="text-sm text-muted-foreground">
+                        {room.property.title} · {room.property.city}
+                      </p>
+                    ) : null}
                     <div className="flex flex-wrap gap-3 pt-1 text-xs text-muted-foreground">
                       {room.bedrooms !== null ? (
                         <span>
