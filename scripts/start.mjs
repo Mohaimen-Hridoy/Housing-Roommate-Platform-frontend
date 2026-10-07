@@ -9,11 +9,13 @@ import { dirname, join } from "node:path";
 
 const projectRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 
+const distDir = process.env.NEXT_DIST_DIR ?? (process.env.VERCEL ? ".next" : ".next-build");
+
 const child = spawn("npx", ["next", "start", "--port", "3000"], {
   cwd: projectRoot,
   stdio: "inherit",
   shell: process.platform === "win32",
-  env: { ...process.env, NEXT_DIST_DIR: process.env.NEXT_DIST_DIR ?? ".next-build" },
+  env: { ...process.env, NEXT_DIST_DIR: distDir },
 });
 
 child.on("error", (error) => {
