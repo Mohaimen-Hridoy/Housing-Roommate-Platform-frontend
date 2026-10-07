@@ -97,144 +97,6 @@ const STEPS = [
   },
 ];
 
-const FALLBACK_PROPERTIES: PropertyListItem[] = [
-  {
-    id: "cmusl3hu00000l604vaenpsjf",
-    ownerId: "cmuskx7o60002js04mtd37ov0",
-    title: "Sunset Apartment",
-    description: "Modern 4 bedroom flat in prime location with high-speed internet and balcony.",
-    address: "Gulshan Avenue",
-    city: "Dhaka",
-    state: "Dhaka",
-    postalCode: "1212",
-    country: "Bangladesh",
-    lat: null,
-    lng: null,
-    status: "PUBLISHED",
-    publishedAt: "2026-04-01T10:00:00.000Z",
-    createdAt: "2026-04-01T10:00:00.000Z",
-    updatedAt: "2026-04-01T10:00:00.000Z",
-    amenities: [
-      { id: "a1", name: "High-speed WiFi", icon: null },
-      { id: "a2", name: "Air Conditioning", icon: null },
-      { id: "a3", name: "24/7 Security", icon: null },
-    ],
-  },
-  {
-    id: "seed-property-1",
-    ownerId: "cmuslknqv0002uhugvpkhsbqj",
-    title: "Metro Luxury Suites",
-    description: "Furnished private rooms with shared lounge, gym, and rooftop view.",
-    address: "123 Demo Street",
-    city: "New York",
-    state: "NY",
-    postalCode: "10001",
-    country: "US",
-    lat: null,
-    lng: null,
-    status: "PUBLISHED",
-    publishedAt: "2026-04-02T10:00:00.000Z",
-    createdAt: "2026-04-02T10:00:00.000Z",
-    updatedAt: "2026-04-02T10:00:00.000Z",
-    amenities: [
-      { id: "a4", name: "Elevator", icon: null },
-      { id: "a5", name: "Fitness Center", icon: null },
-      { id: "a6", name: "Furnished", icon: null },
-    ],
-  },
-  {
-    id: "cmusftm9x0005l804wxvoe32o",
-    ownerId: "cmuslknqv0002uhugvpkhsbqj",
-    title: "Greenwood Residence",
-    description: "Quiet green neighborhood with parking, private bathroom, and solar power.",
-    address: "Banani Lake Road",
-    city: "Dhaka",
-    state: "Dhaka",
-    postalCode: "1213",
-    country: "Bangladesh",
-    lat: null,
-    lng: null,
-    status: "PUBLISHED",
-    publishedAt: "2026-04-03T10:00:00.000Z",
-    createdAt: "2026-04-03T10:00:00.000Z",
-    updatedAt: "2026-04-03T10:00:00.000Z",
-    amenities: [
-      { id: "a7", name: "Reserved Parking", icon: null },
-      { id: "a8", name: "Garden", icon: null },
-      { id: "a9", name: "CCTV", icon: null },
-    ],
-  },
-];
-
-const FALLBACK_ROOMS: RoomListItem[] = [
-  {
-    id: "cmusua2k50007jt0416usoh6s",
-    propertyId: "cmusl3hu00000l604vaenpsjf",
-    title: "Sunny Master Bedroom",
-    description: "Spacious master bedroom with ensuite bath and floor-to-ceiling windows.",
-    area: 24,
-    rent: 450,
-    currency: "USD",
-    deposit: 450,
-    bedrooms: 1,
-    bathrooms: 1,
-    facing: "SOUTH",
-    availableFrom: "2026-05-01T00:00:00.000Z",
-    status: "AVAILABLE",
-    createdAt: "2026-04-01T10:00:00.000Z",
-    updatedAt: "2026-04-01T10:00:00.000Z",
-    property: {
-      id: "cmusl3hu00000l604vaenpsjf",
-      title: "Sunset Apartment",
-      city: "Dhaka",
-    },
-  },
-  {
-    id: "cmusua2k50007jt0416usoh6t",
-    propertyId: "seed-property-1",
-    title: "Cozy Studio Suite",
-    description: "Furnished private studio room with workspace and high-speed fiber internet.",
-    area: 18,
-    rent: 320,
-    currency: "USD",
-    deposit: 320,
-    bedrooms: 1,
-    bathrooms: 1,
-    facing: "EAST",
-    availableFrom: "2026-05-01T00:00:00.000Z",
-    status: "AVAILABLE",
-    createdAt: "2026-04-02T10:00:00.000Z",
-    updatedAt: "2026-04-02T10:00:00.000Z",
-    property: {
-      id: "seed-property-1",
-      title: "Metro Luxury Suites",
-      city: "New York",
-    },
-  },
-  {
-    id: "cmusua2k50007jt0416usoh6u",
-    propertyId: "cmusftm9x0005l804wxvoe32o",
-    title: "Garden View Deluxe Room",
-    description: "Quiet room overlooking private garden with attached balcony and AC.",
-    area: 28,
-    rent: 550,
-    currency: "USD",
-    deposit: 550,
-    bedrooms: 1,
-    bathrooms: 1,
-    facing: "NORTH",
-    availableFrom: "2026-05-01T00:00:00.000Z",
-    status: "AVAILABLE",
-    createdAt: "2026-04-03T10:00:00.000Z",
-    updatedAt: "2026-04-03T10:00:00.000Z",
-    property: {
-      id: "cmusftm9x0005l804wxvoe32o",
-      title: "Greenwood Residence",
-      city: "Dhaka",
-    },
-  },
-];
-
 export default async function HomePage() {
   const [properties, rooms] = await Promise.all([
     apiListSafe<PropertyListItem>("/properties", {
@@ -245,11 +107,8 @@ export default async function HomePage() {
     }),
   ]);
 
-  const rawFeatured = properties.items.slice(0, 3);
-  const featuredProperties = rawFeatured.length > 0 ? rawFeatured : FALLBACK_PROPERTIES;
-
-  const rawRooms = rooms.items.slice(0, 3);
-  const affordableRooms = rawRooms.length > 0 ? rawRooms : FALLBACK_ROOMS;
+  const featuredProperties = properties.items.slice(0, 3);
+  const affordableRooms = rooms.items.slice(0, 3);
 
   // List endpoints omit photos, so fetch the primary image for each card.
   const [propertyImages, roomImages] = await Promise.all([
