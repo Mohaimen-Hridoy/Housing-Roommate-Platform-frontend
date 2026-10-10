@@ -6,9 +6,17 @@ import { MapPin, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/components/providers/locale-provider";
 
+import { cn } from "@/lib/utils";
+
 const POPULAR_LOCATIONS = ["Dhaka", "Chittagong", "Sylhet", "Uttara", "Mirpur"];
 
-export function HeroSearch() {
+export function HeroSearch({
+  centered = false,
+  className = "",
+}: {
+  centered?: boolean;
+  className?: string;
+}) {
   const router = useRouter();
   const t = useTranslation();
   const [query, setQuery] = useState("");
@@ -28,12 +36,12 @@ export function HeroSearch() {
   };
 
   return (
-    <div className="w-full max-w-xl space-y-3">
+    <div className={cn("w-full max-w-2xl space-y-3.5", centered && "mx-auto", className)}>
       <form
         onSubmit={handleSubmit}
-        className="surface-raised edge-light relative flex items-center gap-2 rounded-2xl border border-border/80 bg-card/90 p-2 shadow-lg backdrop-blur-md transition-all duration-300 focus-within:border-primary/50 focus-within:shadow-[0_8px_30px_hsl(var(--shadow-color)/0.18)]"
+        className="surface-raised edge-light relative flex items-center gap-2 rounded-2xl border border-border/80 bg-card/95 p-2 shadow-xl backdrop-blur-md transition-all duration-300 focus-within:border-primary/50 focus-within:shadow-[0_12px_36px_hsl(var(--shadow-color)/0.18)]"
       >
-        <div className="flex flex-1 items-center gap-2.5 pl-3">
+        <div className="flex flex-1 items-center gap-3 pl-3.5">
           <MapPin className="size-4 shrink-0 text-primary" aria-hidden="true" />
           <input
             type="text"
@@ -44,21 +52,21 @@ export function HeroSearch() {
             aria-label="Search destination"
           />
         </div>
-        <Button type="submit" size="sm" className="h-10 shrink-0 gap-1.5 rounded-xl px-4 font-semibold shadow-md">
-          <Search className="size-3.5" aria-hidden="true" />
+        <Button type="submit" size="sm" className="h-10 shrink-0 gap-1.5 rounded-xl px-5 font-semibold shadow-md">
+          <Search className="size-4" aria-hidden="true" />
           <span>{t("common.search") || "Search"}</span>
         </Button>
       </form>
 
       {/* Quick location chips */}
-      <div className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
+      <div className={cn("flex flex-wrap items-center gap-2 text-xs text-muted-foreground", centered && "justify-center")}>
         <span className="font-semibold text-foreground">{t("common.popular") || "Popular"}:</span>
         {POPULAR_LOCATIONS.map((loc) => (
           <button
             key={loc}
             type="button"
             onClick={() => handleLocationClick(loc)}
-            className="rounded-full border border-border/60 bg-secondary/50 px-2.5 py-0.5 text-xs transition-colors hover:border-primary/40 hover:bg-secondary hover:text-foreground"
+            className="rounded-full border border-border/70 bg-card/70 px-3 py-1 text-xs font-medium backdrop-blur-xs transition-colors hover:border-primary/40 hover:bg-primary/10 hover:text-primary"
           >
             {loc}
           </button>

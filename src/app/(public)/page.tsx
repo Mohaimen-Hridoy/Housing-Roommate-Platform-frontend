@@ -21,7 +21,6 @@ import { Badge } from "@/components/ui/badge";
 import { SmartImage } from "@/components/common/smart-image";
 import { RoomStatusBadge } from "@/components/common/status-badge";
 import { T } from "@/components/common/localized-text";
-import { HeroVisual } from "@/components/brand/hero-visual";
 import { Reveal } from "@/components/brand/reveal";
 import { CountUp } from "@/components/brand/count-up";
 import { SpotlightCard } from "@/components/brand/spotlight-card";
@@ -132,19 +131,25 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="aurora grain surface-mint relative border-b border-border">
-        <div className="container-page py-16 lg:py-24">
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,1fr)] lg:items-center">
-          <div className="space-y-7">
+      <section className="aurora grain surface-mint relative border-b border-border overflow-hidden">
+        {/* Ambient subtle backglow */}
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center -z-10" aria-hidden="true">
+          <div className="size-[640px] rounded-full bg-gradient-to-tr from-primary/10 via-mint/15 to-brand/10 blur-3xl opacity-75" />
+        </div>
+
+        <div className="container-page py-16 sm:py-20 lg:py-24">
+          <div className="mx-auto max-w-4xl text-center space-y-8">
             <Reveal distance={16}>
-              <Badge variant="accent" className="gap-1.5">
-                <Sparkles className="size-3" aria-hidden="true" />
-                <T k="home.eyebrow" fallback="Housing & roommate platform" />
-              </Badge>
+              <div className="flex justify-center">
+                <Badge variant="accent" className="gap-1.5 px-3.5 py-1 text-xs font-semibold shadow-xs">
+                  <Sparkles className="size-3.5 text-primary" aria-hidden="true" />
+                  <T k="home.eyebrow" fallback="Housing & roommate platform" />
+                </Badge>
+              </div>
             </Reveal>
 
             <Reveal distance={22} delay={0.06}>
-              <h1 className="text-4xl font-bold leading-[1.02] tracking-[-0.025em] sm:text-5xl lg:text-[3.6rem]">
+              <h1 className="mx-auto max-w-3xl text-balance text-4xl font-extrabold leading-[1.04] tracking-[-0.03em] sm:text-5xl lg:text-[3.8rem]">
                 <span className="text-gradient-brand">
                   <T k="home.titleAccent" fallback="Find a room" />
                 </span>{" "}
@@ -153,7 +158,7 @@ export default async function HomePage() {
             </Reveal>
 
             <Reveal distance={20} delay={0.12}>
-              <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+              <p className="mx-auto max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg lg:text-xl">
                 <T
                   k="home.subtitle"
                   vars={{ app: APP_NAME }}
@@ -163,15 +168,15 @@ export default async function HomePage() {
             </Reveal>
 
             <Reveal distance={18} delay={0.16}>
-              <HeroSearch />
+              <HeroSearch centered />
             </Reveal>
 
             <Reveal distance={18} delay={0.20}>
-              <div className="flex flex-col gap-3 sm:flex-row">
+              <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
                 <Button asChild size="lg" className="shadow-md">
                   <Link href="/properties">
                     <T k="home.ctaBrowse" fallback="Browse available rooms" />
-                    <ArrowRight />
+                    <ArrowRight className="size-4" />
                   </Link>
                 </Button>
                 <Button asChild size="lg" variant="outline">
@@ -183,7 +188,7 @@ export default async function HomePage() {
             </Reveal>
 
             <Reveal distance={18} delay={0.24}>
-              <dl className="grid max-w-lg grid-cols-3 gap-6 border-t border-border/70 pt-7">
+              <dl className="mx-auto flex max-w-xl flex-wrap items-center justify-center gap-8 border-t border-border/70 pt-7 sm:gap-14">
                 {[
                   {
                     label: "home.statRoles",
@@ -196,31 +201,26 @@ export default async function HomePage() {
                     fallback: "API endpoints",
                   },
                 ].map((item) => (
-                  <div key={item.label} className="stat-accent">
+                  <div key={item.label} className="stat-accent text-left">
                     <dt className="text-xs uppercase tracking-wide text-muted-foreground">
                       <T k={item.label} fallback={item.fallback} />
                     </dt>
-                    <dd className="tabular mt-1 text-2xl font-semibold">
+                    <dd className="tabular mt-1 text-2xl font-bold">
                       <CountUp value={item.value} />
                     </dd>
                   </div>
                 ))}
-                <div className="stat-accent">
+                <div className="stat-accent text-left">
                   <dt className="text-xs uppercase tracking-wide text-muted-foreground">
                     <T k="home.statPayments" fallback="Payments" />
                   </dt>
-                  <dd className="tabular mt-1 text-2xl font-semibold">Stripe</dd>
+                  <dd className="tabular mt-1 text-2xl font-bold">Stripe</dd>
                 </div>
               </dl>
             </Reveal>
           </div>
 
-          <Reveal distance={28} delay={0.1} className="order-first lg:order-none">
-            <HeroVisual />
-          </Reveal>
-        </div>
-
-        <div className="mt-14">
+          <div className="mt-14 sm:mt-16">
           <Reveal distance={22}>
             <Card className="surface-raised edge-light overflow-hidden">
             <CardContent className="p-0">
