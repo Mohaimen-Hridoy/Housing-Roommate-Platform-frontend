@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 
+import { useSearchParams } from "next/navigation";
 import { ServerActionForm } from "@/components/auth/server-action-form";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -22,6 +23,9 @@ export function LoginForm({ action, submitLabel }: LoginFormProps) {
     password: z.string().min(1, t("auth.err.passwordRequired")),
   });
 
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next");
+
   return (
     <ServerActionForm
       action={action}
@@ -31,6 +35,7 @@ export function LoginForm({ action, submitLabel }: LoginFormProps) {
     >
       {(form) => (
         <div className="space-y-4">
+          {next ? <input type="hidden" name="next" value={next} /> : null}
           <Field
             label={t("auth.email")}
             htmlFor="email"

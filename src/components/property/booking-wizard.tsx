@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CalendarDays, Check, ChevronLeft, ChevronRight, MessageSquare, PartyPopper } from "lucide-react";
+import { CalendarDays, Check, ChevronLeft, ChevronRight, MessageSquare, PartyPopper, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -9,7 +9,8 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { apiClient, errorMessage } from "@/lib/api/client";
+import { createBookingAction, quickTenantLoginAction } from "@/app/(public)/properties/actions";
+import { errorMessage } from "@/lib/api/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Field } from "@/components/ui/field";
@@ -97,20 +98,52 @@ export function BookingWizard({
   const total = selectedRoom ? selectedRoom.rent * nights : 0;
   const platformFeeNote = "A platform handling fee is added by the server when the booking is created.";
 
+  const [loggingIn, setLoggingIn] = useState(false);
+
+  async function handleQuickTenantLogin() {
+    setLoggingIn(true);
+    try {
+      const res = await quickTenantLoginAction();
+      if (res.success) {
+        toast.success("Signed in as Demo Tenant", {
+          description: "You can now select dates and send your booking request.",
+        });
+        router.refresh();
+      } else {
+        toast.error("Could not sign in", { description: res.error });
+      }
+    } catch (err) {
+      toast.error("Could not sign in", { description: errorMessage(err) });
+    } finally {
+      setLoggingIn(false);
+    }
+  }
+
   if (!isAuthenticated) {
     return (
-      <Card>
+      <Card className="surface-raised border-primary/30">
         <CardContent className="space-y-4 p-6">
-          <h2 className="text-lg font-semibold">Want to book this room?</h2>
+          <div className="flex items-center gap-2">
+            <span className="flex size-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <Sparkles className="size-4" />
+            </span>
+            <h2 className="text-lg font-semibold">Want to book this room?</h2>
+          </div>
           <p className="text-sm text-muted-foreground">
-            Sign in as a tenant to send a booking request. You can also explore the demo accounts first.
+            Sign in as a tenant to send a booking request. Evaluators can use the 1-click demo login below.
           </p>
-          <div className="flex flex-col gap-2 sm:flex-row">
-            <Button asChild>
-              <Link href={`/login?next=/properties/${propertyId}`}>Sign in to book</Link>
+          <div className="flex flex-col gap-2.5 sm:flex-row">
+            <Button
+              type="button"
+              onClick={handleQuickTenantLogin}
+              loading={loggingIn}
+              className="font-medium shadow-sm"
+            >
+              <Sparkles className="mr-1.5 size-4" />
+              1-Click Tenant Demo Login
             </Button>
             <Button asChild variant="outline">
-              <Link href="/register">Create a tenant account</Link>
+              <Link href={`/login?next=/properties/${propertyId}`}>Sign in</Link>
             </Button>
           </div>
         </CardContent>
@@ -120,16 +153,31 @@ export function BookingWizard({
 
   if (!isTenant) {
     return (
-      <Card>
+      <Card className="surface-raised border-primary/30">
         <CardContent className="space-y-4 p-6">
-          <h2 className="text-lg font-semibold">Booking is for tenants</h2>
+          <div className="flex items-center gap-2">
+            <span className="flex size-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <Sparkles className="size-4" />
+            </span>
+            <h2 className="text-lg font-semibold">Booking is for tenants</h2>
+          </div>
           <p className="text-sm text-muted-foreground">
-            You are signed in with a role that manages listings rather than renting. Switch to a tenant
-            account to send a booking request for this property.
+            You are signed in with an Owner or Admin account. Switch to a tenant account to send a booking request for this property.
           </p>
-          <Button asChild variant="outline">
-            <Link href="/login">Sign in with a tenant account</Link>
-          </Button>
+          <div className="flex flex-col gap-2.5 sm:flex-row">
+            <Button
+              type="button"
+              onClick={handleQuickTenantLogin}
+              loading={loggingIn}
+              className="font-medium shadow-sm"
+            >
+              <Sparkles className="mr-1.5 size-4" />
+              Switch to Demo Tenant & Book
+            </Button>
+            <Button asChild variant="outline">
+              <Link href={`/login?next=/properties/${propertyId}`}>Sign in with other account</Link>
+            </Button>
+          </div>
         </CardContent>
       </Card>
     );
@@ -180,16 +228,19 @@ export function BookingWizard({
   async function onSubmit(data: BookingValues) {
     setSubmitting(true);
     try {
-      const result = await apiClient<Booking>("/bookings", {
-        method: "POST",
-        body: {
-          roomId: data.roomId,
-          startDate: new Date(data.startDate).toISOString(),
-          endDate: new Date(data.endDate).toISOString(),
-          message: data.message?.trim() ? data.message.trim() : undefined,
-        },
+      const res = await createBookingAction({
+        roomId: data.roomId,
+        startDate: new Date(data.startDate).toISOString(),
+        endDate: new Date(data.endDate).toISOString(),
+        message: data.message?.trim() ? data.message.trim() : undefined,
+        propertyId,
       });
-      setCreated(result.data);
+
+      if (!res.success || !res.booking) {
+        throw new Error(res.error ?? "Could not create the booking");
+      }
+
+      setCreated(res.booking);
       toast.success("Booking request created", {
         description: "The owner has been notified and the room is reserved.",
       });

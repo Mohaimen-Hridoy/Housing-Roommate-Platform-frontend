@@ -69,8 +69,10 @@ export async function loginAction(_prev: ActionState, formData: FormData): Promi
     return toFieldErrors(error);
   }
 
+  const nextParam = String(formData.get("next") ?? "").trim();
+  const destination = nextParam.startsWith("/") ? nextParam : ROLE_HOME[role];
   revalidatePath("/", "layout");
-  redirect(ROLE_HOME[role]);
+  redirect(destination);
 }
 
 const registerSchema = z
@@ -160,8 +162,10 @@ export async function demoLoginAction(_prev: ActionState, formData: FormData): P
     return toFieldErrors(error);
   }
 
+  const nextParam = String(formData.get("next") ?? "").trim();
+  const destination = nextParam.startsWith("/") ? nextParam : account.home;
   revalidatePath("/", "layout");
-  redirect(account.home);
+  redirect(destination);
 }
 
 export async function logoutAction(): Promise<void> {

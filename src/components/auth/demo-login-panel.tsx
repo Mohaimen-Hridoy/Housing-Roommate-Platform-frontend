@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Building2, Rocket, ShieldCheck, Sparkles } from "lucide-react";
 
 import type { ActionState } from "@/app/(auth)/actions";
@@ -27,6 +28,8 @@ interface DemoLoginPanelProps {
  */
 export function DemoLoginPanel({ action }: DemoLoginPanelProps) {
   const t = useTranslation();
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next");
   const [state, formAction, isPending] = useActionState(action, { status: "idle" });
   const [loadingRole, setLoadingRole] = useState<Role | null>(null);
 
@@ -34,6 +37,7 @@ export function DemoLoginPanel({ action }: DemoLoginPanelProps) {
     setLoadingRole(role);
     const formData = new FormData();
     formData.set("role", role);
+    if (next) formData.set("next", next);
     formAction(formData);
   }
 
