@@ -99,3 +99,17 @@ export async function clearSession(): Promise<void> {
 export function homeForRole(role: Role): string {
   return ROLE_HOME[role];
 }
+
+export async function updateSessionUser(patch: Partial<SessionUser>): Promise<void> {
+  const store = await cookies();
+  const current = await getSessionUser();
+  if (!current) return;
+  const updated: SessionUser = { ...current, ...patch };
+  store.set(SESSION_COOKIE, serializeSession(updated), {
+    httpOnly: false,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: SESSION_MAX_AGE_SECONDS,
+  });
+}

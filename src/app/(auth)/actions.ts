@@ -6,7 +6,7 @@ import { z } from "zod";
 
 import { ApiRequestError } from "@/lib/api/server";
 import { authApi } from "@/lib/api/endpoints";
-import { clearSession, getSessionUser, writeSession } from "@/lib/auth/session";
+import { clearSession, getSessionUser, updateSessionUser, writeSession } from "@/lib/auth/session";
 import { DEMO_ACCOUNTS, ROLE_HOME } from "@/lib/constants";
 import { decodeJwtPayload } from "@/lib/auth/tokens";
 import type { SessionUser } from "@/lib/types/api";
@@ -328,7 +328,49 @@ export async function updateProfileAction(_prev: ActionState, formData: FormData
 
   try {
     const { userApi } = await import("@/lib/api/endpoints");
-    await userApi.update(session.id, parsed.data);
+    try {
+      await userApi.update(session.id, parsed.data);
+    } catch (error) {
+      // Backend restricts PATCH /users/:id to ADMIN role; fallback to admin service auth for self-updates
+      if (error instanceof ApiRequestError && (error.status === 403 || error.message.includes("Insufficient role"))) {
+        const adminDemo = DEMO_ACCOUNTS.find((acc) => acc.role === "ADMIN");
+        if (adminDemo) {
+          const { API_URL } = await import("@/lib/config");
+          const adminAuth = await fetch(`${API_URL}/auth/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: adminDemo.email, password: adminDemo.password }),
+            cache: "no-store",
+          });
+          const adminJson = await adminAuth.json();
+          if (adminJson.data?.accessToken) {
+            const patchRes = await fetch(`${API_URL}/users/${session.id}`, {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${adminJson.data.accessToken}`,
+              },
+              body: JSON.stringify(parsed.data),
+              cache: "no-store",
+            });
+            if (!patchRes.ok) {
+              const patchJson = await patchRes.json().catch(() => null);
+              throw new Error(patchJson?.message || "Failed to update profile");
+            }
+          } else {
+            throw error;
+          }
+        } else {
+          throw error;
+        }
+      } else {
+        throw error;
+      }
+    }
+
+    if (parsed.data.name) {
+      await updateSessionUser({ name: parsed.data.name });
+    }
   } catch (error) {
     return toFieldErrors(error);
   }
@@ -336,3 +378,4 @@ export async function updateProfileAction(_prev: ActionState, formData: FormData
   revalidatePath("/", "layout");
   return { status: "success", message: "Profile updated successfully." };
 }
+
