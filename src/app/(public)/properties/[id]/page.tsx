@@ -31,6 +31,7 @@ import type { Favorite, PropertyDetail } from "@/lib/types/api";
 
 interface PropertyPageProps {
   params: Promise<{ id: string }>;
+  searchParams?: Promise<{ roomId?: string; room?: string }>;
 }
 
 export async function generateMetadata({ params }: PropertyPageProps): Promise<Metadata> {
@@ -62,8 +63,10 @@ export async function generateMetadata({ params }: PropertyPageProps): Promise<M
   };
 }
 
-export default async function PropertyDetailPage({ params }: PropertyPageProps) {
+export default async function PropertyDetailPage({ params, searchParams }: PropertyPageProps) {
   const { id } = await params;
+  const query = await searchParams;
+  const initialRoomId = query?.roomId ?? query?.room;
 
   const [result, session] = await Promise.all([
     apiDataSafe<PropertyDetail>(`/properties/${id}`),
@@ -141,6 +144,14 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
               isAuthenticated={Boolean(session)}
               disabled={isOwner}
             />
+            {rooms.length > 0 && !isOwner ? (
+              <Button asChild size="sm">
+                <a href="#booking-card">
+                  <CalendarDays className="mr-1.5 size-4" />
+                  Book a Room
+                </a>
+              </Button>
+            ) : null}
           </div>
         }
       />
@@ -275,10 +286,17 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
                           ) : null}
                         </div>
                       </div>
-                      <p className="text-sm font-semibold tabular-nums">
-                        {formatCurrency(room.rent, room.currency)}
-                        <span className="text-xs font-normal text-muted-foreground">/night</span>
-                      </p>
+                      <div className="flex items-center gap-3">
+                        <p className="text-sm font-semibold tabular-nums">
+                          {formatCurrency(room.rent, room.currency)}
+                          <span className="text-xs font-normal text-muted-foreground">/night</span>
+                        </p>
+                        {!isOwner ? (
+                          <Button asChild size="sm" variant="outline">
+                            <a href={`/properties/${property.id}?roomId=${room.id}#booking-card`}>Book room</a>
+                          </Button>
+                        ) : null}
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -309,12 +327,13 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
           ))}
         </div>
 
-        <div className="space-y-6 lg:sticky lg:top-24">
+        <div id="booking-card" className="space-y-6 lg:sticky lg:top-24">
           <BookingWizard
             rooms={rooms}
             isAuthenticated={Boolean(session)}
             isTenant={session?.role === "TENANT"}
             propertyId={property.id}
+            initialRoomId={initialRoomId}
           />
 
           <Card>

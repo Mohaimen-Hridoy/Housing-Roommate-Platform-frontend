@@ -39,3 +39,4 @@ export function TenantShell({ children }: { children: React.ReactNode }) {
     </DashboardShell>
   );
 }
+

@@ -426,7 +426,7 @@ export default async function HomePage() {
             {affordableRooms.map((room, index) => (
               <Reveal key={room.id} as="article" distance={18} delay={index * 0.07}>
                 <Link
-                  href={room.property?.id ? `/properties/${room.property.id}` : `/properties/${room.propertyId}`}
+                  href={`/properties/${room.property?.id ?? room.propertyId}?roomId=${room.id}#booking-card`}
                   className="group surface spotlight glow-ring relative isolate block h-full overflow-hidden transition-transform duration-300 ease-out-expo hover:-translate-y-1.5"
                 >
                   <div className="image-zoom relative aspect-[16/10] bg-muted">

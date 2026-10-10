@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -212,7 +212,7 @@ export default function ContactPage() {
                   <p className="text-xs text-muted-foreground">
                     <T
                       k="contact.form.note"
-                      fallback="This form opens your default email client with a pre-filled message. There is no backend contact endpoint â€” all communication happens directly via email."
+                      fallback="This form opens your default email client with a pre-filled message. There is no backend contact endpoint — all communication happens directly via email."
                     />
                   </p>
                 </div>
@@ -285,7 +285,7 @@ export default function ContactPage() {
                       <T k="contact.channels.hoursTitle" fallback="Response hours" />
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      <T k="contact.channels.hoursBody" fallback="Monday â€“ Friday, 9 AM â€“ 6 PM UTC" />
+                      <T k="contact.channels.hoursBody" fallback="Monday – Friday, 9 AM – 6 PM UTC" />
                     </p>
                   </div>
                 </div>
@@ -305,7 +305,7 @@ export default function ContactPage() {
               <p className="text-xs text-muted-foreground">
                 <T
                   k="contact.demo.body2"
-                  fallback="The sign-in page has one-click demo login for all three roles. No email, no password â€” just click and go."
+                  fallback="The sign-in page has one-click demo login for all three roles. No email, no password — just click and go."
                 />
               </p>
               <Button asChild size="sm" variant="outline" className="w-full">

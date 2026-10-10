@@ -31,7 +31,7 @@ export function RoomCard({ room, image }: RoomCardProps) {
 
   return (
     <Link
-      href={`/properties/${room.propertyId}`}
+      href={`/properties/${room.propertyId}?roomId=${room.id}#booking-card`}
       aria-label={`View ${property?.title ?? "property"} details for room ${room.title}`}
       className="interactive-surface glow-ring group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card text-card-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
     >
