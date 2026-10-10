@@ -1,10 +1,9 @@
-"use client";
-
 import type { LucideIcon } from "lucide-react";
 import { FolderSearch } from "lucide-react";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { useTranslation } from "@/components/providers/locale-provider";
+import { T } from "@/components/common/localized-text";
 import { cn } from "@/lib/utils";
 
 interface EmptyStateProps {
@@ -21,6 +20,9 @@ interface EmptyStateProps {
 /**
  * 10/10 Polished Empty State with attractive layered geometric illustration,
  * ambient glow, and clear actionable CTA.
+ *
+ * Kept as a Server Component by default (no "use client") so server pages
+ * can pass icon components without triggering RSC function serialization errors.
  */
 export function EmptyState({
   icon: Icon = FolderSearch,
@@ -32,11 +34,6 @@ export function EmptyState({
   className,
   compact = false,
 }: EmptyStateProps) {
-  const t = useTranslation();
-
-  const heading = titleKey ? t(titleKey) : title;
-  const body = descriptionKey ? t(descriptionKey) : description;
-
   return (
     <div
       className={cn(
@@ -76,11 +73,11 @@ export function EmptyState({
 
       <div className="relative space-y-1.5 max-w-md">
         <h3 className="font-semibold text-foreground tracking-tight text-base sm:text-lg">
-          {heading === titleKey ? title : heading}
+          {titleKey ? <T k={titleKey} fallback={title} /> : title}
         </h3>
-        {body ? (
+        {descriptionKey || description ? (
           <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-            {body === descriptionKey ? description : body}
+            {descriptionKey ? <T k={descriptionKey} fallback={description} /> : description}
           </p>
         ) : null}
       </div>
@@ -89,7 +86,7 @@ export function EmptyState({
         <div className="relative mt-3">
           {action.href ? (
             <Button asChild size="sm" className="shadow-xs font-medium">
-              <a href={action.href}>{action.label}</a>
+              <Link href={action.href}>{action.label}</Link>
             </Button>
           ) : (
             <Button size="sm" className="shadow-xs font-medium" onClick={action.onClick}>

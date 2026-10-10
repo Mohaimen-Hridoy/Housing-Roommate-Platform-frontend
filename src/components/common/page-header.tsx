@@ -1,9 +1,7 @@
-"use client";
-
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
-import { useTranslation } from "@/components/providers/locale-provider";
+import { T } from "@/components/common/localized-text";
 import { cn } from "@/lib/utils";
 
 interface Crumb {
@@ -26,16 +24,11 @@ interface PageHeaderProps {
   className?: string;
 }
 
-/** Resolves a dictionary key, falling back to the literal English text. */
-function useLocalized() {
-  const t = useTranslation();
-  return (key: string | undefined, fallback: string | undefined) => {
-    if (!key) return fallback;
-    const value = t(key);
-    return value === key ? fallback : value;
-  };
-}
-
+/**
+ * Server-compatible page header.
+ * Uses <T> for translations so it does not trigger RSC client-boundary
+ * serialization when rendered inside Server Components.
+ */
 export function PageHeader({
   title,
   titleKey,
@@ -47,8 +40,6 @@ export function PageHeader({
   actions,
   className,
 }: PageHeaderProps) {
-  const localize = useLocalized();
-
   return (
     <div className={cn("flex flex-col gap-4", className)}>
       {breadcrumbs && breadcrumbs.length > 0 ? (
@@ -58,11 +49,11 @@ export function PageHeader({
               <li key={`${crumb.label}-${index}`} className="flex items-center gap-1">
                 {crumb.href ? (
                   <Link href={crumb.href} className="transition-colors hover:text-foreground">
-                    {localize(crumb.labelKey, crumb.label)}
+                    {crumb.labelKey ? <T k={crumb.labelKey} fallback={crumb.label} /> : crumb.label}
                   </Link>
                 ) : (
                   <span className="font-medium text-foreground">
-                    {localize(crumb.labelKey, crumb.label)}
+                    {crumb.labelKey ? <T k={crumb.labelKey} fallback={crumb.label} /> : crumb.label}
                   </span>
                 )}
                 {index < breadcrumbs.length - 1 ? <ChevronRight className="size-3.5" aria-hidden="true" /> : null}
@@ -76,15 +67,15 @@ export function PageHeader({
         <div className="space-y-1.5">
           {eyebrow || eyebrowKey ? (
             <p className="text-xs font-semibold uppercase tracking-wider text-primary">
-              {localize(eyebrowKey, eyebrow)}
+              {eyebrowKey ? <T k={eyebrowKey} fallback={eyebrow} /> : eyebrow}
             </p>
           ) : null}
           <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-            {localize(titleKey, title)}
+            {titleKey ? <T k={titleKey} fallback={title} /> : title}
           </h1>
           {description || descriptionKey ? (
             <p className="max-w-2xl text-sm text-muted-foreground">
-              {localize(descriptionKey, description)}
+              {descriptionKey ? <T k={descriptionKey} fallback={description} /> : description}
             </p>
           ) : null}
         </div>
@@ -111,14 +102,16 @@ export function SectionHeading({
   action,
   className,
 }: SectionHeadingProps) {
-  const localize = useLocalized();
-
   return (
     <div className={cn("flex flex-wrap items-end justify-between gap-3", className)}>
       <div className="space-y-1">
-        <h2 className="text-lg font-semibold tracking-tight">{localize(titleKey, title)}</h2>
+        <h2 className="text-lg font-semibold tracking-tight">
+          {titleKey ? <T k={titleKey} fallback={title} /> : title}
+        </h2>
         {description || descriptionKey ? (
-          <p className="text-sm text-muted-foreground">{localize(descriptionKey, description)}</p>
+          <p className="text-sm text-muted-foreground">
+            {descriptionKey ? <T k={descriptionKey} fallback={description} /> : description}
+          </p>
         ) : null}
       </div>
       {action}
