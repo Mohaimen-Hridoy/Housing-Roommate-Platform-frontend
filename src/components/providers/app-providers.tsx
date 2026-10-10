@@ -1,7 +1,8 @@
 "use client";
 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 import { Toaster } from "sonner";
 
 import { ThemeProvider } from "@/components/providers/theme-provider";
@@ -16,6 +17,8 @@ export interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+export { AuthContext };
+
 export function useAuthContext(): AuthContextValue {
   const context = useContext(AuthContext);
   if (!context) throw new Error("useAuthContext must be used within <AppProviders>");
@@ -23,15 +26,22 @@ export function useAuthContext(): AuthContextValue {
 }
 
 /**
- * Single client-side provider: the session mirror for role-aware rendering, the
- * theme controller, and the global Sonner toaster.
- *
- * Data fetching is deliberately Server-first — route components read the API
- * through `@/lib/api/server` and stream the result — so there is no client cache
- * to invalidate and no second source of truth for server data.
+ * Single client-side provider: TanStack Query for server state, the session
+ * mirror for role-aware rendering, the theme controller, and the global Sonner
+ * toaster.
  */
 export function AppProviders({ children, user }: { children: React.ReactNode; user: SessionUser | null }) {
   const router = useRouter();
+
+  const [client] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: { staleTime: 30_000, refetchOnWindowFocus: false, retry: 1 },
+          mutations: { retry: 0 },
+        },
+      }),
+  );
 
   const value = useMemo<AuthContextValue>(
     () => ({
@@ -49,11 +59,13 @@ export function AppProviders({ children, user }: { children: React.ReactNode; us
   );
 
   return (
-    <ThemeProvider>
-      <AuthContext.Provider value={value}>
-        {children}
-        <Toaster position="top-right" richColors closeButton />
-      </AuthContext.Provider>
-    </ThemeProvider>
+    <QueryClientProvider client={client}>
+      <ThemeProvider>
+        <AuthContext.Provider value={value}>
+          {children}
+          <Toaster position="top-right" richColors closeButton />
+        </AuthContext.Provider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }

@@ -207,6 +207,41 @@ export async function apiClientData<T>(
   return result.data;
 }
 
+const EMPTY_PAGINATION: PaginationMeta = {
+  page: 1,
+  pageSize: 20,
+  totalItems: 0,
+  totalPages: 1,
+  hasNextPage: false,
+  hasPrevPage: false,
+};
+
+interface PaginationMeta {
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+}
+
+/** Safe wrapper that never throws — used by pages that render partial data with an error banner. */
+export async function apiListSafe<T>(
+  path: string,
+  options: ClientRequestOptions = {},
+): Promise<{ items: T[]; pagination: PaginationMeta; error: string | null }> {
+  try {
+    const result = await apiClient<{ items: T[]; pagination: PaginationMeta }>(path, options);
+    return { items: result.data.items, pagination: result.data.pagination, error: null };
+  } catch (error) {
+    return {
+      items: [],
+      pagination: EMPTY_PAGINATION,
+      error: error instanceof Error ? error.message : "Unable to load data",
+    };
+  }
+}
+
 /** Turns any thrown value into a toast-friendly message. */
 export function errorMessage(error: unknown, fallback = "Something went wrong"): string {
   if (error instanceof ClientApiError || error instanceof Error) return error.message || fallback;
