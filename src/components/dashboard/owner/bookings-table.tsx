@@ -10,6 +10,7 @@ import { BookingStatusBadge, PaymentStatusBadge } from "@/components/common/stat
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useOwnerMutation } from "@/components/dashboard/owner/use-owner-mutation";
+import { Reveal } from "@/components/brand/reveal";
 import { formatCurrency, formatDate, formatRelative } from "@/lib/format";
 import type { Booking, BookingStatus } from "@/lib/types/api";
 
@@ -98,93 +99,95 @@ export function BookingsTable({ bookings, tenants }: BookingsTableProps) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {rows.map((booking) => {
+            {rows.map((booking, index) => {
               const tenant = tenants[booking.tenantId];
               const isPending = booking.status === "PENDING";
               return (
-                <TableRow key={booking.id}>
-                  <TableCell>
-                    <p className="font-medium">{tenant?.name ?? "Tenant"}</p>
-                    {tenant ? (
-                      <p className="text-xs text-muted-foreground">{tenant.email}</p>
-                    ) : (
-                      <p className="font-mono text-xs text-muted-foreground" title={booking.tenantId}>
-                        id: {booking.tenantId}
+                <Reveal key={booking.id} as="tr" distance={12} delay={index * 0.03}>
+                  <TableRow>
+                    <TableCell>
+                      <p className="font-medium">{tenant?.name ?? "Tenant"}</p>
+                      {tenant ? (
+                        <p className="text-xs text-muted-foreground">{tenant.email}</p>
+                      ) : (
+                        <p className="font-mono text-xs text-muted-foreground" title={booking.tenantId}>
+                          id: {booking.tenantId}
+                        </p>
+                      )}
+                      <p className="text-[11px] text-muted-foreground">{formatRelative(booking.createdAt)}</p>
+                    </TableCell>
+                    <TableCell>
+                      <Link
+                        href={`/owner/listings/${booking.propertyId}`}
+                        className="text-sm font-medium underline-offset-4 hover:text-primary hover:underline"
+                      >
+                        Manage listing
+                      </Link>
+                      <p className="font-mono text-[11px] text-muted-foreground" title={`Room ${booking.roomId}`}>
+                        room: {booking.roomId.slice(0, 8)}…
                       </p>
-                    )}
-                    <p className="text-[11px] text-muted-foreground">{formatRelative(booking.createdAt)}</p>
-                  </TableCell>
-                  <TableCell>
-                    <Link
-                      href={`/owner/listings/${booking.propertyId}`}
-                      className="text-sm font-medium underline-offset-4 hover:text-primary hover:underline"
-                    >
-                      Manage listing
-                    </Link>
-                    <p className="font-mono text-[11px] text-muted-foreground" title={`Room ${booking.roomId}`}>
-                      room: {booking.roomId.slice(0, 8)}…
-                    </p>
-                  </TableCell>
-                  <TableCell className="hidden text-sm text-muted-foreground lg:table-cell">
-                    {formatDate(booking.startDate)} → {booking.endDate ? formatDate(booking.endDate) : "open-ended"}
-                  </TableCell>
-                  <TableCell className="text-right font-medium tabular-nums">
-                    {formatCurrency(booking.totalAmount, booking.currency)}
-                  </TableCell>
-                  <TableCell className="hidden text-right text-sm tabular-nums text-muted-foreground md:table-cell">
-                    {formatCurrency(booking.platformFee, booking.currency)}
-                  </TableCell>
-                  <TableCell>
-                    <BookingStatusBadge status={booking.status} />
-                  </TableCell>
-                  <TableCell className="hidden xl:table-cell">
-                    {booking.payment ? (
-                      <PaymentStatusBadge status={booking.payment.status} />
-                    ) : (
-                      <span className="text-xs text-muted-foreground">No payment</span>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {isPending ? (
-                      <div className="flex justify-end gap-2">
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="success"
-                          onClick={() => setDecision({ booking, next: "APPROVED" })}
-                        >
-                          <Check />
-                          Approve
-                        </Button>
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="outline"
-                          className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-                          onClick={() => setDecision({ booking, next: "REJECTED" })}
-                        >
-                          <X />
-                          Reject
-                        </Button>
-                      </div>
-                    ) : booking.status === "APPROVED" ? (
-                      <div className="flex justify-end">
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="outline"
-                          className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-                          onClick={() => setDecision({ booking, next: "CANCELLED" })}
-                        >
-                          <X className="mr-1 size-3.5" />
-                          Cancel
-                        </Button>
-                      </div>
-                    ) : (
-                      <p className="text-right text-xs text-muted-foreground">Decided</p>
-                    )}
-                  </TableCell>
-                </TableRow>
+                    </TableCell>
+                    <TableCell className="hidden text-sm text-muted-foreground lg:table-cell">
+                      {formatDate(booking.startDate)} → {booking.endDate ? formatDate(booking.endDate) : "open-ended"}
+                    </TableCell>
+                    <TableCell className="text-right font-medium tabular-nums">
+                      {formatCurrency(booking.totalAmount, booking.currency)}
+                    </TableCell>
+                    <TableCell className="hidden text-right text-sm tabular-nums text-muted-foreground md:table-cell">
+                      {formatCurrency(booking.platformFee, booking.currency)}
+                    </TableCell>
+                    <TableCell>
+                      <BookingStatusBadge status={booking.status} />
+                    </TableCell>
+                    <TableCell className="hidden xl:table-cell">
+                      {booking.payment ? (
+                        <PaymentStatusBadge status={booking.payment.status} />
+                      ) : (
+                        <span className="text-xs text-muted-foreground">No payment</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {isPending ? (
+                        <div className="flex justify-end gap-2">
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="success"
+                            onClick={() => setDecision({ booking, next: "APPROVED" })}
+                          >
+                            <Check />
+                            Approve
+                          </Button>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                            onClick={() => setDecision({ booking, next: "REJECTED" })}
+                          >
+                            <X />
+                            Reject
+                          </Button>
+                        </div>
+                      ) : booking.status === "APPROVED" ? (
+                        <div className="flex justify-end">
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                            onClick={() => setDecision({ booking, next: "CANCELLED" })}
+                          >
+                            <X className="mr-1 size-3.5" />
+                            Cancel
+                          </Button>
+                        </div>
+                      ) : (
+                        <p className="text-right text-xs text-muted-foreground">Decided</p>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                </Reveal>
               );
             })}
           </TableBody>

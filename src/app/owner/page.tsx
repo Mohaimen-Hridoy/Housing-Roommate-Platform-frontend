@@ -19,6 +19,7 @@ import { adminApi } from "@/lib/api/endpoints";
 import { getSessionUser } from "@/lib/auth/session";
 import { BOOKING_STATUS_META, ROOM_STATUS_META } from "@/lib/constants";
 import { formatCurrency, formatDate, formatPercent } from "@/lib/format";
+import { Reveal, RevealGroup } from "@/components/brand/reveal";
 import type { BookingStatus, OwnerDashboard, RoomStatus } from "@/lib/types/api";
 
 export const metadata: Metadata = {
@@ -109,7 +110,8 @@ export default async function OwnerOverviewPage() {
 
       {data ? (
         <>
-          <StatCardGrid>
+          <Reveal distance={18}>
+            <StatCardGrid>
             <StatCard
               label="Properties"
               value={data.listings.properties}
@@ -156,22 +158,23 @@ export default async function OwnerOverviewPage() {
               hint={`Platform fee ${formatCurrency(data.earnings.platformFee, currency)}`}
             />
           </StatCardGrid>
+          </Reveal>
 
-          <div className="grid gap-6 lg:grid-cols-2">
-            <section className="space-y-3 rounded-xl border border-border bg-card p-5 shadow-sm">
+          <RevealGroup className="grid gap-6 lg:grid-cols-2" step={0.08}>
+            <Reveal distance={20} as="section" className="space-y-3 rounded-xl border border-border bg-card p-5 shadow-sm">
               <SectionHeading
                 title="Room status"
                 description="How your inventory is distributed right now."
               />
               <RoomStatusBarChart data={roomStatusData} />
-            </section>
+            </Reveal>
 
-            <section className="space-y-3 rounded-xl border border-border bg-card p-5 shadow-sm">
+            <Reveal distance={20} as="section" className="space-y-3 rounded-xl border border-border bg-card p-5 shadow-sm">
               <SectionHeading title="Bookings by status" description="Every request that reached your properties." />
               <BookingsStatusDonutChart data={bookingStatusData} />
               <ChartLegend data={bookingStatusData} />
-            </section>
-          </div>
+            </Reveal>
+          </RevealGroup>
 
           <section className="space-y-4">
             <SectionHeading

@@ -11,7 +11,7 @@ interface RevealProps {
   delay?: number;
   /** Travel distance in pixels. Larger reads as more dramatic. */
   distance?: number;
-  as?: "div" | "section" | "li" | "article" | "header";
+  as?: "div" | "section" | "li" | "article" | "header" | "tr";
   id?: string;
   style?: React.CSSProperties;
   role?: React.AriaRole;
@@ -88,5 +88,44 @@ export function Reveal({
     >
       {children}
     </Tag>
+  );
+}
+
+interface RevealGroupProps {
+  children?: React.ReactNode;
+  className?: string;
+  /** Seconds added per child, so sections cascade instead of popping together. */
+  step?: number;
+  /** Travel distance for each child. */
+  distance?: number;
+}
+
+/**
+ * Reveals each direct child in turn as the group scrolls into view.
+ *
+ * Wrapping a page's sections in one of these is cheaper and far less noisy than
+ * hand-placing a `Reveal` per section, and it keeps the stagger in sync with the
+ * child order automatically.
+ */
+export function RevealGroup({
+  children,
+  className,
+  step = 0.07,
+  distance = 20,
+}: RevealGroupProps) {
+  const items = React.Children.toArray(children);
+
+  return (
+    <div className={className}>
+      {items.map((child, index) => (
+        <Reveal
+          key={React.isValidElement(child) && child.key != null ? child.key : index}
+          distance={distance}
+          delay={Math.min(index, 6) * step}
+        >
+          {child}
+        </Reveal>
+      ))}
+    </div>
   );
 }
