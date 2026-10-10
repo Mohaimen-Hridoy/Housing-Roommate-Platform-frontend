@@ -193,6 +193,7 @@ export function SiteHeader() {
           )}
           {user ? <UserMenu /> : null}
           <LanguageToggle />
+          <ThemeToggle />
         </div>
 
         <Button
