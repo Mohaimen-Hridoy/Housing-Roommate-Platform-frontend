@@ -24,9 +24,7 @@ const ThemeContext = React.createContext<ThemeContextValue | null>(null);
 export const THEME_BOOTSTRAP_SCRIPT = `(() => {
   try {
     var stored = localStorage.getItem('${STORAGE_KEY}');
-    var theme = stored === 'light' || stored === 'dark'
-      ? stored
-      : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    var theme = stored === 'dark' ? 'dark' : 'light';
     var root = document.documentElement;
     root.classList.toggle('dark', theme === 'dark');
     root.style.colorScheme = theme;
@@ -37,12 +35,14 @@ function readStoredTheme(): Theme {
   if (typeof window === "undefined") return "light";
   try {
     const stored = window.localStorage.getItem(STORAGE_KEY);
-    if (stored === "light" || stored === "dark") return stored;
+    if (stored === "dark") return "dark";
+    if (stored === "light") return "light";
   } catch {
-    // Private browsing can throw on access; fall through to the system choice.
+    // Private browsing can throw on access
   }
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  return "light";
 }
+
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // The bootstrap script has already set the class; this state only exists to
