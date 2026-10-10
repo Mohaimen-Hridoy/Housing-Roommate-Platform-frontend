@@ -221,12 +221,9 @@ export default async function HomePage() {
               </Reveal>
             </div>
 
-            {/* Right Column: Live Featured Property Showcase */}
+            {/* Right Column: Platform Vector Illustration & Benefit Cards (Tuition Terminal style) */}
             <Reveal distance={28} delay={0.1} className="order-first lg:order-none">
-              <HeroVisual
-                property={featuredProperties[0]}
-                imageUrl={propertyImageById.get(featuredProperties[0]?.id)?.url}
-              />
+              <HeroVisual />
             </Reveal>
           </div>
 
