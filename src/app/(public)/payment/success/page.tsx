@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { apiDataSafe } from "@/lib/api/server";
 import { getSessionUser } from "@/lib/auth/session";
 import { formatDateTime } from "@/lib/format";
+import { PaymentLivePoller } from "@/components/payment/payment-live-poller";
 import type { Booking, CheckoutReturnStatus } from "@/lib/types/api";
 
 export const dynamic = "force-dynamic";
@@ -134,10 +135,12 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
           </dl>
 
           {processing ? (
-            <p className="rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm text-primary">
-              Stripe confirms payments through a signed webhook, which can take a few seconds. Reload this
-              page in a moment — the status flips to <strong>Paid</strong> automatically.
-            </p>
+            <div className="space-y-3">
+              <PaymentLivePoller active={processing} />
+              <p className="rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm text-primary">
+                Stripe is finalizing the transaction. NestSpace is automatically checking every 2 seconds — this page will update to <strong>Paid</strong> as soon as Stripe confirms.
+              </p>
+            </div>
           ) : null}
 
           {booking.data ? (
