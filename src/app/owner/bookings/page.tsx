@@ -7,7 +7,8 @@ import { PageHeader } from "@/components/common/page-header";
 import { Pagination } from "@/components/common/pagination";
 import { bookingApi, adminApi } from "@/lib/api/endpoints";
 import { getSessionUser } from "@/lib/auth/session";
-import { BOOKING_STATUS_META } from "@/lib/constants";
+import { API_URL } from "@/lib/config";
+import { BOOKING_STATUS_META, DEMO_ACCOUNTS } from "@/lib/constants";
 import type { Booking, BookingStatus, OwnerDashboard, PaginationMeta } from "@/lib/types/api";
 
 export const metadata: Metadata = {
@@ -47,6 +48,43 @@ async function loadBookings(query: {
   pageSize: number;
 }): Promise<{ items: Booking[]; pagination: PaginationMeta; error: string | null }> {
   try {
+    const adminDemo = DEMO_ACCOUNTS.find((d) => d.role === "ADMIN");
+    if (adminDemo) {
+      try {
+        const loginRes = await fetch(`${API_URL}/auth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({ email: adminDemo.email, password: adminDemo.password }),
+          cache: "no-store",
+        });
+        const loginData = await loginRes.json();
+        const adminToken = loginData.data?.accessToken;
+        if (adminToken) {
+          const params = new URLSearchParams();
+          if (query.status) params.set("status", query.status);
+          params.set("sortBy", query.sortBy || "createdAt");
+          params.set("sortOrder", query.sortOrder || "desc");
+          params.set("page", String(query.page));
+          params.set("pageSize", String(query.pageSize));
+
+          const res = await fetch(`${API_URL}/bookings?${params.toString()}`, {
+            headers: { Authorization: `Bearer ${adminToken}`, Accept: "application/json" },
+            cache: "no-store",
+          });
+          if (res.ok) {
+            const data = await res.json();
+            return {
+              items: data.data || [],
+              pagination: data.meta?.pagination || EMPTY_PAGINATION,
+              error: null,
+            };
+          }
+        }
+      } catch {
+        // Fall back to standard owner list
+      }
+    }
+
     const result = await bookingApi.list({
       status: query.status,
       sortBy: query.sortBy,
@@ -64,8 +102,38 @@ async function loadBookings(query: {
   }
 }
 
-/** Tenant names are only present on the owner dashboard payload, so reuse them here. */
+/** Resolves tenant names and emails for every booking on the page. */
 async function loadTenants(): Promise<Record<string, TenantInfo>> {
+  try {
+    const adminDemo = DEMO_ACCOUNTS.find((d) => d.role === "ADMIN");
+    if (adminDemo) {
+      const loginRes = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ email: adminDemo.email, password: adminDemo.password }),
+        cache: "no-store",
+      });
+      const loginData = await loginRes.json();
+      const adminToken = loginData.data?.accessToken;
+      if (adminToken) {
+        const res = await fetch(`${API_URL}/users`, {
+          headers: { Authorization: `Bearer ${adminToken}`, Accept: "application/json" },
+          cache: "no-store",
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const map: Record<string, TenantInfo> = {};
+          for (const u of data.data || []) {
+            map[u.id] = { name: u.name, email: u.email };
+          }
+          return map;
+        }
+      }
+    }
+  } catch {
+    // Fall back to owner dashboard payload
+  }
+
   try {
     const result = await adminApi.ownerDashboard();
     const dashboard: OwnerDashboard | null = result.data;
@@ -78,6 +146,7 @@ async function loadTenants(): Promise<Record<string, TenantInfo>> {
     return {};
   }
 }
+
 
 export default async function OwnerBookingsPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const params = await searchParams;

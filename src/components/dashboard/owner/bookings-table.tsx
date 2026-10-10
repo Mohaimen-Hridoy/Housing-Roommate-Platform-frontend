@@ -24,9 +24,9 @@ interface BookingsTableProps {
   tenants: Record<string, TenantInfo>;
 }
 
-type PendingDecision = { booking: Booking; next: Extract<BookingStatus, "APPROVED" | "REJECTED"> } | null;
+type PendingDecision = { booking: Booking; next: Extract<BookingStatus, "APPROVED" | "REJECTED" | "CANCELLED"> } | null;
 
-/** Owner booking queue with guarded approve / reject and optimistic status updates. */
+/** Owner booking queue with guarded approve / reject / cancel and optimistic status updates. */
 export function BookingsTable({ bookings, tenants }: BookingsTableProps) {
   const { pendingKey, run } = useOwnerMutation();
   const [rows, setRows] = useState<Booking[]>(bookings);
@@ -38,14 +38,25 @@ export function BookingsTable({ bookings, tenants }: BookingsTableProps) {
     const previous = rows;
     setRows(rows.map((entry) => (entry.id === booking.id ? { ...entry, status: next } : entry)));
 
-    const path = next === "APPROVED" ? `/bookings/${booking.id}/approve` : `/bookings/${booking.id}/reject`;
+    const path =
+      next === "APPROVED"
+        ? `/bookings/${booking.id}/approve`
+        : next === "REJECTED"
+          ? `/bookings/${booking.id}/reject`
+          : `/bookings/${booking.id}/cancel`;
+
+    const body = next === "CANCELLED" ? { reason: "Cancelled by property owner" } : {};
+    const successMessage =
+      next === "APPROVED"
+        ? "Booking approved — the room is now occupied and the payment moved to processing."
+        : next === "REJECTED"
+          ? "Booking rejected — the room is available again."
+          : "Booking cancelled — the room was released back to inventory.";
+
     const updated = await run<Booking>(`booking-${booking.id}`, path, {
       method: "PATCH",
-      body: {},
-      successMessage:
-        next === "APPROVED"
-          ? "Booking approved — the room is now occupied and the payment moved to processing."
-          : "Booking rejected — the room is available again.",
+      body,
+      successMessage,
     });
 
     if (!updated) {
@@ -57,6 +68,7 @@ export function BookingsTable({ bookings, tenants }: BookingsTableProps) {
     setRows(rows.map((entry) => (entry.id === updated.id ? { ...updated, payment: updated.payment ?? entry.payment } : entry)));
     setDecision(null);
   };
+
 
   if (rows.length === 0) {
     return (
@@ -155,6 +167,19 @@ export function BookingsTable({ bookings, tenants }: BookingsTableProps) {
                           Reject
                         </Button>
                       </div>
+                    ) : booking.status === "APPROVED" ? (
+                      <div className="flex justify-end">
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                          onClick={() => setDecision({ booking, next: "CANCELLED" })}
+                        >
+                          <X className="mr-1 size-3.5" />
+                          Cancel
+                        </Button>
+                      </div>
                     ) : (
                       <p className="text-right text-xs text-muted-foreground">Decided</p>
                     )}
@@ -171,17 +196,32 @@ export function BookingsTable({ bookings, tenants }: BookingsTableProps) {
         onOpenChange={(open) => {
           if (!open) setDecision(null);
         }}
-        title={decision?.next === "APPROVED" ? "Approve this booking?" : "Reject this booking?"}
+        title={
+          decision?.next === "APPROVED"
+            ? "Approve this booking?"
+            : decision?.next === "CANCELLED"
+              ? "Cancel this booking?"
+              : "Reject this booking?"
+        }
         description={
           decision?.next === "APPROVED"
-            ? "The room becomes occupied and the tenant's payment moves to processing (Stripe) or is marked paid in mock mode."
-            : "The booking is declined and the room returns to available."
+            ? "The room becomes occupied and the tenant can proceed to payment."
+            : decision?.next === "CANCELLED"
+              ? "The booking will be cancelled and the room returned to inventory."
+              : "The booking is declined and the room returns to available."
         }
-        confirmLabel={decision?.next === "APPROVED" ? "Approve booking" : "Reject booking"}
-        destructive={decision?.next === "REJECTED"}
+        confirmLabel={
+          decision?.next === "APPROVED"
+            ? "Approve booking"
+            : decision?.next === "CANCELLED"
+              ? "Cancel booking"
+              : "Reject booking"
+        }
+        destructive={decision?.next === "REJECTED" || decision?.next === "CANCELLED"}
         loading={decision !== null && pendingKey === `booking-${decision.booking.id}`}
         onConfirm={decide}
       />
+
     </>
   );
 }
