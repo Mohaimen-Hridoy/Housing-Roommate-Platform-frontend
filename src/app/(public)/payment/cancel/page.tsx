@@ -38,7 +38,7 @@ export default async function PaymentCancelPage({ searchParams }: PaymentCancelP
     );
   }
 
-  const checkout = await apiDataSafe<CheckoutReturnStatus>(`/bookings/${bookingId}/cancel`);
+  const checkout = await apiDataSafe<CheckoutReturnStatus>(`/bookings/${bookingId}/cancel`, { revalidate: false });
   const state = checkout.data;
 
   return (

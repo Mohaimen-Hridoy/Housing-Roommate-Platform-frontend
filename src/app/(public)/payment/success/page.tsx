@@ -45,7 +45,7 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
   }
 
   const [checkout, session] = await Promise.all([
-    apiDataSafe<CheckoutReturnStatus>(`/bookings/${bookingId}/success`),
+    apiDataSafe<CheckoutReturnStatus>(`/bookings/${bookingId}/success`, { revalidate: false }),
     getSessionUser(),
   ]);
 
